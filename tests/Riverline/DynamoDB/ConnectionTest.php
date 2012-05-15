@@ -6,7 +6,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConnection()
     {
-        $conn = new Connection(AWS_KEY, AWS_SECRET, AWS_REGION);
+        $conn = new Connection(AWS_KEY, AWS_SECRET, 'apc', AWS_REGION);
 
         $this->assertInstanceOf('AmazonDynamoDB', $conn->getConnector());
 

@@ -27,14 +27,15 @@ class Connection
     /**
      * @param string $key The AWS access Key
      * @param string $secret The AWS secret Key
+     * @param string $cacheConfig The DynamoDB SDK cache configuration
      * @param string|null $region The DynamoDB region endpoint
      */
-    public function __construct($key, $secret, $region = null)
+    public function __construct($key, $secret, $cacheConfig, $region = null)
     {
         $this->connector = new \AmazonDynamoDB(array(
             'key'    => $key,
             'secret' => $secret,
-            'default_cache_config' => 'apc',
+            'default_cache_config' => $cacheConfig,
         ));
 
         if (null !== $region) {
@@ -142,7 +143,7 @@ class Connection
     /**
      * Get an item via the get_item call
      * @param string $table The item table
-     * @param mikex $hash The primary hash key
+     * @param mixed $hash The primary hash key
      * @param mixed|null $range The primary range key
      * @param Context\Get|null $context The call context
      * @return Item|null
