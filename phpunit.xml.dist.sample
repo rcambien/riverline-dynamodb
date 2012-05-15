@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <php>
+        <const name="AWS_SDK"        value="path to AWS SDK" />
+        <const name="AWS_KEY"        value="AWS access key" />
+        <const name="AWS_SECRET"     value="AWS secret key" />
+        <const name="AWS_REGION"     value="dynamoDB endpoint url" />
+        <const name="DY_TABLE"       value="Table name with hash key only" />
+        <const name="DY_TABLE_RANGE" value="Table name with hash key and range key" />
+    </php>
+
+    <testsuites>
+        <testsuite name="DynamoDB Test Suite">
+            <directory>tests/Riverline/DynamoDB/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Riverline/DynamoDB/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

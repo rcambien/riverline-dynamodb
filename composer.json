@@ -1,0 +1,25 @@
+{
+    "name":"riverline/dynamodb",
+    "version":"1.0.0",
+    "description":"Amazon WebService DynamoDB PHP object wrapper",
+    "type":"library",
+    "authors":[
+        {
+            "name":"Romain Cambien",
+            "email":"romain@riverline.fr"
+        },
+        {
+            "name":"Riverline",
+            "homepage":"http://www.riverline.fr"
+        }
+    ],
+    "require":{
+        "php":">=5.3.5"
+    },
+    "autoload":{
+        "psr-0":{
+            "Riverline\\DynamoDB":""
+        }
+    },
+    "target-dir":"Riverline/DynamoDB"
+}
