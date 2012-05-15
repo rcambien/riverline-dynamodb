@@ -24,9 +24,9 @@ class Scan extends Collection
     {
         $parameters = parent::getForDynamoDB();
 
-        foreach($this->filters as $filter) {
+        foreach($this->filters as $name => $filter) {
             /* @var $filter AttributeCondition */
-            $parameters['ScanFilter'][] = $filter->getForDynamoDB();
+            $parameters['ScanFilter'][$name] = $filter->getForDynamoDB();
         }
 
         return $parameters;
