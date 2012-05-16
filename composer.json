@@ -1,6 +1,6 @@
 {
     "name":"riverline/dynamodb",
-    "version":"1.0.1",
+    "version":"1.0.2",
     "description":"Amazon WebService DynamoDB PHP object wrapper",
     "type":"library",
     "authors":[
@@ -20,6 +20,5 @@
         "psr-0":{
             "Riverline\\DynamoDB": "src/"
         }
-    },
-    "target-dir":"Riverline/DynamoDB"
+    }
 }
