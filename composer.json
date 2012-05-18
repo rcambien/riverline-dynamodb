@@ -2,7 +2,9 @@
     "name":"riverline/dynamodb",
     "version":"1.0.2",
     "description":"Amazon WebService DynamoDB PHP object wrapper",
+    "keywords":["dynamodb","aws","amazon"],
     "type":"library",
+    "license":"MIT",
     "authors":[
         {
             "name":"Romain Cambien",
@@ -13,6 +15,7 @@
             "homepage":"http://www.riverline.fr"
         }
     ],
+    "homepage": "https://github.com/rcambien/riverline-dynamodb",
     "require":{
         "php":">=5.3.5"
     },
