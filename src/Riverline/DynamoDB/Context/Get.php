@@ -17,40 +17,28 @@ class Get
      * Use of the consistent read method
      * @var bool
      */
-    protected $ConsistentRead;
+    protected $consistentRead;
 
     /**
      * @param array $attributesToGet The list of attributes to get
+     * @return \Riverline\DynamoDB\Context\Get
      */
     public function setAttributesToGet($attributesToGet)
     {
         $this->attributesToGet = $attributesToGet;
+
+        return $this;
     }
 
     /**
-     * Return the list ofattributes to get
-     * @return array|null
+     * @param boolean $consistentRead Use the consistent read method
+     * @return \Riverline\DynamoDB\Context\Get
      */
-    public function getAttributesToGet()
+    public function setConsistentRead($consistentRead)
     {
-        return $this->attributesToGet;
-    }
+        $this->consistentRead = $consistentRead;
 
-    /**
-     * @param bool $ConsistentRead Use the consistent read method
-     */
-    public function setConsistentRead($ConsistentRead)
-    {
-        $this->ConsistentRead = $ConsistentRead;
-    }
-
-    /**
-     * Return true to use the consistent read method
-     * @return bool
-     */
-    public function getConsistentRead()
-    {
-        return $this->ConsistentRead;
+        return $this;
     }
 
     /**
@@ -61,14 +49,14 @@ class Get
     {
         $parameters = array();
 
-        $attributes = $this->getAttributesToGet();
+        $attributes = $this->attributesToGet;
         if (null !== $attributes) {
             $parameters['AttributesToGet'] = $attributes;
         }
 
-        $ConsistentRead = $this->getConsistentRead();
-        if (null !== $ConsistentRead) {
-            $parameters['ConsistentRead'] = $ConsistentRead;
+        $consistentRead = $this->consistentRead;
+        if (null !== $consistentRead) {
+            $parameters['ConsistentRead'] = $consistentRead;
         }
 
         return $parameters;

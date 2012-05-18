@@ -21,48 +21,52 @@ Installation
 Getting started
 ---------------
 
-    // Create a DynamoDB connection
-    $connection = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', 'apc');
+```php
+<?php
 
-    // Create an item
-    // Product is a table with hash key 'id' and range key 'subid'
-    $product = new \Riverline\DynamoDB\Item('Product');
-    $product['id']    = 102;
-    $product['subid'] = 202;
-    $product['title'] = "Product 102-202";
-    $product['authors'] = array('Author1', 'Author2');
+// Create a DynamoDB connection
+$connection = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', 'apc');
 
-    // Save it
-    $connection->put($product);
+// Create an item
+// Product is a table with hash key 'id' and range key 'subid'
+$product = new \Riverline\DynamoDB\Item('Product');
+$product['id']    = 102;
+$product['subid'] = 202;
+$product['title'] = "Product 102-202";
+$product['authors'] = array('Author1', 'Author2');
 
-    // Get It
-    $product = $connection->get('Product', 102, 202);
+// Save it
+$connection->put($product);
 
-    // Query It with consistent read
-    $context = new \Riverline\DynamoDB\Context\Query();
-    $context->setRangeCondition(\AmazonDynamoDB::CONDITION_BETWEEN, array(200, 205));
-    $context->setConsistentRead(true);
-    $items = $connection->query('Product', 102, $context);
+// Get It
+$product = $connection->get('Product', 102, 202);
 
-    // Scan It with limit
-    $context = new \Riverline\DynamoDB\Context\Scan();
-    $context->addFilter('title', \AmazonDynamoDB::CONDITION_CONTAINS, 'Product');
-    $context->addFilter('authors', \AmazonDynamoDB::CONDITION_CONTAINS, 'Author1');
-    $context->setLimit(1);
-    $items = $connection->scan('Product', $context);
+// Query It with consistent read
+$context = new \Riverline\DynamoDB\Context\Query();
+$context->setRangeCondition(\AmazonDynamoDB::CONDITION_BETWEEN, array(200, 205));
+$context->setConsistentRead(true);
+$items = $connection->query('Product', 102, $context);
 
-    if ($items->more()) {
-        // more results to get
-        $context->setLastKey($items->getLastKey());
-        $moreItems = $connection->scan('Product', $context);
-    }
+foreach($items as $item) {
+    echo $item['title'];
+}
 
-    // Delete it
-    $connection->delete('Product', 102, 202);
+// Scan It with limit
+$context = new \Riverline\DynamoDB\Context\Scan();
+$context->addFilter('title', \AmazonDynamoDB::CONDITION_CONTAINS, 'Product');
+$context->addFilter('authors', \AmazonDynamoDB::CONDITION_CONTAINS, 'Author1');
+$context->setLimit(1);
+$items = $connection->scan('Product', $context);
 
-    // Get consumed read unit
-    echo $connection->getConsumedReadUnits();
+if ($items->more()) {
+    // more results to get
+    $context->setLastKey($items->getLastKey());
+    $moreItems = $connection->scan('Product', $context);
+}
 
+// Delete it
+$connection->delete('Product', 102, 202);
 
-
-
+// Get consumed read unit
+echo $connection->getConsumedReadUnits();
+```
