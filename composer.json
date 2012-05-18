@@ -1,6 +1,6 @@
 {
     "name":"riverline/dynamodb",
-    "version":"1.0.2",
+    "version":"1.0.3",
     "description":"Amazon WebService DynamoDB PHP object wrapper",
     "keywords":["dynamodb","aws","amazon"],
     "type":"library",
