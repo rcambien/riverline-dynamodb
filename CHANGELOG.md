@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+* 1.0.3
+    * Fix Context internal properties name
+    * Remove useless constants
+    * Add docs (PhpDocumentor2)
+    * Update README
+
 * 1.0.2
     * Fix Scan/Query result with no Items
     * Fix Put with empty attributes
