@@ -95,7 +95,10 @@ class Connection
         $attributes = array();
         foreach ($item as $name => $attribute) {
             /** @var $attribute \Riverline\DynamoDB\Attribute */
-            $attributes[$name] = $attribute->getForDynamoDB();
+            if ("" !== $attribute->getValue()) {
+                // Only not empty string
+                $attributes[$name] = $attribute->getForDynamoDB();
+            }
         }
 
         $response = $this->parseResponse(
@@ -206,10 +209,12 @@ class Connection
         $this->readUnit += floatval($response->ConsumedCapacityUnits);
 
         $items = new Collection($response->LastEvaluatedKey);
-        foreach ($response->Items as $responseItem) {
-            $item = new Item($table);
-            $item->populateFromDynamoDB($responseItem);
-            $items->add($item);
+        if (!empty($response->Items)) {
+            foreach ($response->Items as $responseItem) {
+                $item = new Item($table);
+                $item->populateFromDynamoDB($responseItem);
+                $items->add($item);
+            }
         }
         return $items;
     }
@@ -235,10 +240,12 @@ class Connection
         $this->readUnit += floatval($response->ConsumedCapacityUnits);
 
         $items = new Collection($response->LastEvaluatedKey);
-        foreach ($response->Items as $responseItem) {
-            $item = new Item($table);
-            $item->populateFromDynamoDB($responseItem);
-            $items->add($item);
+        if (!empty($response->Items)) {
+            foreach ($response->Items as $responseItem) {
+                $item = new Item($table);
+                $item->populateFromDynamoDB($responseItem);
+                $items->add($item);
+            }
         }
         return $items;
     }
