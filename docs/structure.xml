@@ -1,0 +1,1401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project version="2.0.0a3" title="">
+  <file path="Riverline/DynamoDB/Collection.php" hash="4df277aa5fea6fc5bcc1e384214cb8af" package="Default">
+    <parse_markers>
+      <error line="22" code="50012">No short description for method __construct()</error>
+      <error line="66" code="50012">No short description for method getIterator()</error>
+      <error line="75" code="50012">No short description for method count()</error>
+      <critical line="5" code="50005">No short description for class Collection</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Collection.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB" line="8" package="Default">
+      <name>Collection</name>
+      <full_name>\Riverline\DynamoDB\Collection</full_name>
+      <extends/>
+      <implements>\IteratorAggregate</implements>
+      <implements>\Countable</implements>
+      <docblock line="5">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="5" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="14" package="Default">
+        <name>$items</name>
+        <default><![CDATA[array()]]></default>
+        <docblock line="10">
+          <description><![CDATA[The items collection]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="20" package="Default">
+        <name>$lastKey</name>
+        <default><![CDATA[]]></default>
+        <docblock line="16">
+          <description><![CDATA[The previous request last key]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="16" name="var" description="" type="string|null">
+            <type by_reference="false">string</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="25" package="">
+        <name>__construct</name>
+        <type>function</type>
+        <docblock line="22">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="22" name="param" description="The previous request last key" type="string|null" variable="$lastKey">
+            <type by_reference="false">string</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="25">
+          <name>$lastKey</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="34" package="">
+        <name>getLastKey</name>
+        <type>function</type>
+        <docblock line="30">
+          <description><![CDATA[Return the previous request last key]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="30" name="return" description="" type="null|string">
+            <type by_reference="false">null</type>
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="43" package="">
+        <name>more</name>
+        <type>function</type>
+        <docblock line="39">
+          <description><![CDATA[Return true if the previous request has more items to retreive]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="39" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="52" package="">
+        <name>add</name>
+        <type>function</type>
+        <docblock line="48">
+          <description><![CDATA[Add an item to the collection]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="48" name="param" description="" type="\Riverline\DynamoDB\Item" variable="$item">
+            <type by_reference="false">\Riverline\DynamoDB\Item</type>
+          </tag>
+        </docblock>
+        <argument line="52">
+          <name>$item</name>
+          <default><![CDATA[]]></default>
+          <type>Item</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="61" package="">
+        <name>shift</name>
+        <type>function</type>
+        <docblock line="57">
+          <description><![CDATA[Remove an item off the beginning of the collection]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="57" name="return" description="" type="\Riverline\DynamoDB\Item">
+            <type by_reference="false">\Riverline\DynamoDB\Item</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="70" package="">
+        <name>getIterator</name>
+        <type>function</type>
+        <docblock line="66">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="66" name="see" description="\IteratorAggregate" refers="\IteratorAggregate"/>
+          <tag line="66" name="return" description="" type="\ArrayIterator">
+            <type by_reference="false">\ArrayIterator</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="79" package="">
+        <name>count</name>
+        <type>function</type>
+        <docblock line="75">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="75" name="see" description="\Countable" refers="\Countable"/>
+          <tag line="75" name="return" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Exception/ConfigurationException.php" hash="deaf315e2c54b47dc20077d2c581af9c" package="Default">
+    <parse_markers>
+      <error line="5" code="50000">No DocBlock was found for ConfigurationException</error>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Exception/ConfigurationException.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Exception" line="5" package="Default">
+      <name>ConfigurationException</name>
+      <full_name>\Riverline\DynamoDB\Exception\ConfigurationException</full_name>
+      <extends>\Exception</extends>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Exception/ServerException.php" hash="e625162a31bed9741808d30876e77eb4" package="Default">
+    <parse_markers>
+      <error line="5" code="50000">No DocBlock was found for ServerException</error>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Exception/ServerException.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Exception" line="5" package="Default">
+      <name>ServerException</name>
+      <full_name>\Riverline\DynamoDB\Exception\ServerException</full_name>
+      <extends>\Exception</extends>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Exception/AttributesException.php" hash="a559d5089a3b51301ade946cee6f2ab3" package="Default">
+    <parse_markers>
+      <error line="5" code="50000">No DocBlock was found for AttributesException</error>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Exception/AttributesException.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Exception" line="5" package="Default">
+      <name>AttributesException</name>
+      <full_name>\Riverline\DynamoDB\Exception\AttributesException</full_name>
+      <extends>\Exception</extends>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Attribute.php" hash="d01a81feb2c07a270184d9dd63241dc0" package="Default">
+    <parse_markers>
+      <error line="22" code="50012">No short description for method __construct()</error>
+      <error line="87" code="50012">No short description for method __toString()</error>
+      <error line="99" code="50012">No short description for method getIterator()</error>
+      <critical line="5" code="50005">No short description for class Attribute</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Attribute.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB" line="8" package="Default">
+      <name>Attribute</name>
+      <full_name>\Riverline\DynamoDB\Attribute</full_name>
+      <extends/>
+      <implements>\IteratorAggregate</implements>
+      <docblock line="5">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="5" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="14" package="Default">
+        <name>$type</name>
+        <default><![CDATA[]]></default>
+        <docblock line="10">
+          <description><![CDATA[The attribute type]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="20" package="Default">
+        <name>$value</name>
+        <default><![CDATA[]]></default>
+        <docblock line="16">
+          <description><![CDATA[The attribute value]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="16" name="var" description="" type="mixed">
+            <type by_reference="false">mixed</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="27" package="">
+        <name>__construct</name>
+        <type>function</type>
+        <docblock line="22">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="22" name="param" description="The attribute value" type="string" variable="$value">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="22" name="param" description="The attribute type" type="string|null" variable="$type">
+            <type by_reference="false">string</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="22" name="throws" description="" type="\Exception\AttributesException">
+            <type by_reference="false">\Exception\AttributesException</type>
+          </tag>
+        </docblock>
+        <argument line="27">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="27">
+          <name>$type</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="62" package="">
+        <name>getValue</name>
+        <type>function</type>
+        <docblock line="58">
+          <description><![CDATA[Return the attribute value]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="58" name="return" description="" type="mixed">
+            <type by_reference="false">mixed</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="71" package="">
+        <name>getType</name>
+        <type>function</type>
+        <docblock line="67">
+          <description><![CDATA[Return the attribute value]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="67" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="80" package="">
+        <name>isArray</name>
+        <type>function</type>
+        <docblock line="76">
+          <description><![CDATA[Return true if this attribute is a collection of attributes]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="76" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="90" package="">
+        <name>__toString</name>
+        <type>function</type>
+        <docblock line="87">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="87" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="104" package="">
+        <name>getIterator</name>
+        <type>function</type>
+        <docblock line="99">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="99" name="see" description="\IteratorAggregate" refers="\IteratorAggregate"/>
+          <tag line="99" name="return" description="" type="\ArrayIterator">
+            <type by_reference="false">\ArrayIterator</type>
+          </tag>
+          <tag line="99" name="throws" description="" type="\Exception\AttributesException">
+            <type by_reference="false">\Exception\AttributesException</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="117" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="113">
+          <description><![CDATA[Return attribute formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="113" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="private" namespace="Riverline\DynamoDB" line="134" package="">
+        <name>autoDetectType</name>
+        <type>function</type>
+        <docblock line="128">
+          <description><![CDATA[Auto detect attribute type base on value type]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="128" name="todo" description="Use the internal SDK method attribute()"/>
+          <tag line="128" name="param" description="The attribute value" type="mixed" variable="$value">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="128" name="return" description="The detected type" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="134">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/AttributeCondition.php" hash="ae09e02892f3d2ca7f7fbb210813a667" package="Default">
+    <parse_markers>
+      <error line="24" code="50012">No short description for method __construct()</error>
+      <critical line="7" code="50005">No short description for class AttributeCondition</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/AttributeCondition.php</error>
+    </parse_markers>
+    <namespace-alias name="AttributesException">\Riverline\DynamoDB\Exception\AttributesException</namespace-alias>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB" line="10" package="Default">
+      <name>AttributeCondition</name>
+      <full_name>\Riverline\DynamoDB\AttributeCondition</full_name>
+      <extends/>
+      <docblock line="7">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="7" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="16" package="Default">
+        <name>$operator</name>
+        <default><![CDATA[]]></default>
+        <docblock line="12">
+          <description><![CDATA[The condition operator]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="12" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="22" package="Default">
+        <name>$attributes</name>
+        <default><![CDATA[]]></default>
+        <docblock line="18">
+          <description><![CDATA[The condition attributes]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="18" name="var" description="" type="\Riverline\DynamoDB\Attribute|array">
+            <type by_reference="false">\Riverline\DynamoDB\Attribute</type>
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="28" package="">
+        <name>__construct</name>
+        <type>function</type>
+        <docblock line="24">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="24" name="param" description="The condition operator" type="string" variable="$operator">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="24" name="param" description="The condition attributes" type="\Riverline\DynamoDB\Attribute|array" variable="$attributes">
+            <type by_reference="false">\Riverline\DynamoDB\Attribute</type>
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+        <argument line="28">
+          <name>$operator</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="28">
+          <name>$attributes</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="49" package="">
+        <name>getOperator</name>
+        <type>function</type>
+        <docblock line="45">
+          <description><![CDATA[Return the condition operator]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="45" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="58" package="">
+        <name>getAttributes</name>
+        <type>function</type>
+        <docblock line="54">
+          <description><![CDATA[Return the condition attributes]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="54" name="return" description="" type="array|\Riverline\DynamoDB\Attribute">
+            <type by_reference="false">array</type>
+            <type by_reference="false">\Riverline\DynamoDB\Attribute</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="67" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="63">
+          <description><![CDATA[Return the condition formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="63" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Item.php" hash="2c4036bdd053797c6d85424b48f8481e" package="Default">
+    <parse_markers>
+      <error line="22" code="50012">No short description for method __construct()</error>
+      <error line="39" code="50012">No short description for method setAttribute()</error>
+      <error line="53" code="50012">No short description for method offsetExists()</error>
+      <error line="63" code="50012">No short description for method offsetGet()</error>
+      <error line="73" code="50012">No short description for method offsetSet()</error>
+      <error line="88" code="50012">No short description for method offsetUnset()</error>
+      <error line="97" code="50012">No short description for method getIterator()</error>
+      <critical line="5" code="50005">No short description for class Item</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Item.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB" line="8" package="Default">
+      <name>Item</name>
+      <full_name>\Riverline\DynamoDB\Item</full_name>
+      <extends/>
+      <implements>\ArrayAccess</implements>
+      <implements>\IteratorAggregate</implements>
+      <docblock line="5">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="5" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="private" line="14" package="Default">
+        <name>$table</name>
+        <default><![CDATA[]]></default>
+        <docblock line="10">
+          <description><![CDATA[The item table name]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="private" line="20" package="Default">
+        <name>$attributes</name>
+        <default><![CDATA[array()]]></default>
+        <docblock line="16">
+          <description><![CDATA[The item attributes]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="16" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="25" package="">
+        <name>__construct</name>
+        <type>function</type>
+        <docblock line="22">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="22" name="param" description="string The item table name" type="\Riverline\DynamoDB\$table" variable="$table">
+            <type by_reference="false">\Riverline\DynamoDB\$table</type>
+          </tag>
+        </docblock>
+        <argument line="25">
+          <name>$table</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="34" package="">
+        <name>getTable</name>
+        <type>function</type>
+        <docblock line="30">
+          <description><![CDATA[Return the Item table name]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="30" name="return" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="44" package="">
+        <name>setAttribute</name>
+        <type>function</type>
+        <docblock line="39">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="39" name="param" description="" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="39" name="param" description="" type="\Riverline\DynamoDB\Attribute|mixed" variable="$value">
+            <type by_reference="false">\Riverline\DynamoDB\Attribute</type>
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="39" name="param" description="" type="null|string" variable="$type">
+            <type by_reference="false">null</type>
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+        <argument line="44">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="44">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="44">
+          <name>$type</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="58" package="">
+        <name>offsetExists</name>
+        <type>function</type>
+        <docblock line="53">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="53" name="see" description="\ArrayAccess" refers="\ArrayAccess"/>
+          <tag line="53" name="param" description="" type="" variable="$offset"/>
+          <tag line="53" name="return" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+        <argument line="58">
+          <name>$offset</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="68" package="">
+        <name>offsetGet</name>
+        <type>function</type>
+        <docblock line="63">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="63" name="see" description="\ArrayAccess" refers="\ArrayAccess"/>
+          <tag line="63" name="param" description="" type="" variable="$offset"/>
+          <tag line="63" name="return" description="" type="null">
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="68">
+          <name>$offset</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="79" package="">
+        <name>offsetSet</name>
+        <type>function</type>
+        <docblock line="73">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="73" name="see" description="\ArrayAccess" refers="\ArrayAccess"/>
+          <tag line="73" name="param" description="" type="" variable="$offset"/>
+          <tag line="73" name="param" description="" type="" variable="$value"/>
+          <tag line="73" name="throws" description="" type="\Exception\AttributesException">
+            <type by_reference="false">\Exception\AttributesException</type>
+          </tag>
+        </docblock>
+        <argument line="79">
+          <name>$offset</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="79">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="92" package="">
+        <name>offsetUnset</name>
+        <type>function</type>
+        <docblock line="88">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="88" name="see" description="\ArrayAccess" refers="\ArrayAccess"/>
+          <tag line="88" name="param" description="" type="" variable="$offset"/>
+        </docblock>
+        <argument line="92">
+          <name>$offset</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="101" package="">
+        <name>getIterator</name>
+        <type>function</type>
+        <docblock line="97">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="97" name="see" description="\IteratorAggregate" refers="\IteratorAggregate"/>
+          <tag line="97" name="return" description="" type="\ArrayIterator">
+            <type by_reference="false">\ArrayIterator</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="110" package="">
+        <name>populateFromDynamoDB</name>
+        <type>function</type>
+        <docblock line="106">
+          <description><![CDATA[Populate attributes from the raw DynamoDB response]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="106" name="param" description="" type="\CFSimpleXML" variable="$xml">
+            <type by_reference="false">\CFSimpleXML</type>
+          </tag>
+        </docblock>
+        <argument line="110">
+          <name>$xml</name>
+          <default><![CDATA[]]></default>
+          <type>\CFSimpleXML</type>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Context/Query.php" hash="1419f5a4591a53819e06ef2b249421b6" package="Default">
+    <parse_markers>
+      <critical line="9" code="50019">No short description for property $rangeCondition</critical>
+      <critical line="14" code="50019">No short description for property $scanIndexForward</critical>
+      <error line="19" code="50012">No short description for method setRangeCondition()</error>
+      <error line="31" code="50012">No short description for method setScanIndexForward()</error>
+      <error line="63" code="50012">No short description for method create()</error>
+      <error line="7" code="50000">No DocBlock was found for Query</error>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Context/Query.php</error>
+    </parse_markers>
+    <namespace-alias name="AttributeCondition">\Riverline\DynamoDB\AttributeCondition</namespace-alias>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Context" line="7" package="Default">
+      <name>Query</name>
+      <full_name>\Riverline\DynamoDB\Context\Query</full_name>
+      <extends>\Riverline\DynamoDB\Context\Collection</extends>
+      <property final="false" static="false" visibility="protected" line="12" package="Default">
+        <name>$rangeCondition</name>
+        <default><![CDATA[]]></default>
+        <docblock line="9">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="9" name="var" description="" type="\Riverline\DynamoDB\AttributeCondition">
+            <type by_reference="false">\Riverline\DynamoDB\AttributeCondition</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="17" package="Default">
+        <name>$scanIndexForward</name>
+        <default><![CDATA[]]></default>
+        <docblock line="14">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="14" name="var" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="24" package="">
+        <name>setRangeCondition</name>
+        <type>function</type>
+        <docblock line="19">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="19" name="param" description="" type="string" variable="$operator">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="19" name="param" description="" type="mixed" variable="$attributes">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="19" name="return" description="" type="\Riverline\DynamoDB\Context\Query">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Query</type>
+          </tag>
+        </docblock>
+        <argument line="24">
+          <name>$operator</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="24">
+          <name>$attributes</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="35" package="">
+        <name>setScanIndexForward</name>
+        <type>function</type>
+        <docblock line="31">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="31" name="param" description="" type="boolean" variable="$ScanIndexForward">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="31" name="return" description="" type="\Riverline\DynamoDB\Context\Query">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Query</type>
+          </tag>
+        </docblock>
+        <argument line="35">
+          <name>$ScanIndexForward</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="46" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="42">
+          <description><![CDATA[Return the context formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="42" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="true" visibility="public" namespace="Riverline\DynamoDB\Context" line="69" package="">
+        <name>create</name>
+        <type>function</type>
+        <docblock line="63">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="63" name="static" description=""/>
+          <tag line="63" name="param" description="" type="string" variable="$operator">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="63" name="param" description="" type="mixed" variable="$attributes">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="63" name="return" description="" type="\Riverline\DynamoDB\Context\Query">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Query</type>
+          </tag>
+        </docblock>
+        <argument line="69">
+          <name>$operator</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="69">
+          <name>$attributes</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Context/Get.php" hash="99ed3649b31a7c45f4b8957b29b9b1df" package="Default">
+    <parse_markers>
+      <error line="22" code="50012">No short description for method setAttributesToGet()</error>
+      <error line="33" code="50012">No short description for method setConsistentRead()</error>
+      <critical line="5" code="50005">No short description for class Get</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Context/Get.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Context" line="8" package="Default">
+      <name>Get</name>
+      <full_name>\Riverline\DynamoDB\Context\Get</full_name>
+      <extends/>
+      <docblock line="5">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="5" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="14" package="Default">
+        <name>$attributesToGet</name>
+        <default><![CDATA[]]></default>
+        <docblock line="10">
+          <description><![CDATA[List of attributes to get]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="var" description="" type="array|null">
+            <type by_reference="false">array</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="20" package="Default">
+        <name>$consistentRead</name>
+        <default><![CDATA[]]></default>
+        <docblock line="16">
+          <description><![CDATA[Use of the consistent read method]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="16" name="var" description="" type="bool">
+            <type by_reference="false">bool</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="26" package="">
+        <name>setAttributesToGet</name>
+        <type>function</type>
+        <docblock line="22">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="22" name="param" description="The list of attributes to get" type="array" variable="$attributesToGet">
+            <type by_reference="false">array</type>
+          </tag>
+          <tag line="22" name="return" description="" type="\Riverline\DynamoDB\Context\Get">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Get</type>
+          </tag>
+        </docblock>
+        <argument line="26">
+          <name>$attributesToGet</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="37" package="">
+        <name>setConsistentRead</name>
+        <type>function</type>
+        <docblock line="33">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="33" name="param" description="Use the consistent read method" type="boolean" variable="$consistentRead">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="33" name="return" description="" type="\Riverline\DynamoDB\Context\Get">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Get</type>
+          </tag>
+        </docblock>
+        <argument line="37">
+          <name>$consistentRead</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="48" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="44">
+          <description><![CDATA[Return the context formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="44" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Context/Scan.php" hash="2cfdf38f2ae64f06b11cdc23e16ede14" package="Default">
+    <parse_markers>
+      <critical line="9" code="50019">No short description for property $filters</critical>
+      <error line="14" code="50012">No short description for method addFilter()</error>
+      <error line="27" code="50012">No short description for method setConsistentRead()</error>
+      <error line="7" code="50000">No DocBlock was found for Scan</error>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Context/Scan.php</error>
+    </parse_markers>
+    <namespace-alias name="AttributeCondition">\Riverline\DynamoDB\AttributeCondition</namespace-alias>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB\Context" line="7" package="Default">
+      <name>Scan</name>
+      <full_name>\Riverline\DynamoDB\Context\Scan</full_name>
+      <extends>\Riverline\DynamoDB\Context\Collection</extends>
+      <property final="false" static="false" visibility="protected" line="12" package="Default">
+        <name>$filters</name>
+        <default><![CDATA[array()]]></default>
+        <docblock line="9">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="9" name="var" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="20" package="">
+        <name>addFilter</name>
+        <type>function</type>
+        <docblock line="14">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="14" name="param" description="" type="string" variable="$name">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="param" description="" type="string" variable="$operator">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="14" name="param" description="" type="mixed" variable="$value">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="14" name="return" description="" type="\Riverline\DynamoDB\Context\Scan">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Scan</type>
+          </tag>
+        </docblock>
+        <argument line="20">
+          <name>$name</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="20">
+          <name>$operator</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="20">
+          <name>$value</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="31" package="">
+        <name>setConsistentRead</name>
+        <type>function</type>
+        <docblock line="27">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="27" name="param" description="" type="bool" variable="$ConsistentRead">
+            <type by_reference="false">bool</type>
+          </tag>
+          <tag line="27" name="throws" description="" type="\Riverline\DynamoDB\Exception\AttributesException">
+            <type by_reference="false">\Riverline\DynamoDB\Exception\AttributesException</type>
+          </tag>
+        </docblock>
+        <argument line="31">
+          <name>$ConsistentRead</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="40" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="36">
+          <description><![CDATA[Return the context formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="36" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Context/Collection.php" hash="4d7ae2e91b50ff9a5da136109a6f10c7" package="Default">
+    <parse_markers>
+      <critical line="10" code="50019">No short description for property $count</critical>
+      <critical line="15" code="50019">No short description for property $limit</critical>
+      <critical line="20" code="50019">No short description for property $lastKey</critical>
+      <error line="25" code="50012">No short description for method setCount()</error>
+      <error line="36" code="50012">No short description for method setLimit()</error>
+      <error line="47" code="50012">No short description for method setLastKey()</error>
+      <critical line="5" code="50005">No short description for class Collection</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Context/Collection.php</error>
+    </parse_markers>
+    <class final="false" abstract="true" namespace="Riverline\DynamoDB\Context" line="8" package="Default">
+      <name>Collection</name>
+      <full_name>\Riverline\DynamoDB\Context\Collection</full_name>
+      <extends>\Riverline\DynamoDB\Context\Get</extends>
+      <docblock line="5">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="5" name="class" description=""/>
+      </docblock>
+      <property final="false" static="false" visibility="protected" line="13" package="Default">
+        <name>$count</name>
+        <default><![CDATA[]]></default>
+        <docblock line="10">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="10" name="var" description="" type="boolean">
+            <type by_reference="false">boolean</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="18" package="Default">
+        <name>$limit</name>
+        <default><![CDATA[]]></default>
+        <docblock line="15">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="15" name="var" description="" type="integer">
+            <type by_reference="false">integer</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="23" package="Default">
+        <name>$lastKey</name>
+        <default><![CDATA[]]></default>
+        <docblock line="20">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="20" name="var" description="" type="string">
+            <type by_reference="false">string</type>
+          </tag>
+        </docblock>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="29" package="">
+        <name>setCount</name>
+        <type>function</type>
+        <docblock line="25">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="25" name="param" description="" type="boolean" variable="$count">
+            <type by_reference="false">boolean</type>
+          </tag>
+          <tag line="25" name="return" description="" type="\Riverline\DynamoDB\Context\Collection">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Collection</type>
+          </tag>
+        </docblock>
+        <argument line="29">
+          <name>$count</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="40" package="">
+        <name>setLimit</name>
+        <type>function</type>
+        <docblock line="36">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="36" name="param" description="" type="integer" variable="$limit">
+            <type by_reference="false">integer</type>
+          </tag>
+          <tag line="36" name="return" description="" type="\Riverline\DynamoDB\Context\Collection">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Collection</type>
+          </tag>
+        </docblock>
+        <argument line="40">
+          <name>$limit</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="51" package="">
+        <name>setLastKey</name>
+        <type>function</type>
+        <docblock line="47">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="47" name="param" description="" type="string" variable="$lastKey">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="47" name="return" description="" type="\Riverline\DynamoDB\Context\Collection">
+            <type by_reference="false">\Riverline\DynamoDB\Context\Collection</type>
+          </tag>
+        </docblock>
+        <argument line="51">
+          <name>$lastKey</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB\Context" line="62" package="">
+        <name>getForDynamoDB</name>
+        <type>function</type>
+        <docblock line="58">
+          <description><![CDATA[Return the context formated for DynamoDB]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="58" name="return" description="" type="array">
+            <type by_reference="false">array</type>
+          </tag>
+        </docblock>
+      </method>
+    </class>
+  </file>
+  <file path="Riverline/DynamoDB/Connection.php" hash="52e0cd40b54bd0544e8db29c4c1f11a3" package="Default">
+    <parse_markers>
+      <critical line="17" code="50019">No short description for property $connector</critical>
+      <critical line="22" code="50019">No short description for property $readUnit</critical>
+      <error line="25" code="50018">No DocBlock was found for property $writeUnit</error>
+      <error line="27" code="50012">No short description for method __construct()</error>
+      <critical line="9" code="50005">No short description for class Connection</critical>
+      <error line="1" code="50007">No page-level DocBlock was found in file Riverline/DynamoDB/Connection.php</error>
+    </parse_markers>
+    <class final="false" abstract="false" namespace="Riverline\DynamoDB" line="12" package="Default">
+      <name>Connection</name>
+      <full_name>\Riverline\DynamoDB\Connection</full_name>
+      <extends/>
+      <docblock line="9">
+        <description><![CDATA[]]></description>
+        <long-description><![CDATA[]]></long-description>
+        <tag line="9" name="class" description=""/>
+      </docblock>
+      <constant namespace="Riverline\DynamoDB" line="14" package="Default">
+        <name>REGION_US</name>
+        <value><![CDATA[\AmazonDynamoDB::REGION_US_E1]]></value>
+      </constant>
+      <constant namespace="Riverline\DynamoDB" line="15" package="Default">
+        <name>REGION_EU</name>
+        <value><![CDATA['dynamodb.eu-west-1.amazonaws.com']]></value>
+      </constant>
+      <property final="false" static="false" visibility="protected" line="20" package="Default">
+        <name>$connector</name>
+        <default><![CDATA[]]></default>
+        <docblock line="17">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="17" name="var" description="" type="\AmazonDynamoDB">
+            <type by_reference="false">\AmazonDynamoDB</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="protected" line="25" package="Default">
+        <name>$readUnit</name>
+        <default><![CDATA[0]]></default>
+        <docblock line="22">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="22" name="var" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </property>
+      <property final="false" static="false" visibility="public" line="25" package="Default">
+        <name>$writeUnit</name>
+        <default><![CDATA[0]]></default>
+      </property>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="33" package="">
+        <name>__construct</name>
+        <type>function</type>
+        <docblock line="27">
+          <description><![CDATA[]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="27" name="param" description="The AWS access Key" type="string" variable="$key">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="27" name="param" description="The AWS secret Key" type="string" variable="$secret">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="27" name="param" description="The DynamoDB SDK cache configuration" type="string" variable="$cacheConfig">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="27" name="param" description="The DynamoDB region endpoint" type="string|null" variable="$region">
+            <type by_reference="false">string</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="33">
+          <name>$key</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="33">
+          <name>$secret</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="33">
+          <name>$cacheConfig</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="33">
+          <name>$region</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="50" package="">
+        <name>getConnector</name>
+        <type>function</type>
+        <docblock line="46">
+          <description><![CDATA[Return the DynamoDB object]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="46" name="return" description="" type="\AmazonDynamoDB">
+            <type by_reference="false">\AmazonDynamoDB</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="59" package="">
+        <name>getConsumedReadUnits</name>
+        <type>function</type>
+        <docblock line="55">
+          <description><![CDATA[Return the number of read units consumed]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="55" name="return" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="68" package="">
+        <name>getConsumedWriteUnits</name>
+        <type>function</type>
+        <docblock line="64">
+          <description><![CDATA[Return the number of write units consumed]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="64" name="return" description="" type="int">
+            <type by_reference="false">int</type>
+          </tag>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="76" package="">
+        <name>resetConsumedUnits</name>
+        <type>function</type>
+        <docblock line="73">
+          <description><![CDATA[Reset the read and write unit counter]]></description>
+          <long-description><![CDATA[]]></long-description>
+        </docblock>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="87" package="">
+        <name>put</name>
+        <type>function</type>
+        <docblock line="82">
+          <description><![CDATA[Add an item to DynamoDB via the put_item call]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="82" name="param" description="" type="\Riverline\DynamoDB\Item" variable="$item">
+            <type by_reference="false">\Riverline\DynamoDB\Item</type>
+          </tag>
+          <tag line="82" name="throws" description="" type="\Exception\AttributesException">
+            <type by_reference="false">\Exception\AttributesException</type>
+          </tag>
+        </docblock>
+        <argument line="87">
+          <name>$item</name>
+          <default><![CDATA[]]></default>
+          <type>Item</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="121" package="">
+        <name>delete</name>
+        <type>function</type>
+        <docblock line="115">
+          <description><![CDATA[Delete an item via the delete_item call]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="115" name="param" description="The item table" type="string" variable="$table">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="115" name="param" description="The primary hash key" type="mixed" variable="$hash">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="115" name="param" description="The primary range key" type="mixed|null" variable="$range">
+            <type by_reference="false">mixed</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="121">
+          <name>$table</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="121">
+          <name>$hash</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="121">
+          <name>$range</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="154" package="">
+        <name>get</name>
+        <type>function</type>
+        <docblock line="146">
+          <description><![CDATA[Get an item via the get_item call]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="146" name="param" description="The item table" type="string" variable="$table">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="146" name="param" description="The primary hash key" type="mixed" variable="$hash">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="146" name="param" description="The primary range key" type="mixed|null" variable="$range">
+            <type by_reference="false">mixed</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="146" name="param" description="The call context" type="\Context\Get|null" variable="$context">
+            <type by_reference="false">\Context\Get</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="146" name="return" description="" type="\Riverline\DynamoDB\Item|null">
+            <type by_reference="false">\Riverline\DynamoDB\Item</type>
+            <type by_reference="false">null</type>
+          </tag>
+        </docblock>
+        <argument line="154">
+          <name>$table</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="154">
+          <name>$hash</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="154">
+          <name>$range</name>
+          <default><![CDATA[null]]></default>
+          <type/>
+        </argument>
+        <argument line="154">
+          <name>$context</name>
+          <default><![CDATA[null]]></default>
+          <type>Context\Get</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="195" package="">
+        <name>query</name>
+        <type>function</type>
+        <docblock line="188">
+          <description><![CDATA[Get items via the query call]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="188" name="param" description="The item table" type="string" variable="$table">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="188" name="param" description="The primary hash key" type="mixed" variable="$hash">
+            <type by_reference="false">mixed</type>
+          </tag>
+          <tag line="188" name="param" description="The call context" type="\Context\Query|null" variable="$context">
+            <type by_reference="false">\Context\Query</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="188" name="return" description="" type="\Riverline\DynamoDB\Collection">
+            <type by_reference="false">\Riverline\DynamoDB\Collection</type>
+          </tag>
+        </docblock>
+        <argument line="195">
+          <name>$table</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="195">
+          <name>$hash</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="195">
+          <name>$context</name>
+          <default><![CDATA[null]]></default>
+          <type>Context\Query</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="public" namespace="Riverline\DynamoDB" line="228" package="">
+        <name>scan</name>
+        <type>function</type>
+        <docblock line="222">
+          <description><![CDATA[Get items via the scan call]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="222" name="param" description="The item table" type="string" variable="$table">
+            <type by_reference="false">string</type>
+          </tag>
+          <tag line="222" name="param" description="The call context" type="\Context\Scan|null" variable="$context">
+            <type by_reference="false">\Context\Scan</type>
+            <type by_reference="false">null</type>
+          </tag>
+          <tag line="222" name="return" description="" type="\Riverline\DynamoDB\Collection">
+            <type by_reference="false">\Riverline\DynamoDB\Collection</type>
+          </tag>
+        </docblock>
+        <argument line="228">
+          <name>$table</name>
+          <default><![CDATA[]]></default>
+          <type/>
+        </argument>
+        <argument line="228">
+          <name>$context</name>
+          <default><![CDATA[null]]></default>
+          <type>Context\Scan</type>
+        </argument>
+      </method>
+      <method final="false" abstract="false" static="false" visibility="protected" namespace="Riverline\DynamoDB" line="259" package="">
+        <name>parseResponse</name>
+        <type>function</type>
+        <docblock line="253">
+          <description><![CDATA[Parse the SDK response to detect error]]></description>
+          <long-description><![CDATA[]]></long-description>
+          <tag line="253" name="param" description="The raw SDK response" type="\CFResponse" variable="$response">
+            <type by_reference="false">\CFResponse</type>
+          </tag>
+          <tag line="253" name="return" description="The response body" type="\CFSimpleXML">
+            <type by_reference="false">\CFSimpleXML</type>
+          </tag>
+          <tag line="253" name="throws" description="" type="\Exception\ServerException">
+            <type by_reference="false">\Exception\ServerException</type>
+          </tag>
+        </docblock>
+        <argument line="259">
+          <name>$response</name>
+          <default><![CDATA[]]></default>
+          <type>\CFResponse</type>
+        </argument>
+      </method>
+    </class>
+  </file>
+  <package name="" full_name=""/>
+  <package name="Default" full_name="Default"/>
+  <namespace name="Riverline" full_name="Riverline">
+    <namespace name="DynamoDB" full_name="Riverline\DynamoDB">
+      <namespace name="Context" full_name="Riverline\DynamoDB\Context"/>
+      <namespace name="Exception" full_name="Riverline\DynamoDB\Exception"/>
+    </namespace>
+  </namespace>
+  <marker count="1">todo</marker>
+  <marker count="0">fixme</marker>
+  <deprecated count="0"/>
+</project>

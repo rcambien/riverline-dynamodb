@@ -7,12 +7,25 @@ namespace Riverline\DynamoDB\Context;
  */
 abstract class Collection extends Get
 {
+    /**
+     * @var boolean
+     */
     protected $count;
 
+    /**
+     * @var integer
+     */
     protected $limit;
 
+    /**
+     * @var string
+     */
     protected $lastKey;
 
+    /**
+     * @param boolean $count
+     * @return \Riverline\DynamoDB\Context\Collection
+     */
     public function setCount($count)
     {
         $this->count = (bool)$count;
@@ -20,6 +33,10 @@ abstract class Collection extends Get
         return $this;
     }
 
+    /**
+     * @param integer $limit
+     * @return \Riverline\DynamoDB\Context\Collection
+     */
     public function setLimit($limit)
     {
         $this->limit = intval($limit);
@@ -27,6 +44,10 @@ abstract class Collection extends Get
         return $this;
     }
 
+    /**
+     * @param string $lastKey
+     * @return \Riverline\DynamoDB\Context\Collection
+     */
     public function setLastKey($lastKey)
     {
         $this->lastKey = $lastKey;
@@ -34,47 +55,25 @@ abstract class Collection extends Get
         return $this;
     }
 
-    public function setAttributesToGet($attributesToGet)
-    {
-        $this->attributesToGet = $attributesToGet;
-
-        return $this;
-    }
-
-    public function getCount()
-    {
-        return $this->count;
-    }
-
-    public function getLastKey()
-    {
-        return $this->lastKey;
-    }
-
-    public function getLimit()
-    {
-        return $this->limit;
-    }
-
-    public function getAttributesToGet()
-    {
-        return $this->attributesToGet;
-    }
-
+    /**
+     * Return the context formated for DynamoDB
+     * @return array
+     */
     public function getForDynamoDB()
     {
         $parameters = parent::getForDynamoDB();
 
-        if ($this->getCount()) {
-            $parameters['Count'] = true;
+        $count = $this->count;
+        if (null !== $count) {
+            $parameters['Count'] = $this->count;
         }
 
-        $limit = $this->getLimit();
+        $limit = $this->limit;
         if (null !== $limit) {
             $parameters['Limit'] = $limit;
         }
 
-        $lastKey = $this->getLastKey();
+        $lastKey = $this->lastKey;
         if (null !== $lastKey) {
             $parameters['ExclusiveStartKey'] = $lastKey;
         }

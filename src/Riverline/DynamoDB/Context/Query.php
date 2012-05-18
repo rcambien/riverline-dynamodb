@@ -6,10 +6,21 @@ use \Riverline\DynamoDB\AttributeCondition;
 
 class Query extends Collection
 {
+    /**
+     * @var AttributeCondition
+     */
     protected $rangeCondition;
 
-    protected $ScanIndexForward;
+    /**
+     * @var boolean
+     */
+    protected $scanIndexForward;
 
+    /**
+     * @param string $operator
+     * @param mixed $attributes
+     * @return \Riverline\DynamoDB\Context\Query
+     */
     public function setRangeCondition($operator, $attributes)
     {
         $this->rangeCondition = new AttributeCondition($operator, $attributes);
@@ -17,19 +28,21 @@ class Query extends Collection
         return $this;
     }
 
-    static public function create($operator, $attributes)
-    {
-        $query = new Query();
-        $query->setRangeCondition($operator, $attributes);
-
-        return $query;
-    }
-
+    /**
+     * @param boolean $ScanIndexForward
+     * @return \Riverline\DynamoDB\Context\Query
+     */
     public function setScanIndexForward($ScanIndexForward)
     {
-        $this->ScanIndexForward = (bool)$ScanIndexForward;
+        $this->scanIndexForward = (bool)$ScanIndexForward;
+
+        return $this;
     }
 
+    /**
+     * Return the context formated for DynamoDB
+     * @return array
+     */
     public function getForDynamoDB()
     {
         $parameters = parent::getForDynamoDB();
@@ -39,10 +52,25 @@ class Query extends Collection
             $parameters['RangeKeyCondition'] = $rangeCondition->getForDynamoDB();
         }
 
-        if (null !== $this->ScanIndexForward) {
-            $parameters['ScanIndexForward'] = $this->ScanIndexForward;
+        $scanIndexForward = $this->scanIndexForward;
+        if (null !== $scanIndexForward) {
+            $parameters['ScanIndexForward'] = $scanIndexForward;
         }
 
         return $parameters;
+    }
+
+    /**
+     * @static
+     * @param string $operator
+     * @param mixed $attributes
+     * @return \Riverline\DynamoDB\Context\Query
+     */
+    static public function create($operator, $attributes)
+    {
+        $query = new Query();
+        $query->setRangeCondition($operator, $attributes);
+
+        return $query;
     }
 }
