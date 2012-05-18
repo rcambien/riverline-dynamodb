@@ -2,18 +2,11 @@
 
 namespace Riverline\DynamoDB;
 
-if (!class_exists('\AmazonDynamoDB')) {
-    throw new \Exception('Missing AWS PHP SDK');
-}
-
 /**
  * @class
  */
 class Connection
 {
-    const REGION_US = \AmazonDynamoDB::REGION_US_E1;
-    const REGION_EU = 'dynamodb.eu-west-1.amazonaws.com';
-
     /**
      * @var \AmazonDynamoDB
      */
@@ -29,9 +22,14 @@ class Connection
      * @param string $secret The AWS secret Key
      * @param string $cacheConfig The DynamoDB SDK cache configuration
      * @param string|null $region The DynamoDB region endpoint
+     * @throws \Exception
      */
     public function __construct($key, $secret, $cacheConfig, $region = null)
     {
+        if (!class_exists('\AmazonDynamoDB')) {
+            throw new \Exception('Missing AWS PHP SDK');
+        }
+
         $this->connector = new \AmazonDynamoDB(array(
             'key'    => $key,
             'secret' => $secret,
