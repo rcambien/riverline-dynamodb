@@ -80,9 +80,10 @@ class Connection
     /**
      * Add an item to DynamoDB via the put_item call
      * @param Item $item
+     * @param Context\Put|null $context The call context
      * @throws Exception\AttributesException
      */
-    public function put(Item $item)
+    public function put(Item $item, Context\Put $context = null)
     {
         $table = $item->getTable();
 
@@ -98,16 +99,21 @@ class Connection
                 $attributes[$name] = $attribute->getForDynamoDB();
             }
         }
-
-        $response = $this->parseResponse(
-            $this->connector->put_item(array(
-                'TableName' => $table,
-                'Item'      => $attributes,
-            ))
+        $parameters = array(
+            'TableName' => $table,
+            'Item'      => $attributes,
         );
+
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $response = $this->parseResponse($this->connector->put_item($parameters));
 
         // Update write counter
         $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+
+        return $this->populateAttributes($response);
     }
 
     /**
@@ -115,8 +121,9 @@ class Connection
      * @param string $table The item table
      * @param mixed $hash The primary hash key
      * @param mixed|null $range The primary range key
+     * @param Context\Delete|null $context The call context
      */
-    public function delete($table, $hash, $range = null)
+    public function delete($table, $hash, $range = null, Context\Delete $context = null)
     {
         // Primary key
         $hash = new Attribute($hash);
@@ -130,15 +137,21 @@ class Connection
             $key['RangeKeyElement'] = $range->getForDynamoDB();
         }
 
-        $response = $this->parseResponse(
-            $this->connector->delete_item(array(
-                'TableName' => $table,
-                'Key'       => $key
-            ))
+        $parameters = array(
+            'TableName' => $table,
+            'Key'       => $key
         );
+
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $response = $this->parseResponse($this->connector->delete_item($parameters));
 
         // Update write counter
         $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+
+        return $this->populateAttributes($response);
     }
 
     /**
@@ -181,6 +194,52 @@ class Connection
         } else {
             return null;
         }
+    }
+
+    /**
+     * Update an item via the update_item call
+     * @param string $table The item table
+     * @param mixed $hash The primary hash key
+     * @param mixed|null $range The primary range key
+     * @param AttributeUpdate $update
+     * @param Context\Update|null $context The call context
+     * @throws Exception\AttributesException
+     */
+    public function update($table, $hash, $range = null, AttributeUpdate $update, Context\Update $context = null)
+    {
+        // Primary key
+        $hash = new Attribute($hash);
+        $key = array(
+            'HashKeyElement' => $hash->getForDynamoDB()
+        );
+
+        // Range key
+        if (null !== $range) {
+            $range = new Attribute($range);
+            $key['RangeKeyElement'] = $range->getForDynamoDB();
+        }
+
+        $attributes = array();
+        foreach ($update as $name => $attribute) {
+            $attributes[$name] = $attribute->getForDynamoDB();
+        }
+        
+        $parameters = array(
+            'TableName'         => $table,
+            'Key'               => $key,
+            'AttributeUpdates'  => $attributes,
+        );
+
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $response = $this->parseResponse($this->connector->update_item($parameters));
+
+        // Update write counter
+        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+
+        return $this->populateAttributes($response);
     }
 
     /**
@@ -266,6 +325,24 @@ class Connection
                 $message = strval($response->body->Message);
             }
             throw new Exception\ServerException($message);
+        }
+    }
+
+    /**
+     * Extract the attributes array from response XML
+     * @param \CFSimpleXML $responseXml The response body XML
+     */
+    protected function populateAttributes(\CFSimpleXML $responseXml)
+    {
+        if ($responseXml->Attributes) {
+            $attributes = array();
+            foreach ($responseXml->Attributes[0] as $name => $value) {
+                list ($type, $value) = each($value);
+                $attributes[$name] = new Attribute($value, $type);
+            }
+            return $attributes;
+        } else {
+            return null;
         }
     }
 }
