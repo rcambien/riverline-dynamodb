@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+* 1.1.0 (Contribution by Tomonori Kusanagi )
+    * Add update method
+    * Add Excepted and ReturnValues options for Put and Delete methods
+    * Put, Delete and Update methods return attribute array (when ReturnValues is not NONE).
+
 * 1.0.3
     * Fix Context internal properties name
     * Remove useless constants
