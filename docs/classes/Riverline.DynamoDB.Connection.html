@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">58</span></a></li>
+                <span class="label label-info">88</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -68,18 +68,16 @@
 <li class="method public "><a href="#query" title="query :: Get items via the query call"><span class="description">Get items via the query call</span><pre>query()</pre></a></li>
 <li class="method public "><a href="#resetConsumedUnits" title="resetConsumedUnits :: Reset the read and write unit counter"><span class="description">Reset the read and write unit counter</span><pre>resetConsumedUnits()</pre></a></li>
 <li class="method public "><a href="#scan" title="scan :: Get items via the scan call"><span class="description">Get items via the scan call</span><pre>scan()</pre></a></li>
+<li class="method public "><a href="#update" title="update :: Update an item via the update_item call"><span class="description">Update an item via the update_item call</span><pre>update()</pre></a></li>
 <li class="nav-header protected">» Protected</li>
 <li class="method protected "><a href="#parseResponse" title="parseResponse :: Parse the SDK response to detect error"><span class="description">Parse the SDK response to detect error</span><pre>parseResponse()</pre></a></li>
+<li class="method protected "><a href="#populateAttributes" title="populateAttributes :: Extract the attributes array from response XML"><span class="description">Extract the attributes array from response XML</span><pre>populateAttributes()</pre></a></li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties</li>
 <li class="property public "><a href="#%24writeUnit" title="$writeUnit :: "><span class="description">$writeUnit</span><pre>$writeUnit</pre></a></li>
 <li class="nav-header protected">» Protected</li>
 <li class="property protected "><a href="#%24connector" title="$connector :: "><span class="description">$connector</span><pre>$connector</pre></a></li>
 <li class="property protected "><a href="#%24readUnit" title="$readUnit :: "><span class="description">$readUnit</span><pre>$readUnit</pre></a></li>
-<li class="nav-header">
-<i class="icon-custom icon-constant"></i> Constants</li>
-<li class="constant  "><a href="#REGION_EU" title="REGION_EU :: "><span class="description">REGION_EU</span><pre>REGION_EU</pre></a></li>
-<li class="constant  "><a href="#REGION_US" title="REGION_US :: "><span class="description">REGION_US</span><pre>REGION_US</pre></a></li>
 </ul>
 </div>
 <div class="span8">
@@ -123,11 +121,16 @@
 <div class="subelement argument">
 <h4>$region</h4>
 <code>stringnull</code><p>The DynamoDB region endpoint</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="http://php.net/manual/en/class.exception.php">\Exception</a></code></th>
+<td></td>
+</tr></table>
 </div></div>
 </div>
 <a name="delete" id="delete"></a><div class="element clickable method public delete" data-toggle="collapse" data-target=".delete .collapse">
 <h2>Delete an item via the delete_item call</h2>
-<pre>delete(string $table, mixed $hash, mixed | null $range) </pre>
+<pre>delete(string $table, mixed $hash, mixed | null $range, Context\Delete $context) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -141,6 +144,9 @@
 <div class="subelement argument">
 <h4>$range</h4>
 <code>mixednull</code><p>The primary range key</p></div>
+<div class="subelement argument">
+<h4>$context</h4>
+<code>\Context\Deletenull</code><p>The call context</p></div>
 </div></div>
 </div>
 <a name="get" id="get"></a><div class="element clickable method public get" data-toggle="collapse" data-target=".get .collapse">
@@ -200,7 +206,7 @@
 </div>
 <a name="put" id="put"></a><div class="element clickable method public put" data-toggle="collapse" data-target=".put .collapse">
 <h2>Add an item to DynamoDB via the put_item call</h2>
-<pre>put(Item $item) </pre>
+<pre>put(Item $item, Context\Put $context) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -209,6 +215,9 @@
 <h4>$item</h4>
 <code><a href="../classes/Riverline.DynamoDB.Item.html">\Riverline\DynamoDB\Item</a></code>
 </div>
+<div class="subelement argument">
+<h4>$context</h4>
+<code>\Context\Putnull</code><p>The call context</p></div>
 <h3>Exceptions</h3>
 <table class="table table-bordered"><tr>
 <th><code>\Exception\AttributesException</code></th>
@@ -259,6 +268,36 @@
 <div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Collection.html">\Riverline\DynamoDB\Collection</a></code></div>
 </div></div>
 </div>
+<a name="update" id="update"></a><div class="element clickable method public update" data-toggle="collapse" data-target=".update .collapse">
+<h2>Update an item via the update_item call</h2>
+<pre>update(string $table, mixed $hash, mixed | null $range, AttributeUpdate $update, Context\Update $context) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The item table</p></div>
+<div class="subelement argument">
+<h4>$hash</h4>
+<code>mixed</code><p>The primary hash key</p></div>
+<div class="subelement argument">
+<h4>$range</h4>
+<code>mixednull</code><p>The primary range key</p></div>
+<div class="subelement argument">
+<h4>$update</h4>
+<code><a href="../classes/Riverline.DynamoDB.AttributeUpdate.html">\Riverline\DynamoDB\AttributeUpdate</a></code>
+</div>
+<div class="subelement argument">
+<h4>$context</h4>
+<code>\Context\Updatenull</code><p>The call context</p></div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\Exception\AttributesException</code></th>
+<td></td>
+</tr></table>
+</div></div>
+</div>
 <a name="parseResponse" id="parseResponse"></a><div class="element clickable method protected parseResponse" data-toggle="collapse" data-target=".parseResponse .collapse">
 <h2>Parse the SDK response to detect error</h2>
 <pre>parseResponse(\CFResponse $response) : \CFSimpleXML</pre>
@@ -277,6 +316,18 @@
 <h3>Returns</h3>
 <div class="subelement response">
 <code>\CFSimpleXML</code>The response body</div>
+</div></div>
+</div>
+<a name="populateAttributes" id="populateAttributes"></a><div class="element clickable method protected populateAttributes" data-toggle="collapse" data-target=".populateAttributes .collapse">
+<h2>Extract the attributes array from response XML</h2>
+<pre>populateAttributes(\CFSimpleXML $responseXml) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$responseXml</h4>
+<code>\CFSimpleXML</code><p>The response body XML</p></div>
 </div></div>
 </div>
 <h3>
@@ -299,20 +350,6 @@
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>
-<h3>
-<i class="icon-custom icon-constant"></i> Constants</h3>
-<a name="REGION_EU" id="REGION_EU"> </a><div class="element clickable constant  REGION_EU" data-toggle="collapse" data-target=".REGION_EU .collapse">
-<h2>REGION_EU</h2>
-<pre>REGION_EU </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
-</div>
-<a name="REGION_US" id="REGION_US"> </a><div class="element clickable constant  REGION_US" data-toggle="collapse" data-target=".REGION_US .collapse">
-<h2>REGION_US</h2>
-<pre>REGION_US </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
-</div>
 </div>
 </div>
 </div>
@@ -320,7 +357,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a3</a> and<br>
-            generated on 2012-05-18T15:38:35+02:00.<br></footer></div>
+            generated on 2012-06-19T11:53:54+02:00.<br></footer></div>
 </div>
 </body>
 </html>
