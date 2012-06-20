@@ -40,12 +40,14 @@ class Attribute implements \IteratorAggregate
                 break;
             case \AmazonDynamoDB::TYPE_ARRAY_OF_STRINGS:
                 $value = (array) $value;
-                $value = array_map(function ($value) { return strval($value);}, $value['SS']);
+                $value = isset($value['SS']) ? $value['SS'] : $value;
+                $value = array_map(function ($value) { return strval($value);}, $value);
                 sort($value);
                 break;
             case \AmazonDynamoDB::TYPE_ARRAY_OF_NUMBERS:
                 $value = (array) $value;
-                $value = array_map(function ($value) { return $value+0;}, $value['NS']);
+                $value = isset($value['NS']) ? $value['NS'] : $value;
+                $value = array_map(function ($value) { return $value+0;}, $value);
                 sort($value);
                 break;
             default:
