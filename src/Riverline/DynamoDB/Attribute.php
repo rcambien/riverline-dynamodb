@@ -39,11 +39,13 @@ class Attribute implements \IteratorAggregate
                 $value = $value+0;
                 break;
             case \AmazonDynamoDB::TYPE_ARRAY_OF_STRINGS:
-                $value = array_map(function ($value) { return strval($value);}, (array)$value);
+                $value = (array) $value;
+                $value = array_map(function ($value) { return strval($value);}, $value['SS']);
                 sort($value);
                 break;
             case \AmazonDynamoDB::TYPE_ARRAY_OF_NUMBERS:
-                $value = array_map(function ($value) { return $value+0;}, (array)$value);
+                $value = (array) $value;
+                $value = array_map(function ($value) { return $value+0;}, $value['NS']);
                 sort($value);
                 break;
             default:
