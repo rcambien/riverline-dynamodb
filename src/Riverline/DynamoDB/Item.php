@@ -37,6 +37,15 @@ class Item implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * Return the Item attributes
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+
+    /**
      * @param string $name
      * @param \Riverline\DynamoDB\Attribute|mixed $value
      * @param null|string $type
