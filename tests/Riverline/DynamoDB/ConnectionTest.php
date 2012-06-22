@@ -55,6 +55,28 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testConnection
      */
+    public function testArrayCopy(Connection $conn)
+    {
+        $item = $conn->get(DY_TABLE, ITEM_ID);
+
+        $this->assertSame(array (
+            'id' => ITEM_ID,
+            'name' => 'test',
+            'numbers' => array (
+                0 => 4,
+                1 => 5,
+                2 => 6,
+            ),
+            'strings' => array (
+                0 => 'test1',
+                1 => 'test2',
+            )
+        ), $item->getArrayCopy());
+    }
+
+    /**
+     * @depends testConnection
+     */
     public function testGetPartial(Connection $conn)
     {
         $context = new Context\Get();
