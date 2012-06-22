@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="tests/bootstrap.php" colors="true">
+    <php>
+        <!-- AWS credential provided for travis with restricted access, don't play with them, thanks -->
+        <const name="AWS_KEY"        value="AKIAJYTPPAREMZTXAWVA" />
+        <const name="AWS_SECRET"     value="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" />
+        <const name="AWS_REGION"     value="dynamodb.eu-west-1.amazonaws.com" />
+        <const name="DY_TABLE"       value="Test" />
+        <const name="DY_TABLE_RANGE" value="TestRange" />
+    </php>
+
+    <testsuites>
+        <testsuite name="DynamoDB Test Suite">
+            <directory>tests/Riverline/DynamoDB/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/Riverline/DynamoDB/</directory>
+        </whitelist>
+    </filter>
+</phpunit>

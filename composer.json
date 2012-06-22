@@ -17,7 +17,8 @@
     ],
     "homepage": "https://github.com/rcambien/riverline-dynamodb",
     "require":{
-        "php":">=5.3.5"
+        "php":">=5.3.5",
+        "amazonwebservices/aws-sdk-for-php": ">=1.5.2"
     },
     "autoload":{
         "psr-0":{
