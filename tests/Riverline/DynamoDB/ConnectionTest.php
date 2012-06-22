@@ -168,7 +168,10 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testScan(Connection $conn)
     {
-        $items = $conn->scan(DY_TABLE_RANGE);
+        $scan = new Context\Scan();
+        $scan->addFilter('id', \AmazonDynamoDB::CONDITION_EQUAL, ITEM_ID);
+
+        $items = $conn->scan(DY_TABLE_RANGE, $scan);
 
         $this->assertCount(4, $items);
     }
