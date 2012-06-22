@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+* 1.1.1
+    * Add getArrayCopy method on the Item class to extract all attributes
+    * Fix Tests for parallel executions
+    * Add Travis CI configuration
+
 * 1.1.0 (Contribution by Tomonori Kusanagi )
     * Add update method
     * Add Excepted and ReturnValues options for Put and Delete methods
