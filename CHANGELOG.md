@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+* 1.1.2
+    * Use raw JSON response from the API to avoid bugged XML convertion (Fix #3)
+
 * 1.1.1
     * Add getArrayCopy method on the Item class to extract all attributes
     * Fix Tests for parallel executions
