@@ -105,11 +105,11 @@ class Item implements \ArrayAccess, \IteratorAggregate
 
     /**
      * Populate attributes from the raw DynamoDB response
-     * @param \CFSimpleXML $xml
+     * @param \stdClass $data
      */
-    public function populateFromDynamoDB(\CFSimpleXML $xml)
+    public function populateFromDynamoDB(\stdClass $data)
     {
-        foreach ($xml as $name => $value) {
+        foreach ($data as $name => $value) {
             list ($type, $value) = each($value);
             $this->setAttribute($name, $value, $type);
         }

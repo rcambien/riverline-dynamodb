@@ -30,6 +30,16 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @depends testConnection
      */
+    public function testServerError(Connection $conn)
+    {
+        $this->setExpectedException('\Riverline\DynamoDB\Exception\ServerException');
+
+        $conn->get(DY_TABLE_RANGE, ITEM_ID);
+    }
+
+    /**
+     * @depends testConnection
+     */
     public function testGetUnknowItem(Connection $conn)
     {
         $item = $conn->get(DY_TABLE, ITEM_ID+1);
@@ -196,6 +206,38 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $items = $conn->scan(DY_TABLE_RANGE, $scan);
 
         $this->assertCount(4, $items);
+    }
+
+    /**
+     * @depends testConnection
+     */
+    public function testScanWithArray(Connection $conn)
+    {
+        $item = $conn->get(DY_TABLE_RANGE, ITEM_ID, 456);
+
+        $item['strings'] = array('one', 'two');
+
+        $conn->put($item);
+
+        $scan = new Context\Scan();
+        $scan->addFilter('id', \AmazonDynamoDB::CONDITION_EQUAL, ITEM_ID);
+        $scan->addFilter('strings', \AmazonDynamoDB::CONDITION_CONTAINS, 'one');
+
+        $items = $conn->scan(DY_TABLE_RANGE, $scan);
+
+        foreach ($items as $item) {
+            $this->assertSame(array (
+                'id'    => ITEM_ID,
+                'name'  => 'test 456',
+                'range' => 456,
+                'strings' => array (
+                    0 => 'one',
+                    1 => 'two',
+                )
+            ), $item->getArrayCopy());
+
+            break;
+        }
     }
 
     /**
