@@ -39,6 +39,9 @@ class Connection
         if (null !== $region) {
             $this->connector->set_region($region);
         }
+
+        // Raw JSON response
+        $this->connector->parse_the_response = false;
     }
 
     /**
@@ -81,6 +84,7 @@ class Connection
      * Add an item to DynamoDB via the put_item call
      * @param Item $item
      * @param Context\Put|null $context The call context
+     * @return array|null
      * @throws Exception\AttributesException
      */
     public function put(Item $item, Context\Put $context = null)
@@ -122,6 +126,7 @@ class Connection
      * @param mixed $hash The primary hash key
      * @param mixed|null $range The primary range key
      * @param Context\Delete|null $context The call context
+     * @return array|null
      */
     public function delete($table, $hash, $range = null, Context\Delete $context = null)
     {
@@ -187,9 +192,9 @@ class Connection
 
         $this->readUnit += floatval($response->ConsumedCapacityUnits);
 
-        if ($response->Item) {
+        if (isset($response->Item)) {
             $item = new Item($table);
-            $item->populateFromDynamoDB($response->Item[0]);
+            $item->populateFromDynamoDB($response->Item);
             return $item;
         } else {
             return null;
@@ -203,6 +208,7 @@ class Connection
      * @param mixed|null $range The primary range key
      * @param AttributeUpdate $update
      * @param Context\Update|null $context The call context
+     * @return array|null
      * @throws Exception\AttributesException
      */
     public function update($table, $hash, $range = null, AttributeUpdate $update, Context\Update $context = null)
@@ -265,7 +271,7 @@ class Connection
 
         $this->readUnit += floatval($response->ConsumedCapacityUnits);
 
-        $items = new Collection($response->LastEvaluatedKey);
+        $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
             foreach ($response->Items as $responseItem) {
                 $item = new Item($table);
@@ -296,7 +302,7 @@ class Connection
 
         $this->readUnit += floatval($response->ConsumedCapacityUnits);
 
-        $items = new Collection($response->LastEvaluatedKey);
+        $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
             foreach ($response->Items as $responseItem) {
                 $item = new Item($table);
@@ -315,14 +321,15 @@ class Connection
      */
     protected function parseResponse(\CFResponse $response)
     {
+        $body = json_decode($response->body);
         if ($response->isOk()) {
-            return $response->body;
+            return $body;
         } else {
             $message = '';
-            if (isset($response->body->message)) {
-                $message = strval($response->body->message);
-            } elseif (isset($response->body->Message)) {
-                $message = strval($response->body->Message);
+            if (isset($body->message)) {
+                $message = $body->message;
+            } elseif (isset($body->Message)) {
+                $message = $body->Message;
             }
             throw new Exception\ServerException($message);
         }
@@ -330,13 +337,14 @@ class Connection
 
     /**
      * Extract the attributes array from response XML
-     * @param \CFSimpleXML $responseXml The response body XML
+     * @param \stdClass $data The response body XML
+     * @return array|null
      */
-    protected function populateAttributes(\CFSimpleXML $responseXml)
+    protected function populateAttributes(\stdClass $data)
     {
-        if ($responseXml->Attributes) {
+        if (isset($data->Attributes)) {
             $attributes = array();
-            foreach ($responseXml->Attributes[0] as $name => $value) {
+            foreach ($data->Attributes as $name => $value) {
                 list ($type, $value) = each($value);
                 $attributes[$name] = new Attribute($value, $type);
             }

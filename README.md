@@ -1,6 +1,8 @@
 README
 ======
 
+[![Build Status](https://secure.travis-ci.org/rcambien/riverline-dynamodb.png)](http://travis-ci.org/rcambien/riverline-dynamodb)
+
 What is Riverline\DynamoDB
 --------------------------
 

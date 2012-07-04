@@ -63,7 +63,7 @@ class Item implements \ArrayAccess, \IteratorAggregate
     /**
      * @see \ArrayAccess
      * @param $offset
-     * @return null
+     * @return mixed|null
      */
     public function offsetGet($offset)
     {
@@ -105,13 +105,29 @@ class Item implements \ArrayAccess, \IteratorAggregate
 
     /**
      * Populate attributes from the raw DynamoDB response
-     * @param \CFSimpleXML $xml
+     * @param \stdClass $data
      */
-    public function populateFromDynamoDB(\CFSimpleXML $xml)
+    public function populateFromDynamoDB(\stdClass $data)
     {
-        foreach ($xml as $name => $value) {
+        foreach ($data as $name => $value) {
             list ($type, $value) = each($value);
             $this->setAttribute($name, $value, $type);
         }
+    }
+
+    /**
+     * Return an Array representation of the item attributes
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        $attributes = array();
+
+        foreach($this->attributes as $key => $attribute) {
+            /** @var Attribute $attribute->get */
+            $attributes[$key] = $attribute->getValue();
+        }
+
+        return $attributes;
     }
 }
