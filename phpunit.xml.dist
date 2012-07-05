@@ -8,6 +8,7 @@
         <const name="AWS_REGION"     value="dynamodb.eu-west-1.amazonaws.com" />
         <const name="DY_TABLE"       value="Test" />
         <const name="DY_TABLE_RANGE" value="TestRange" />
+        <const name="DY_TABLE_TMP"   value="TestTmp" />
     </php>
 
     <testsuites>
