@@ -372,6 +372,46 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($attributes);
     }
 
+    /**
+     * @depends testConnection
+     */
+    public function testDescribeTable(Connection $conn)
+    {
+        $tableDescription = $conn->describeTable(DY_TABLE);
+        $this->assertNotNull($tableDescription);
+    }
+
+    /**
+     * @depends testConnection
+     */
+    public function testListTables(Connection $conn)
+    {
+        $tableCollection = $conn->listTables();
+        $this->assertNotNull($tableCollection);
+    }
+
+    /**
+     * @depends testConnection
+     */
+    public function testTableOperations(Connection $conn)
+    {
+        // Create table
+        $hash = new \Riverline\DynamoDB\Table\KeySchemaElement('id', \AmazonDynamoDB::TYPE_NUMBER);
+        $range = new \Riverline\DynamoDB\Table\KeySchemaElement('range', \AmazonDynamoDB::TYPE_STRING);
+        $keySchema = new \Riverline\DynamoDB\Table\KeySchema($hash, $range);
+        $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(3, 5);
+        $tableDescription = $conn->createTable(DY_TABLE_TMP, $keySchema, $provisionedThroughput);
+
+        $this->waitForTableToBeInState($conn, DY_TABLE_TMP, 'ACTIVE');
+        // Update table
+        $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(5, 5);
+        $tableDescription = $conn->updateTable(DY_TABLE_TMP, $provisionedThroughput);
+
+        $this->waitForTableToBeInState($conn, DY_TABLE_TMP, 'ACTIVE');
+        // Delete table
+        $tableDescription = $conn->deleteTable(DY_TABLE_TMP);
+    }
+
     protected function createRangeItem($range)
     {
         $item = new Item(DY_TABLE_RANGE);
@@ -379,5 +419,19 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['range'] = $range;
         $item['name']  = 'test '.$range;
         return $item;
+    }
+
+    protected function waitForTableToBeInState(Connection $conn, $table, $status, $sleep = 3, $max = 10, $current = 0)
+    {
+        $tableDescription = $conn->describeTable($table);
+        if ($status === $tableDescription->getTableStatus()) {
+            return true;
+        } else {
+            if ($current >= $max) {
+                throw new \Exception();
+            }
+            sleep($sleep);
+            $this->waitForTableToBeInState($conn, $table, $status, $sleep, $max, $current + 1);
+        }
     }
 }
