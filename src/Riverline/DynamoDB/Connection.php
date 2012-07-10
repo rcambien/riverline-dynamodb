@@ -314,6 +314,94 @@ class Connection
     }
 
     /**
+     * Create table via the create_table call
+     * @param string $table The name of the table
+     * @param Table\KeySchema $keySchama
+     * @param Table\ProvisionedThroughput $provisionedThroughput
+     * @return Table\TableDescription
+     */
+    public function createTable($table, Table\KeySchema $keySchama, Table\ProvisionedThroughput $provisionedThroughput)
+    {
+        $parameters = array(
+            'TableName' => $table,
+            'KeySchema' => $keySchama->getForDynamoDB(),
+            'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
+        );
+        $response = $this->parseResponse($this->connector->create_table($parameters));
+        return $this->populateTableDescription($response);
+    }
+
+    /**
+     * Update table via the update_table call
+     * @param string $table The name of the table
+     * @param Table\ProvisionedThroughput $provisionedThroughput
+     * @return Table\TableDescription
+     */
+    public function updateTable($table, Table\ProvisionedThroughput $provisionedThroughput)
+    {
+        $parameters = array(
+            'TableName' => $table,
+            'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
+        );
+        $response = $this->parseResponse($this->connector->update_table($parameters));
+        return $this->populateTableDescription($response);
+    }
+
+    /**
+     * Delete table via the delete_table call
+     * @param string $table The name of the table
+     * @return Table\TableDescription
+     */
+    public function deleteTable($table)
+    {
+        $parameters = array(
+            'TableName' => $table,
+        );
+        $response = $this->parseResponse($this->connector->delete_table($parameters));
+        return $this->populateTableDescription($response);
+    }
+
+    /**
+     * Describe table via the describe_table call
+     * @param string $table The name of the table
+     * @return Table\TableDescription
+     */
+    public function describeTable($table)
+    {
+        $parameters = array(
+            'TableName' => $table,
+        );
+        $response = $this->parseResponse($this->connector->describe_table($parameters));
+        return $this->populateTableDescription($response);
+    }
+
+    /**
+     * List tables via the list_tables call
+     * @param integer $limit
+     * @param string $exclusiveStartTableName
+     * @return Table\TableCollection
+     */
+    public function listTables($limit = null, $exclusiveStartTableName = null)
+    {
+        $parameters = array();
+        if (null !== $limit) {
+            $parameters['Limit'] = $limit;
+        }
+        if (null !== $exclusiveStartTableName) {
+            $parameters['ExclusiveStartTableName'] = $exclusiveStartTableName;
+        }
+        $response = $this->parseResponse($this->connector->list_tables($parameters));
+
+        $tables = new Table\TableCollection((isset($response->LastEvaluatedTableName)?$response->LastEvaluatedTableName:null));
+        if (!empty($response->TableNames)) {
+            foreach ($response->TableNames as $table) {
+                $tables->add($table);
+            }
+        }
+        return $tables;
+    }
+
+    /**
      * Parse the SDK response to detect error
      * @param \CFResponse $response The raw SDK response
      * @return \CFSimpleXML The response body
@@ -336,8 +424,8 @@ class Connection
     }
 
     /**
-     * Extract the attributes array from response XML
-     * @param \stdClass $data The response body XML
+     * Extract the attributes array from response data
+     * @param \stdClass $data The response body data
      * @return array|null
      */
     protected function populateAttributes(\stdClass $data)
@@ -352,5 +440,21 @@ class Connection
         } else {
             return null;
         }
+    }
+
+    /**
+     * Generate TableDescription from response data
+     * @param \stdClass $data The response body data
+     * @return Table\TableDescription
+     */
+    protected function populateTableDescription(\stdClass $data)
+    {
+        $tableDescription = new Table\TableDescription(null, null, null, null, null);
+        if (isset($data->TableDescription)) {
+            $tableDescription->populateFromDynamoDB($data->TableDescription);
+        } else if (isset($data->Table)) {
+            $tableDescription->populateFromDynamoDB($data->Table);
+        }
+        return $tableDescription;
     }
 }
