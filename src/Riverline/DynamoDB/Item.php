@@ -103,6 +103,20 @@ class Item implements \ArrayAccess, \IteratorAggregate
         return new \ArrayIterator($this->attributes);
     }
 
+    public function getForDynamoDB()
+    {
+        $attributes = array();
+        foreach ($this->attributes as $name => $value) {
+            /** @var $value \Riverline\DynamoDB\Attribute */
+            if ("" !== $value->getValue()) {
+                // Only not empty string
+                $attributes[$name] = $value->getForDynamoDB();
+            }
+        }
+        return $attributes;
+    }
+
+
     /**
      * Populate attributes from the raw DynamoDB response
      * @param \stdClass $data
