@@ -18,6 +18,11 @@ class Connection
     protected $readUnit = 0, $writeUnit = 0;
 
     /**
+     * @var array
+     */
+    protected $consumedUnits;
+
+    /**
      * @param string $key The AWS access Key
      * @param string $secret The AWS secret Key
      * @param string $cacheConfig The DynamoDB SDK cache configuration
@@ -42,6 +47,9 @@ class Connection
 
         // Raw JSON response
         $this->connector->parse_the_response = false;
+
+        // Consumed read/write units per table.
+        $this->consumedUnits = array();
     }
 
     /**
@@ -72,12 +80,22 @@ class Connection
     }
 
     /**
+     * Return consumed read/write units per table
+     * @return array
+     */
+    public function getConsumedUnits()
+    {
+        return $this->consumedUnits;
+    }
+
+    /**
      * Reset the read and write unit counter
      */
     public function resetConsumedUnits()
     {
         $this->readUnit  = 0;
         $this->writeUnit = 0;
+        $this->consumedUnits = array();
     }
 
     /**
@@ -95,14 +113,7 @@ class Connection
             throw new \Riverline\DynamoDB\Exception\AttributesException('Item do not have table defined');
         }
 
-        $attributes = array();
-        foreach ($item as $name => $attribute) {
-            /** @var $attribute \Riverline\DynamoDB\Attribute */
-            if ("" !== $attribute->getValue()) {
-                // Only not empty string
-                $attributes[$name] = $attribute->getForDynamoDB();
-            }
-        }
+        $attributes = $item->getForDynamoDB();
         $parameters = array(
             'TableName' => $table,
             'Item'      => $attributes,
@@ -115,7 +126,7 @@ class Connection
         $response = $this->parseResponse($this->connector->put_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, $response->ConsumedCapacityUnits);
 
         return $this->populateAttributes($response);
     }
@@ -154,7 +165,7 @@ class Connection
         $response = $this->parseResponse($this->connector->delete_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, $response->ConsumedCapacityUnits);
 
         return $this->populateAttributes($response);
     }
@@ -190,7 +201,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->get_item($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, $response->ConsumedCapacityUnits);
 
         if (isset($response->Item)) {
             $item = new Item($table);
@@ -243,7 +254,7 @@ class Connection
         $response = $this->parseResponse($this->connector->update_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, $response->ConsumedCapacityUnits);
 
         return $this->populateAttributes($response);
     }
@@ -269,7 +280,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->query($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, $response->ConsumedCapacityUnits);
 
         $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
@@ -300,7 +311,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->scan($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, $response->ConsumedCapacityUnits);
 
         $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
@@ -311,6 +322,55 @@ class Connection
             }
         }
         return $items;
+    }
+
+    /**
+     * Batch get items via the batch_get_item call
+     * @param Batch\BatchGetRequest $request
+     * @return array
+     */
+    public function batchGet(Batch\BatchGetRequest $request)
+    {
+        $parameters = array('RequestItems' => $request->getForDynamoDB());
+        $response = $this->parseResponse($this->connector->batch_get_item($parameters));
+
+        $items = array();
+        foreach ($response->Responses as $table => $data) {
+            $this->addConsumedReadUnits($table, $data->ConsumedCapacityUnits);
+            foreach ($data->Items as $value) {
+                $item = $item = new Item($table);
+                $item->populateFromDynamoDB($value);
+                $items[$table][] = $item;
+            }
+        }
+        $unprocessedKeys = new Batch\BatchGetRequest();
+        foreach ($response->UnprocessedKeys as $table => $data) {
+            $requestItem = new Batch\GetRequestItem();
+            $requestItem->populateFromDynamoDB($data);
+            $unprocessedKeys->setRequestItem($table, $requestItem);
+        }
+
+        return array($items, $unprocessedKeys);
+    }
+
+    /**
+     * Batch write items via the batch_write_item call
+     * @param Batch\BatchWriteRequest $request
+     */
+    public function batchWrite(Batch\BatchWriteRequest $request)
+    {
+        $parameters = array('RequestItems' => $request->getForDynamoDB());
+        $response = $this->parseResponse($this->connector->batch_write_item($parameters));
+        foreach ($response->Responses as $table => $data) {
+            $this->addConsumedWriteUnits($table, $data->ConsumedCapacityUnits);
+        }
+        $unprocessedItems = new Batch\BatchWriteRequest();
+        foreach ($response->UnprocessedItems as $table => $data) {
+            $requestItem = new Batch\WriteRequestItem();
+            $requestItem->populateFromDynamoDB($table, $data);
+            $unprocessedItems->setRequestItem($table, $requestItem);
+        }
+        return $unprocessedItems;
     }
 
     /**
@@ -352,5 +412,33 @@ class Connection
         } else {
             return null;
         }
+    }
+
+    /**
+     * Add comsumed read units.
+     * @param mixed $unit
+     */
+    protected function addConsumedReadUnits($table, $unit)
+    {
+        $unit = floatval($unit);
+        $this->readUnit += $unit;
+        if (!isset($this->consumedUnits[$table])) {
+            $this->consumedUnits[$table] = new ConsumedUnit();
+        }
+        $this->consumedUnits[$table]->addRead($unit);
+    }
+
+    /**
+     * Add comsumed write units.
+     * @param mixed $unit
+     */
+    protected function addConsumedWriteUnits($table, $unit)
+    {
+        $unit = floatval($unit);
+        $this->writeUnit += $unit;
+        if (!isset($this->consumedUnits[$table])) {
+            $this->consumedUnits[$table] = new ConsumedUnit();
+        }
+        $this->consumedUnits[$table]->addWrite($unit);
     }
 }

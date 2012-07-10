@@ -372,6 +372,54 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertNotNull($attributes);
     }
 
+    /**
+     * @depends testConnection
+     */
+    public function testBatchGet(Connection $conn)
+    {
+        // items to get.
+        $item = new Item(DY_TABLE);
+        $item['id']      = ITEM_ID;
+        $item['name']    = 'test';
+        $item['strings'] = array('test1', 'test2');
+        $item['numbers'] = array(4, 5, 6);
+        $conn->put($item);
+        $conn->put($this->createRangeItem(123));
+        $conn->put($this->createRangeItem(456));
+
+        $request = new Batch\BatchGetRequest();
+        $request[DY_TABLE]->get(array(ITEM_ID, ITEM_ID+1), array('id', 'name'));
+        $request[DY_TABLE_RANGE]->get(array(array(ITEM_ID, 123), array(ITEM_ID, 456), array(ITEM_ID, 789)));
+
+        list($items, $unprocessedKeys) = $conn->batchGet($request);
+        $units = $conn->getConsumedUnits();
+    }
+
+    /**
+     * @depends testConnection
+     */
+    public function testBatchWrite(Connection $conn)
+    {
+        // items to delete.
+        $conn->put($this->createRangeItem(123));
+        $conn->put($this->createRangeItem(456));
+        // items to put.
+        $items = array();
+        for($i=0;$i<3;$i++) {
+            $item = new Item(DY_TABLE);
+            $item['id']      = ITEM_ID+$i;
+            $item['name']    = 'test' . $i;
+            $items[] = $item;
+        }
+
+        $request = new Batch\BatchWriteRequest();
+        $request[DY_TABLE]->put($items);
+        $request[DY_TABLE_RANGE]->delete(array(array(ITEM_ID, 123), array(ITEM_ID, 456)));
+
+        $unprocessedItems = $conn->batchWrite($request);
+        $units = $conn->getConsumedUnits();
+    }
+
     protected function createRangeItem($range)
     {
         $item = new Item(DY_TABLE_RANGE);
