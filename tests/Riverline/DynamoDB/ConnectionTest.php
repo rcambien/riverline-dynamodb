@@ -210,6 +210,27 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testBatchGet()
+    {
+        $batch = new Context\BatchGet();
+        $batch
+            ->addKey(DY_TABLE, ITEM_ID)
+            ->addKey(DY_TABLE_RANGE, ITEM_ID, 456)
+            ->addKey(DY_TABLE_RANGE, ITEM_ID, 567)
+            ->addKey(DY_TABLE_RANGE, ITEM_ID, 678)
+            ->setAttributesToGet(DY_TABLE, array('id'));
+
+        $result = $this->conn->batchGet($batch);
+
+        $this->assertCount(4, $result);
+        $this->assertCount(1, $result[DY_TABLE]);
+        $this->assertCount(3, $result[DY_TABLE_RANGE]);
+
+        $item = $result[DY_TABLE]->shift();
+        $this->assertEquals(ITEM_ID, $item['id']);
+        $this->assertNull($item['name']);
+    }
+
     public function testDelete()
     {
         $this->conn->delete(DY_TABLE, ITEM_ID);

@@ -314,6 +314,50 @@ class Connection
     }
 
     /**
+     * Get a batch of items
+     * @param Context\BatchGet $context
+     * @return \Riverline\DynamoDB\BatchCollection
+     */
+    public function batchGet(Context\BatchGet $context)
+    {
+        $paramaters = $context->getForDynamoDB();
+
+        $response = $this->parseResponse($this->connector->batch_get_item($paramaters));
+
+        // UnprocessedKeys
+        if (!empty($response->UnprocessedKeys)) {
+            $unprocessKeyContext = new Context\BatchGet();
+            foreach ($response->UnprocessedKeys as $table => $tableParameters) {
+                foreach ($tableParameters->Keys as $key) {
+                    $unprocessKeyContext->addKey($table, current($key->HashKeyElement), current($key->RangeKeyElement));
+                }
+                if (!empty($tableParameters->AttributesToGet)) {
+                    $unprocessKeyContext->setAttributesToGet($table, $tableParameters->AttributesToGet);
+                }
+            }
+        } else {
+            $unprocessKeyContext = null;
+        }
+
+        $collection = new BatchCollection($unprocessKeyContext);
+
+        foreach ($response->Responses as $table => $responseItems) {
+            $this->readUnit += floatval($responseItems->ConsumedCapacityUnits);
+
+            $items = new Collection();
+            foreach ($responseItems->Items as $responseItem) {
+                $item = new Item($table);
+                $item->populateFromDynamoDB($responseItem);
+                $items->add($item);
+            }
+
+            $collection->setItems($table, $items);
+        }
+
+        return $collection;
+    }
+
+    /**
      * Create table via the create_table call
      * @param string $table The name of the table
      * @param Table\KeySchema $keySchama
