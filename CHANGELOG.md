@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+* 1.2.0
+    * Merge table operation methods by Tomonori Kusanagi
+    * Remove the return of tableDescription object for methods create, update and delete (for consistency)
+    * Move the waitForTableToBeInState method to the Connection class (can be useful outside the tests)
+    * Add more test for table operations
+
 * 1.1.2
     * Use raw JSON response from the API to avoid bugged XML convertion (Fix #3)
 
