@@ -9,5 +9,10 @@ php composer.phar install
 ");
 }
 
-// Create a uniq ID to avoid ID collision between test
+// Create a versioned table name to avoid collision between php 5.3 and 5.4 tests
+$version = floatval(phpversion());
+define('DY_TABLE_TMP_VER', DY_TABLE_TMP.PHP_MAJOR_VERSION.PHP_MINOR_VERSION);
+
+// Create a uniq ID to avoid ID collision between tests
 define('ITEM_ID', crc32(uniqid()));
+

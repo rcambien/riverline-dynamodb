@@ -11,13 +11,13 @@ class ProvisionedThroughput
      * The provisioned read capacity units.
      * @var integer
      */
-    private $read;
+    private $readCapacity;
 
     /**
      * The provisioned write capacity units.
      * @var integer
      */
-    private $write;
+    private $writeCapacity;
 
     /**
      * Date when the capacity was increased.
@@ -34,11 +34,13 @@ class ProvisionedThroughput
     /**
      * @param integer $read The provisioned read capacity units.
      * @param integer $write The provisioned write capacity units.
+     * @param string|null $lastIncreaseDateTime
+     * @param string|null $lastDecreaseDateTime
      */
     public function __construct($read, $write, $lastIncreaseDateTime = null, $lastDecreaseDateTime = null)
     {
-        $this->read = $read;
-        $this->write = $write;
+        $this->readCapacity         = $read;
+        $this->writeCapacity        = $write;
         $this->lastIncreaseDateTime = $lastIncreaseDateTime;
         $this->lastDecreaseDateTime = $lastDecreaseDateTime;
     }
@@ -47,18 +49,18 @@ class ProvisionedThroughput
      * Return the provisioned read capacity units.
      * @return integer
      */
-    public function getRead()
+    public function getReadCapacity()
     {
-        return $this->read;
+        return $this->readCapacity;
     }
 
     /**
      * Return the provisioned write capacity units.
      * @return integer
      */
-    public function getWrite()
+    public function getWriteCapacity()
     {
-        return $this->write;
+        return $this->writeCapacity;
     }
 
     /**
@@ -86,20 +88,8 @@ class ProvisionedThroughput
     public function getForDynamoDB()
     {
         return array(
-            'ReadCapacityUnits' => $this->getRead(),
-            'WriteCapacityUnits' => $this->getWrite()
-            );
-    }
-
-    /**
-     * Populate provisioned throughput from the raw DynamoDB response
-     * @param \stdClass $data
-     */
-    public function populateFromDynamoDB(\stdClass $data)
-    {
-        $this->read = $data->ReadCapacityUnits;
-        $this->write = $data->WriteCapacityUnits;
-        $this->lastIncreaseDateTime = isset($data->LastIncreaseDateTime)?$data->LastIncreaseDateTime:null;
-        $this->lastDecreaseDateTime = isset($data->LastDecreaseDateTime)?$data->LastDecreaseDateTime:null;
+            'ReadCapacityUnits'  => $this->getReadCapacity(),
+            'WriteCapacityUnits' => $this->getWriteCapacity()
+        );
     }
 }

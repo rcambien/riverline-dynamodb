@@ -51,7 +51,7 @@ class TableCollection implements \IteratorAggregate, \Countable
      */
     public function add($table)
     {
-        $this->table[] = $table;
+        $this->tables[] = $table;
     }
 
     /**

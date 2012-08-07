@@ -327,8 +327,7 @@ class Connection
             'KeySchema' => $keySchama->getForDynamoDB(),
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
-        $response = $this->parseResponse($this->connector->create_table($parameters));
-        return $this->populateTableDescription($response);
+        $this->parseResponse($this->connector->create_table($parameters));
     }
 
     /**
@@ -343,8 +342,7 @@ class Connection
             'TableName' => $table,
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
-        $response = $this->parseResponse($this->connector->update_table($parameters));
-        return $this->populateTableDescription($response);
+        $this->parseResponse($this->connector->update_table($parameters));
     }
 
     /**
@@ -357,8 +355,7 @@ class Connection
         $parameters = array(
             'TableName' => $table,
         );
-        $response = $this->parseResponse($this->connector->delete_table($parameters));
-        return $this->populateTableDescription($response);
+        $this->parseResponse($this->connector->delete_table($parameters));
     }
 
     /**
@@ -372,7 +369,9 @@ class Connection
             'TableName' => $table,
         );
         $response = $this->parseResponse($this->connector->describe_table($parameters));
-        return $this->populateTableDescription($response);
+        $tableDescription = new Table\TableDescription();
+        $tableDescription->populateFromDynamoDB($response->Table);
+        return $tableDescription;
     }
 
     /**
@@ -399,6 +398,21 @@ class Connection
             }
         }
         return $tables;
+    }
+
+    public function waitForTableToBeInState($table, $status, $sleep = 3, $max = 20)
+    {
+        $current = 0;
+        do {
+            $tableDescription = $this->describeTable($table);
+            if ($status == $tableDescription->getTableStatus()) {
+                return $tableDescription;
+            } else {
+                sleep($sleep);
+            }
+        } while(++$current < $max);
+
+        throw new \Exception('waitForTableToBeInState timeout');
     }
 
     /**
@@ -440,21 +454,5 @@ class Connection
         } else {
             return null;
         }
-    }
-
-    /**
-     * Generate TableDescription from response data
-     * @param \stdClass $data The response body data
-     * @return Table\TableDescription
-     */
-    protected function populateTableDescription(\stdClass $data)
-    {
-        $tableDescription = new Table\TableDescription(null, null, null, null, null);
-        if (isset($data->TableDescription)) {
-            $tableDescription->populateFromDynamoDB($data->TableDescription);
-        } else if (isset($data->Table)) {
-            $tableDescription->populateFromDynamoDB($data->Table);
-        }
-        return $tableDescription;
     }
 }

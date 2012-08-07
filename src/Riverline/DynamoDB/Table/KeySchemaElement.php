@@ -58,14 +58,4 @@ class KeySchemaElement
             'AttributeType' => $this->getType()
             );
     }
-
-    /**
-     * Populate key schema element from the raw DynamoDB response
-     * @param \stdClass $data
-     */
-    public function populateFromDynamoDB(\stdClass $data)
-    {
-        $this->name = $data->AttributeName;
-        $this->type = $data->AttributeType;
-    }
 }

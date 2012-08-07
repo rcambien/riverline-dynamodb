@@ -2,6 +2,8 @@
 
 namespace Riverline\DynamoDB\Table;
 
+use \Riverline\DynamoDB\Attribute;
+
 /**
  * @class
  */
@@ -48,26 +50,6 @@ class TableDescription
      * @var integer
      */
     protected $tableSizeBytes;
-
-    /**
-     * @param string $tableName The name of the table.
-     * @param KeySchema $keySchema The primary key structure of the table.
-     * @param ProvisionedThroughput $provisionedThroughput The provisioned throughput.
-     * @param number $creationDateTime Date when the table was created.
-     * @param string $tableStatus The current status of the table.
-     * @param integer $itemCount Number of items in the table.
-     * @param integer $tableSizeBytes Total size of the table in bytes.
-     */
-    public function __construct($tableName, $keySchema, $provisionedThroughput, $creationDateTime, $tableStatus, $itemCount = null, $tableSizeBytes = null)
-    {
-        $this->tableName = $tableName;
-        $this->keySchema = $keySchema;
-        $this->provisionedThroughput = $provisionedThroughput;
-        $this->creationDateTime = $creationDateTime;
-        $this->tableStatus = $tableStatus;
-        $this->itemCount = $itemCount;
-        $this->tableSizeBytes = $tableSizeBytes;
-    }
 
     /**
      * Return date when the table was created.
@@ -138,18 +120,35 @@ class TableDescription
      */
     public function populateFromDynamoDB(\stdClass $data)
     {
-        $this->creationDateTime = isset($data->CreationDateTime)?$data->CreationDateTime:null;
-        if (isset($data->KeySchema)) {
-            $keySchema = new KeySchema(null, null);
-            $keySchema->populateFromDynamoDB($data->KeySchema);
-            $this->keySchema = $keySchema;
+        $this->tableName        = $data->TableName;
+        $this->tableStatus      = $data->TableStatus;
+        $this->creationDateTime = $data->CreationDateTime;
+
+        $this->itemCount        = (isset($data->ItemCount)?$data->ItemCount:0);
+        $this->tableSizeBytes   = (isset($data->TableSizeBytes)?$data->TableSizeBytes:0);
+
+        $keySchema = $data->KeySchema;
+        $hash = new KeySchemaElement(
+            $keySchema->HashKeyElement->AttributeName,
+            $keySchema->HashKeyElement->AttributeType
+        );
+        if (isset($keySchema->RangeKeyElement)) {
+            $range = new KeySchemaElement(
+                $keySchema->RangeKeyElement->AttributeName,
+                $keySchema->RangeKeyElement->AttributeType
+            );
+        } else {
+            $range = null;
         }
-        $provisionedThroughput = new ProvisionedThroughput(null, null);
-        $provisionedThroughput->populateFromDynamoDB($data->ProvisionedThroughput);
-        $this->provisionedThroughput = $provisionedThroughput;
-        $this->tableName = $data->TableName;
-        $this->tableStatus = $data->TableStatus;
-        $this->itemCount = isset($data->ItemCount)?$data->ItemCount:null;
-        $this->tableSizeBytes = isset($data->TableSizeBytes)?$data->TableSizeBytes:null;
+
+        $this->keySchema = new KeySchema($hash, $range);
+
+        $provisionedThroughput = $data->ProvisionedThroughput;
+        $this->provisionedThroughput = new ProvisionedThroughput(
+            $provisionedThroughput->ReadCapacityUnits,
+            $provisionedThroughput->WriteCapacityUnits,
+            (isset($provisionedThroughput->LastIncreaseDateTime)?$provisionedThroughput->LastIncreaseDateTime:null),
+            (isset($provisionedThroughput->LastDecreaseDateTime)?$provisionedThroughput->LastDecreaseDateTime:null)
+        );
     }
 }

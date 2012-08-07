@@ -4,19 +4,22 @@ namespace Riverline\DynamoDB;
 
 class ConnectionTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConnection()
+    /**
+     * @var Connection
+     */
+    protected $conn;
+
+    protected function setUp()
     {
-        $conn = new Connection(AWS_KEY, AWS_SECRET, '/tmp/', AWS_REGION);
-
-        $this->assertInstanceOf('AmazonDynamoDB', $conn->getConnector());
-
-        return $conn;
+        $this->conn = new Connection(AWS_KEY, AWS_SECRET, '/tmp/', AWS_REGION);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testCreateItem(Connection $conn)
+    public function testConnection()
+    {
+        $this->assertInstanceOf('AmazonDynamoDB', $this->conn->getConnector());
+    }
+
+    public function testCreateItem()
     {
         $item = new Item(DY_TABLE);
         $item['id']      = ITEM_ID;
@@ -24,35 +27,26 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['strings'] = array('test1', 'test2');
         $item['numbers'] = array(4, 5, 6);
 
-        $conn->put($item);
+        $this->conn->put($item);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testServerError(Connection $conn)
+    public function testServerError()
     {
         $this->setExpectedException('\Riverline\DynamoDB\Exception\ServerException');
 
-        $conn->get(DY_TABLE_RANGE, ITEM_ID);
+        $this->conn->get(DY_TABLE_RANGE, ITEM_ID);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testGetUnknowItem(Connection $conn)
+    public function testGetUnknowItem()
     {
-        $item = $conn->get(DY_TABLE, ITEM_ID+1);
+        $item = $this->conn->get(DY_TABLE, ITEM_ID+1);
 
         $this->assertNull($item);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testGetItem(Connection $conn)
+    public function testGetItem()
     {
-        $item = $conn->get(DY_TABLE, ITEM_ID);
+        $item = $this->conn->get(DY_TABLE, ITEM_ID);
 
         $this->assertInstanceOf('\Riverline\DynamoDB\Item', $item);
 
@@ -62,12 +56,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(array(4, 5, 6), $item['numbers']);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testArrayCopy(Connection $conn)
+    public function testArrayCopy()
     {
-        $item = $conn->get(DY_TABLE, ITEM_ID);
+        $item = $this->conn->get(DY_TABLE, ITEM_ID);
 
         $this->assertSame(array (
             'id' => ITEM_ID,
@@ -84,15 +75,12 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         ), $item->getArrayCopy());
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testGetPartial(Connection $conn)
+    public function testGetPartial()
     {
         $context = new Context\Get();
         $context->setAttributesToGet(array('id'));
 
-        $item = $conn->get(DY_TABLE, ITEM_ID, null, $context);
+        $item = $this->conn->get(DY_TABLE, ITEM_ID, null, $context);
 
         $this->assertInstanceOf('\Riverline\DynamoDB\Item', $item);
 
@@ -100,14 +88,11 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($item['name']);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testGetRangeItem(Connection $conn)
+    public function testGetRangeItem()
     {
-        $conn->put($this->createRangeItem(456));
+        $this->conn->put($this->createRangeItem(456));
 
-        $item = $conn->get(DY_TABLE_RANGE, ITEM_ID, 456);
+        $item = $this->conn->get(DY_TABLE_RANGE, ITEM_ID, 456);
 
         $this->assertInstanceOf('\Riverline\DynamoDB\Item', $item);
 
@@ -116,12 +101,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test 456', $item['name']);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testQuery(Connection $conn)
+    public function testQuery()
     {
-        $items = $conn->query(DY_TABLE_RANGE, ITEM_ID, Context\Query::create(\AmazonDynamoDB::CONDITION_LESS_THAN, 460));
+        $items = $this->conn->query(DY_TABLE_RANGE, ITEM_ID, Context\Query::create(\AmazonDynamoDB::CONDITION_LESS_THAN, 460));
 
         $this->assertCount(1, $items);
 
@@ -134,12 +116,9 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test 456', $item['name']);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testBetweenQuery(Connection $conn)
+    public function testBetweenQuery()
     {
-        $items = $conn->query(DY_TABLE_RANGE, ITEM_ID, Context\Query::create(\AmazonDynamoDB::CONDITION_BETWEEN, array(400, 500)));
+        $items = $this->conn->query(DY_TABLE_RANGE, ITEM_ID, Context\Query::create(\AmazonDynamoDB::CONDITION_BETWEEN, array(400, 500)));
 
         $this->assertCount(1, $items);
 
@@ -152,20 +131,17 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('test 456', $item['name']);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testQueryLimit(Connection $conn)
+    public function testQueryLimit()
     {
         // Add items
-        $conn->put($this->createRangeItem(567));
-        $conn->put($this->createRangeItem(678));
-        $conn->put($this->createRangeItem(789));
+        $this->conn->put($this->createRangeItem(567));
+        $this->conn->put($this->createRangeItem(678));
+        $this->conn->put($this->createRangeItem(789));
 
         $query = new Context\Query();
         $query->setLimit(2);
 
-        $items = $conn->query(DY_TABLE_RANGE, ITEM_ID, $query);
+        $items = $this->conn->query(DY_TABLE_RANGE, ITEM_ID, $query);
 
         $this->assertInstanceOf('\Riverline\DynamoDB\Collection', $items);
 
@@ -182,7 +158,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $query->setLastKey($items->getLastKey());
         $query->setLimit(3);
 
-        $items = $conn->query(DY_TABLE_RANGE, ITEM_ID, $query);
+        $items = $this->conn->query(DY_TABLE_RANGE, ITEM_ID, $query);
 
         $this->assertCount(2, $items);
 
@@ -195,35 +171,29 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($items->getLastKey());
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testScan(Connection $conn)
+    public function testScan()
     {
         $scan = new Context\Scan();
         $scan->addFilter('id', \AmazonDynamoDB::CONDITION_EQUAL, ITEM_ID);
 
-        $items = $conn->scan(DY_TABLE_RANGE, $scan);
+        $items = $this->conn->scan(DY_TABLE_RANGE, $scan);
 
         $this->assertCount(4, $items);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testScanWithArray(Connection $conn)
+    public function testScanWithArray()
     {
-        $item = $conn->get(DY_TABLE_RANGE, ITEM_ID, 456);
+        $item = $this->conn->get(DY_TABLE_RANGE, ITEM_ID, 456);
 
         $item['strings'] = array('one', 'two');
 
-        $conn->put($item);
+        $this->conn->put($item);
 
         $scan = new Context\Scan();
         $scan->addFilter('id', \AmazonDynamoDB::CONDITION_EQUAL, ITEM_ID);
         $scan->addFilter('strings', \AmazonDynamoDB::CONDITION_CONTAINS, 'one');
 
-        $items = $conn->scan(DY_TABLE_RANGE, $scan);
+        $items = $this->conn->scan(DY_TABLE_RANGE, $scan);
 
         foreach ($items as $item) {
             $this->assertSame(array (
@@ -240,34 +210,25 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testDelete(Connection $conn)
+    public function testDelete()
     {
-        $conn->delete(DY_TABLE, ITEM_ID);
+        $this->conn->delete(DY_TABLE, ITEM_ID);
 
-        $conn->delete(DY_TABLE_RANGE, ITEM_ID, 456);
+        $this->conn->delete(DY_TABLE_RANGE, ITEM_ID, 456);
 
-        $conn->delete(DY_TABLE_RANGE, ITEM_ID, 567);
+        $this->conn->delete(DY_TABLE_RANGE, ITEM_ID, 567);
 
-        $conn->delete(DY_TABLE_RANGE, ITEM_ID, 678);
+        $this->conn->delete(DY_TABLE_RANGE, ITEM_ID, 678);
 
-        $conn->delete(DY_TABLE_RANGE, ITEM_ID, 789);
+        $this->conn->delete(DY_TABLE_RANGE, ITEM_ID, 789);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testDeleteUnknow(Connection $conn)
+    public function testDeleteUnknow()
     {
-        $conn->delete(DY_TABLE, 456);
+        $this->conn->delete(DY_TABLE, 456);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testUpdate(Connection $conn)
+    public function testUpdate()
     {
         $item = new Item(DY_TABLE);
         $item['id']      = ITEM_ID;
@@ -275,21 +236,18 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['strings'] = array('test1', 'test2');
         $item['numbers'] = array(4, 5, 6);
 
-        $conn->put($item);
+        $this->conn->put($item);
 
         $update = new \Riverline\DynamoDB\AttributeUpdate();
         $update['name'] = new UpdateAction(\AmazonDynamoDB::ACTION_PUT, 'new name');
         $update['strings'] = new UpdateAction(\AmazonDynamoDB::ACTION_ADD, array('test3'));
         $update['numbers'] = new UpdateAction(\AmazonDynamoDB::ACTION_DELETE);
 
-        $attributes = $conn->update(DY_TABLE, ITEM_ID, null, $update);
+        $attributes = $this->conn->update(DY_TABLE, ITEM_ID, null, $update);
         $this->assertNull($attributes);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testPutExpected(Connection $conn)
+    public function testPutExpected()
     {
         $item = new Item(DY_TABLE);
         $item['id']      = ITEM_ID;
@@ -297,7 +255,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['strings'] = array('test1', 'test2');
         $item['numbers'] = array(4, 5, 6);
 
-        $conn->put($item);
+        $this->conn->put($item);
 
         $expected = new Expected();
         $expected['strings'] = new ExpectedAttribute(array('test1', 'test2'));
@@ -313,14 +271,11 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $newItem['strings'] = array('test1', 'test2', 'test3');
         $newItem['numbers'] = array(4, 5, 6, 7, 8, 9);
 
-        $attributes = $conn->put($item, $context);
+        $attributes = $this->conn->put($item, $context);
         $this->assertNotNull($attributes);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testDeleteExpected(Connection $conn)
+    public function testDeleteExpected()
     {
         $item = new Item(DY_TABLE);
         $item['id']      = ITEM_ID;
@@ -328,7 +283,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['strings'] = array('test1', 'test2');
         $item['numbers'] = array(4, 5, 6);
 
-        $conn->put($item);
+        $this->conn->put($item);
 
         $expected = new Expected();
         $expected['name'] = new ExpectedAttribute('test');
@@ -338,14 +293,11 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $context->setExpected($expected);
         $context->setReturnValues(\AmazonDynamoDB::RETURN_ALL_OLD);
 
-        $attributes = $conn->delete(DY_TABLE, ITEM_ID, null, $context);
+        $attributes = $this->conn->delete(DY_TABLE, ITEM_ID, null, $context);
         $this->assertNotNull($attributes);
     }
 
-    /**
-     * @depends testConnection
-     */
-    public function testUpdateExpected(Connection $conn)
+    public function testUpdateExpected()
     {
         $item = new Item(DY_TABLE);
         $item['id']      = ITEM_ID;
@@ -353,7 +305,7 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['strings'] = array('test1', 'test2');
         $item['numbers'] = array(4, 5, 6);
 
-        $conn->put($item);
+        $this->conn->put($item);
 
         $expected = new Expected();
         $expected['name'] = new ExpectedAttribute('test');
@@ -368,48 +320,8 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $update['strings'] = new UpdateAction(\AmazonDynamoDB::ACTION_ADD, array('test3'));
         $update['numbers'] = new UpdateAction(\AmazonDynamoDB::ACTION_DELETE);
 
-        $attributes = $conn->update(DY_TABLE, ITEM_ID, null, $update, $context);
+        $attributes = $this->conn->update(DY_TABLE, ITEM_ID, null, $update, $context);
         $this->assertNotNull($attributes);
-    }
-
-    /**
-     * @depends testConnection
-     */
-    public function testDescribeTable(Connection $conn)
-    {
-        $tableDescription = $conn->describeTable(DY_TABLE);
-        $this->assertNotNull($tableDescription);
-    }
-
-    /**
-     * @depends testConnection
-     */
-    public function testListTables(Connection $conn)
-    {
-        $tableCollection = $conn->listTables();
-        $this->assertNotNull($tableCollection);
-    }
-
-    /**
-     * @depends testConnection
-     */
-    public function testTableOperations(Connection $conn)
-    {
-        // Create table
-        $hash = new \Riverline\DynamoDB\Table\KeySchemaElement('id', \AmazonDynamoDB::TYPE_NUMBER);
-        $range = new \Riverline\DynamoDB\Table\KeySchemaElement('range', \AmazonDynamoDB::TYPE_STRING);
-        $keySchema = new \Riverline\DynamoDB\Table\KeySchema($hash, $range);
-        $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(3, 5);
-        $tableDescription = $conn->createTable(DY_TABLE_TMP, $keySchema, $provisionedThroughput);
-
-        $this->waitForTableToBeInState($conn, DY_TABLE_TMP, 'ACTIVE');
-        // Update table
-        $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(5, 5);
-        $tableDescription = $conn->updateTable(DY_TABLE_TMP, $provisionedThroughput);
-
-        $this->waitForTableToBeInState($conn, DY_TABLE_TMP, 'ACTIVE');
-        // Delete table
-        $tableDescription = $conn->deleteTable(DY_TABLE_TMP);
     }
 
     protected function createRangeItem($range)
@@ -419,19 +331,5 @@ class ConnectionTest extends \PHPUnit_Framework_TestCase
         $item['range'] = $range;
         $item['name']  = 'test '.$range;
         return $item;
-    }
-
-    protected function waitForTableToBeInState(Connection $conn, $table, $status, $sleep = 3, $max = 10, $current = 0)
-    {
-        $tableDescription = $conn->describeTable($table);
-        if ($status === $tableDescription->getTableStatus()) {
-            return true;
-        } else {
-            if ($current >= $max) {
-                throw new \Exception();
-            }
-            sleep($sleep);
-            $this->waitForTableToBeInState($conn, $table, $status, $sleep, $max, $current + 1);
-        }
     }
 }

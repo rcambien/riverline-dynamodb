@@ -9,29 +9,29 @@ class KeySchema
 {
     /**
      * HashKeyElement
-     * @var KeySchemaElement
+     * @var \Riverline\DynamoDB\Table\KeySchemaElement
      */
     private $hash;
 
     /**
      * RangeKeyElement
-     * @var KeySchemaElement
+     * @var \Riverline\DynamoDB\Table\KeySchemaElement
      */
     private $range;
 
     /**
-     * @param KeySchemaElement $hashKeyElement HashKeyElement
-     * @param KeySchemaElement $rangeKeyElement RangeKeyElement
+     * @param \Riverline\DynamoDB\Table\KeySchemaElement $hash
+     * @param \Riverline\DynamoDB\Table\KeySchemaElement $range
      */
-    public function __construct($hash, $range = null)
+    public function __construct(KeySchemaElement $hash, KeySchemaElement $range = null)
     {
-        $this->hash = $hash;
+        $this->hash  = $hash;
         $this->range = $range;
     }
 
     /**
      * Return HashKeyElement
-     * @return KeySchemaElement
+     * @return \Riverline\DynamoDB\Table\KeySchemaElement
      */
     public function getHash()
     {
@@ -40,7 +40,7 @@ class KeySchema
 
     /**
      * Return RangeKeyElement
-     * @return KeySchemaElement
+     * @return \Riverline\DynamoDB\Table\KeySchemaElement
      */
     public function getRange()
     {
@@ -53,28 +53,12 @@ class KeySchema
      */
     public function getForDynamoDB()
     {
-        $hash = $this->getHash();
+        $hash  = $this->getHash();
         $range = $this->getRange();
         $parameters = array('HashKeyElement' => $hash->getForDynamoDB());
         if (null !== $range) {
             $parameters['RangeKeyElement'] = $range->getForDynamoDB();
         }
         return $parameters;
-    }
-
-    /**
-     * Populate key schema from the raw DynamoDB response
-     * @param \stdClass $data
-     */
-    public function populateFromDynamoDB(\stdClass $data)
-    {
-        $hash = new KeySchemaElement(null, null);
-        $hash->populateFromDynamoDB($data->HashKeyElement);
-        $this->hash = $hash;
-        if (isset($data->RangeKeyElement)) {
-            $range = new KeySchemaElement(null, null);
-            $range->populateFromDynamoDB($data->RangeKeyElement);
-            $this->range = $range;
-        }
     }
 }
