@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+* 1.3.0
+    * Add BatchGet method
+    * Add BatchWrite method
+    * Add Repeater helper class for batch request
+    * Add special ProvisionedThroughputExceededException
+
 * 1.2.0
     * Merge table operation methods by Tomonori Kusanagi
     * Remove the return of tableDescription object for methods create, update and delete (for consistency)
