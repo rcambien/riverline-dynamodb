@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>phpDocumentor » \Riverline\DynamoDB\Context\Put</title>
+<title>phpDocumentor » \Riverline\DynamoDB\Context\BatchWrite</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -57,20 +57,22 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods</li>
+<li class="method public "><a href="#addItemToPut" title="addItemToPut :: "><span class="description">addItemToPut()
+        </span><pre>addItemToPut()</pre></a></li>
+<li class="method public "><a href="#addKeyToDelete" title="addKeyToDelete :: "><span class="description">addKeyToDelete()
+        </span><pre>addKeyToDelete()</pre></a></li>
+<li class="method public "><a href="#count" title="count :: "><span class="description">count()
+        </span><pre>count()</pre></a></li>
 <li class="method public "><a href="#getForDynamoDB" title="getForDynamoDB :: Return the context formated for DynamoDB"><span class="description">Return the context formated for DynamoDB</span><pre>getForDynamoDB()</pre></a></li>
-<li class="method public "><a href="#setExpected" title="setExpected :: "><span class="description">setExpected()
-        </span><pre>setExpected()</pre></a></li>
-<li class="method public "><a href="#setReturnValues" title="setReturnValues :: "><span class="description">setReturnValues()
-        </span><pre>setReturnValues()</pre></a></li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties</li>
 <li class="nav-header protected">» Protected</li>
-<li class="property protected "><a href="#%24expected" title="$expected :: Expected values."><span class="description">Expected values.</span><pre>$expected</pre></a></li>
-<li class="property protected "><a href="#%24returnValues" title="$returnValues :: A return constant."><span class="description">A return constant.</span><pre>$returnValues</pre></a></li>
+<li class="property protected "><a href="#%24itemsToPut" title="$itemsToPut :: "><span class="description">$itemsToPut</span><pre>$itemsToPut</pre></a></li>
+<li class="property protected "><a href="#%24keysToDelete" title="$keysToDelete :: "><span class="description">$keysToDelete</span><pre>$keysToDelete</pre></a></li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CRiverline%5CDynamoDB%5CContext%5CPut" id="\Riverline\DynamoDB\Context\Put"></a><ul class="breadcrumb">
+<a name="%5CRiverline%5CDynamoDB%5CContext%5CBatchWrite" id="\Riverline\DynamoDB\Context\BatchWrite"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
@@ -78,10 +80,10 @@
 <span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.html">DynamoDB</a></li>
 <span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.Context.html">Context</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Context.Put.html">Put</a>
+<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Context.BatchWrite.html">BatchWrite</a>
 </li>
 </ul>
-<div href="../classes/Riverline.DynamoDB.Context.Put.html" class="element class">
+<div href="../classes/Riverline.DynamoDB.Context.BatchWrite.html" class="element class">
 <p class="short_description"></p>
 <div class="details">
 <p class="long_description"></p>
@@ -91,6 +93,71 @@
 </tr></table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
+<a name="addItemToPut" id="addItemToPut"></a><div class="element clickable method public addItemToPut" data-toggle="collapse" data-target=".addItemToPut .collapse">
+<h2>addItemToPut()
+        </h2>
+<pre>addItemToPut(\Riverline\DynamoDB\Item $item) : <a href="../classes/Riverline.DynamoDB.Context.BatchWrite.html">\Riverline\DynamoDB\Context\BatchWrite</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$item</h4>
+<code><a href="../classes/Riverline.DynamoDB.Item.html">\Riverline\DynamoDB\Item</a></code>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Riverline.DynamoDB.Exception.AttributesException.html">\Riverline\DynamoDB\Exception\AttributesException</a></code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Context.BatchWrite.html">\Riverline\DynamoDB\Context\BatchWrite</a></code></div>
+</div></div>
+</div>
+<a name="addKeyToDelete" id="addKeyToDelete"></a><div class="element clickable method public addKeyToDelete" data-toggle="collapse" data-target=".addKeyToDelete .collapse">
+<h2>addKeyToDelete()
+        </h2>
+<pre>addKeyToDelete($table, mixed $hash, mixed | null $range) : <a href="../classes/Riverline.DynamoDB.Context.BatchWrite.html">\Riverline\DynamoDB\Context\BatchWrite</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$hash</h4>
+<code>mixed</code>
+</div>
+<div class="subelement argument">
+<h4>$range</h4>
+<code>mixednull</code>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Riverline.DynamoDB.Exception.AttributesException.html">\Riverline\DynamoDB\Exception\AttributesException</a></code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Context.BatchWrite.html">\Riverline\DynamoDB\Context\BatchWrite</a></code></div>
+</div></div>
+</div>
+<a name="count" id="count"></a><div class="element clickable method public count" data-toggle="collapse" data-target=".count .collapse">
+<h2>count()
+        </h2>
+<pre>count() : int</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<table class="table table-bordered"><tr>
+<th>see</th>
+<td>\Countable</td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code>int</code></div>
+</div></div>
+</div>
 <a name="getForDynamoDB" id="getForDynamoDB"></a><div class="element clickable method public getForDynamoDB" data-toggle="collapse" data-target=".getForDynamoDB .collapse">
 <h2>Return the context formated for DynamoDB</h2>
 <pre>getForDynamoDB() : array</pre>
@@ -101,49 +168,19 @@
 <div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
-<a name="setExpected" id="setExpected"></a><div class="element clickable method public setExpected" data-toggle="collapse" data-target=".setExpected .collapse">
-<h2>setExpected()
-        </h2>
-<pre>setExpected(Expected $expected) </pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$expected</h4>
-<code><a href="../classes/Riverline.DynamoDB.Expected.html">\Riverline\DynamoDB\Expected</a></code>
-</div>
-</div></div>
-</div>
-<a name="setReturnValues" id="setReturnValues"></a><div class="element clickable method public setReturnValues" data-toggle="collapse" data-target=".setReturnValues .collapse">
-<h2>setReturnValues()
-        </h2>
-<pre>setReturnValues(string $returnValues) : <a href="../classes/Riverline.DynamoDB.Context.Put.html">\Riverline\DynamoDB\Context\Put</a></pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$returnValues</h4>
-<code>string</code><p>AmazonDynamoDB return constant</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Context.Put.html">\Riverline\DynamoDB\Context\Put</a></code></div>
-</div></div>
-</div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24expected" id="$expected"> </a><div class="element clickable property protected $expected" data-toggle="collapse" data-target=".$expected .collapse">
-<h2>Expected values.</h2>
-<pre>$expected : array</pre>
+<a name="%24itemsToPut" id="$itemsToPut"> </a><div class="element clickable property protected $itemsToPut" data-toggle="collapse" data-target=".$itemsToPut .collapse">
+<h2>$itemsToPut</h2>
+<pre>$itemsToPut : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>
-<a name="%24returnValues" id="$returnValues"> </a><div class="element clickable property protected $returnValues" data-toggle="collapse" data-target=".$returnValues .collapse">
-<h2>A return constant.</h2>
-<pre>$returnValues : string</pre>
+<a name="%24keysToDelete" id="$keysToDelete"> </a><div class="element clickable property protected $keysToDelete" data-toggle="collapse" data-target=".$keysToDelete .collapse">
+<h2>$keysToDelete</h2>
+<pre>$keysToDelete : array</pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description">\AmazonDynamoDB::RETURN_NONE or \AmazonDynamoDB::RETURN_ALL_OLD for put and delete operations.
-\AmazonDynamoDB::RETURN_NONE, \AmazonDynamoDB::RETURN_ALL_OLD, \AmazonDynamoDB::RETURN_ALL_NEW, \AmazonDynamoDB::RETURN_UPDATED_OLD, \AmazonDynamoDB::RETURN_UPDATED_NEW for update operation.</p></div></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>
 </div>
 </div>

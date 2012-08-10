@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>phpDocumentor » \Riverline\DynamoDB\Attribute</title>
+<title>phpDocumentor » \Riverline\DynamoDB\Table\ProvisionedThroughput</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -59,35 +59,33 @@
 <i class="icon-custom icon-method"></i> Methods</li>
 <li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
-<li class="method public "><a href="#__toString" title="__toString :: "><span class="description">__toString()
-        </span><pre>__toString()</pre></a></li>
-<li class="method public "><a href="#getForDynamoDB" title="getForDynamoDB :: Return attribute formated for DynamoDB"><span class="description">Return attribute formated for DynamoDB</span><pre>getForDynamoDB()</pre></a></li>
-<li class="method public "><a href="#getIterator" title="getIterator :: "><span class="description">getIterator()
-        </span><pre>getIterator()</pre></a></li>
-<li class="method public "><a href="#getType" title="getType :: Return the attribute value"><span class="description">Return the attribute value</span><pre>getType()</pre></a></li>
-<li class="method public "><a href="#getValue" title="getValue :: Return the attribute value"><span class="description">Return the attribute value</span><pre>getValue()</pre></a></li>
-<li class="method public "><a href="#isArray" title="isArray :: Return true if this attribute is a collection of attributes"><span class="description">Return true if this attribute is a collection of attributes</span><pre>isArray()</pre></a></li>
-<li class="nav-header private">» Private</li>
-<li class="method private "><a href="#autoDetectType" title="autoDetectType :: Auto detect attribute type base on value type"><span class="description">Auto detect attribute type base on value type</span><pre>autoDetectType()</pre></a></li>
+<li class="method public "><a href="#getForDynamoDB" title="getForDynamoDB :: Return provisioned throughput for DynamoDB"><span class="description">Return provisioned throughput for DynamoDB</span><pre>getForDynamoDB()</pre></a></li>
+<li class="method public "><a href="#getLastDecreaseDateTime" title="getLastDecreaseDateTime :: Return date when the capacity was decreased."><span class="description">Return date when the capacity was decreased.</span><pre>getLastDecreaseDateTime()</pre></a></li>
+<li class="method public "><a href="#getLastIncreaseDateTime" title="getLastIncreaseDateTime :: Return date when the capacity was increased."><span class="description">Return date when the capacity was increased.</span><pre>getLastIncreaseDateTime()</pre></a></li>
+<li class="method public "><a href="#getReadCapacity" title="getReadCapacity :: Return the provisioned read capacity units."><span class="description">Return the provisioned read capacity units.</span><pre>getReadCapacity()</pre></a></li>
+<li class="method public "><a href="#getWriteCapacity" title="getWriteCapacity :: Return the provisioned write capacity units."><span class="description">Return the provisioned write capacity units.</span><pre>getWriteCapacity()</pre></a></li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties</li>
 <li class="nav-header private">» Private</li>
-<li class="property private "><a href="#%24type" title="$type :: The attribute type"><span class="description">The attribute type</span><pre>$type</pre></a></li>
-<li class="property private "><a href="#%24value" title="$value :: The attribute value"><span class="description">The attribute value</span><pre>$value</pre></a></li>
+<li class="property private "><a href="#%24lastDecreaseDateTime" title="$lastDecreaseDateTime :: Date when the capacity was decreased."><span class="description">Date when the capacity was decreased.</span><pre>$lastDecreaseDateTime</pre></a></li>
+<li class="property private "><a href="#%24lastIncreaseDateTime" title="$lastIncreaseDateTime :: Date when the capacity was increased."><span class="description">Date when the capacity was increased.</span><pre>$lastIncreaseDateTime</pre></a></li>
+<li class="property private "><a href="#%24readCapacity" title="$readCapacity :: The provisioned read capacity units."><span class="description">The provisioned read capacity units.</span><pre>$readCapacity</pre></a></li>
+<li class="property private "><a href="#%24writeCapacity" title="$writeCapacity :: The provisioned write capacity units."><span class="description">The provisioned write capacity units.</span><pre>$writeCapacity</pre></a></li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CRiverline%5CDynamoDB%5CAttribute" id="\Riverline\DynamoDB\Attribute"></a><ul class="breadcrumb">
+<a name="%5CRiverline%5CDynamoDB%5CTable%5CProvisionedThroughput" id="\Riverline\DynamoDB\Table\ProvisionedThroughput"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/Riverline.html">Riverline</a></li>
 <span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.html">DynamoDB</a></li>
+<span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.Table.html">Table</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Attribute.html">Attribute</a>
+<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Table.ProvisionedThroughput.html">ProvisionedThroughput</a>
 </li>
 </ul>
-<div href="../classes/Riverline.DynamoDB.Attribute.html" class="element class">
+<div href="../classes/Riverline.DynamoDB.Table.ProvisionedThroughput.html" class="element class">
 <p class="short_description"></p>
 <div class="details">
 <p class="long_description"></p>
@@ -100,37 +98,29 @@
 <a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
 <h2>__construct()
         </h2>
-<pre>__construct(string $value, string | null $type) </pre>
+<pre>__construct(integer $read, integer $write, string | null $lastIncreaseDateTime, string | null $lastDecreaseDateTime) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$value</h4>
-<code>string</code><p>The attribute value</p></div>
+<h4>$read</h4>
+<code>integer</code><p>The provisioned read capacity units.</p></div>
 <div class="subelement argument">
-<h4>$type</h4>
-<code>stringnull</code><p>The attribute type</p></div>
-<h3>Exceptions</h3>
-<table class="table table-bordered"><tr>
-<th><code>\Exception\AttributesException</code></th>
-<td></td>
-</tr></table>
-</div></div>
+<h4>$write</h4>
+<code>integer</code><p>The provisioned write capacity units.</p></div>
+<div class="subelement argument">
+<h4>$lastIncreaseDateTime</h4>
+<code>stringnull</code>
 </div>
-<a name="__toString" id="__toString"></a><div class="element clickable method public __toString" data-toggle="collapse" data-target=".__toString .collapse">
-<h2>__toString()
-        </h2>
-<pre>__toString() : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
+<div class="subelement argument">
+<h4>$lastDecreaseDateTime</h4>
+<code>stringnull</code>
+</div>
 </div></div>
 </div>
 <a name="getForDynamoDB" id="getForDynamoDB"></a><div class="element clickable method public getForDynamoDB" data-toggle="collapse" data-target=".getForDynamoDB .collapse">
-<h2>Return attribute formated for DynamoDB</h2>
+<h2>Return provisioned throughput for DynamoDB</h2>
 <pre>getForDynamoDB() : array</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
@@ -139,86 +129,69 @@
 <div class="subelement response"><code>array</code></div>
 </div></div>
 </div>
-<a name="getIterator" id="getIterator"></a><div class="element clickable method public getIterator" data-toggle="collapse" data-target=".getIterator .collapse">
-<h2>getIterator()
-        </h2>
-<pre>getIterator() : <a href="http://php.net/manual/en/class.arrayiterator.php">\ArrayIterator</a></pre>
+<a name="getLastDecreaseDateTime" id="getLastDecreaseDateTime"></a><div class="element clickable method public getLastDecreaseDateTime" data-toggle="collapse" data-target=".getLastDecreaseDateTime .collapse">
+<h2>Return date when the capacity was decreased.</h2>
+<pre>getLastDecreaseDateTime() : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
-<table class="table table-bordered"><tr>
-<th>see</th>
-<td>\IteratorAggregate</td>
-</tr></table>
-<h3>Exceptions</h3>
-<table class="table table-bordered"><tr>
-<th><code>\Exception\AttributesException</code></th>
-<td></td>
-</tr></table>
 <h3>Returns</h3>
-<div class="subelement response"><code><a href="http://php.net/manual/en/class.arrayiterator.php">\ArrayIterator</a></code></div>
+<div class="subelement response"><code>integer</code></div>
 </div></div>
 </div>
-<a name="getType" id="getType"></a><div class="element clickable method public getType" data-toggle="collapse" data-target=".getType .collapse">
-<h2>Return the attribute value</h2>
-<pre>getType() : string</pre>
+<a name="getLastIncreaseDateTime" id="getLastIncreaseDateTime"></a><div class="element clickable method public getLastIncreaseDateTime" data-toggle="collapse" data-target=".getLastIncreaseDateTime .collapse">
+<h2>Return date when the capacity was increased.</h2>
+<pre>getLastIncreaseDateTime() : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Returns</h3>
-<div class="subelement response"><code>string</code></div>
+<div class="subelement response"><code>integer</code></div>
 </div></div>
 </div>
-<a name="getValue" id="getValue"></a><div class="element clickable method public getValue" data-toggle="collapse" data-target=".getValue .collapse">
-<h2>Return the attribute value</h2>
-<pre>getValue() : mixed</pre>
+<a name="getReadCapacity" id="getReadCapacity"></a><div class="element clickable method public getReadCapacity" data-toggle="collapse" data-target=".getReadCapacity .collapse">
+<h2>Return the provisioned read capacity units.</h2>
+<pre>getReadCapacity() : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Returns</h3>
-<div class="subelement response"><code>mixed</code></div>
+<div class="subelement response"><code>integer</code></div>
 </div></div>
 </div>
-<a name="isArray" id="isArray"></a><div class="element clickable method public isArray" data-toggle="collapse" data-target=".isArray .collapse">
-<h2>Return true if this attribute is a collection of attributes</h2>
-<pre>isArray() : bool</pre>
+<a name="getWriteCapacity" id="getWriteCapacity"></a><div class="element clickable method public getWriteCapacity" data-toggle="collapse" data-target=".getWriteCapacity .collapse">
+<h2>Return the provisioned write capacity units.</h2>
+<pre>getWriteCapacity() : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Returns</h3>
-<div class="subelement response"><code>bool</code></div>
-</div></div>
-</div>
-<a name="autoDetectType" id="autoDetectType"></a><div class="element clickable method private autoDetectType" data-toggle="collapse" data-target=".autoDetectType .collapse">
-<h2>Auto detect attribute type base on value type</h2>
-<pre>autoDetectType(mixed $value) : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<table class="table table-bordered"><tr>
-<th>todo</th>
-<td>Use the internal SDK method attribute()</td>
-</tr></table>
-<h3>Parameters</h3>
-<div class="subelement argument">
-<h4>$value</h4>
-<code>mixed</code><p>The attribute value</p></div>
-<h3>Returns</h3>
-<div class="subelement response">
-<code>string</code>The detected type</div>
+<div class="subelement response"><code>integer</code></div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24type" id="$type"> </a><div class="element clickable property private $type" data-toggle="collapse" data-target=".$type .collapse">
-<h2>The attribute type</h2>
-<pre>$type : string</pre>
+<a name="%24lastDecreaseDateTime" id="$lastDecreaseDateTime"> </a><div class="element clickable property private $lastDecreaseDateTime" data-toggle="collapse" data-target=".$lastDecreaseDateTime .collapse">
+<h2>Date when the capacity was decreased.</h2>
+<pre>$lastDecreaseDateTime : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>
-<a name="%24value" id="$value"> </a><div class="element clickable property private $value" data-toggle="collapse" data-target=".$value .collapse">
-<h2>The attribute value</h2>
-<pre>$value : mixed</pre>
+<a name="%24lastIncreaseDateTime" id="$lastIncreaseDateTime"> </a><div class="element clickable property private $lastIncreaseDateTime" data-toggle="collapse" data-target=".$lastIncreaseDateTime .collapse">
+<h2>Date when the capacity was increased.</h2>
+<pre>$lastIncreaseDateTime : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24readCapacity" id="$readCapacity"> </a><div class="element clickable property private $readCapacity" data-toggle="collapse" data-target=".$readCapacity .collapse">
+<h2>The provisioned read capacity units.</h2>
+<pre>$readCapacity : integer</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+</div>
+<a name="%24writeCapacity" id="$writeCapacity"> </a><div class="element clickable property private $writeCapacity" data-toggle="collapse" data-target=".$writeCapacity .collapse">
+<h2>The provisioned write capacity units.</h2>
+<pre>$writeCapacity : integer</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>

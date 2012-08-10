@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">88</span></a></li>
+                <span class="label label-info">137</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -59,25 +59,36 @@
 <i class="icon-custom icon-method"></i> Methods</li>
 <li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#batchGet" title="batchGet :: Get a batch of items"><span class="description">Get a batch of items</span><pre>batchGet()</pre></a></li>
+<li class="method public "><a href="#batchWrite" title="batchWrite :: Put Items and delete Keys by batch"><span class="description">Put Items and delete Keys by batch</span><pre>batchWrite()</pre></a></li>
+<li class="method public "><a href="#createTable" title="createTable :: Create table via the create_table call"><span class="description">Create table via the create_table call</span><pre>createTable()</pre></a></li>
 <li class="method public "><a href="#delete" title="delete :: Delete an item via the delete_item call"><span class="description">Delete an item via the delete_item call</span><pre>delete()</pre></a></li>
+<li class="method public "><a href="#deleteTable" title="deleteTable :: Delete table via the delete_table call"><span class="description">Delete table via the delete_table call</span><pre>deleteTable()</pre></a></li>
+<li class="method public "><a href="#describeTable" title="describeTable :: Describe table via the describe_table call"><span class="description">Describe table via the describe_table call</span><pre>describeTable()</pre></a></li>
 <li class="method public "><a href="#get" title="get :: Get an item via the get_item call"><span class="description">Get an item via the get_item call</span><pre>get()</pre></a></li>
 <li class="method public "><a href="#getConnector" title="getConnector :: Return the DynamoDB object"><span class="description">Return the DynamoDB object</span><pre>getConnector()</pre></a></li>
 <li class="method public "><a href="#getConsumedReadUnits" title="getConsumedReadUnits :: Return the number of read units consumed"><span class="description">Return the number of read units consumed</span><pre>getConsumedReadUnits()</pre></a></li>
 <li class="method public "><a href="#getConsumedWriteUnits" title="getConsumedWriteUnits :: Return the number of write units consumed"><span class="description">Return the number of write units consumed</span><pre>getConsumedWriteUnits()</pre></a></li>
+<li class="method public "><a href="#listTables" title="listTables :: List tables via the list_tables call"><span class="description">List tables via the list_tables call</span><pre>listTables()</pre></a></li>
 <li class="method public "><a href="#put" title="put :: Add an item to DynamoDB via the put_item call"><span class="description">Add an item to DynamoDB via the put_item call</span><pre>put()</pre></a></li>
 <li class="method public "><a href="#query" title="query :: Get items via the query call"><span class="description">Get items via the query call</span><pre>query()</pre></a></li>
 <li class="method public "><a href="#resetConsumedUnits" title="resetConsumedUnits :: Reset the read and write unit counter"><span class="description">Reset the read and write unit counter</span><pre>resetConsumedUnits()</pre></a></li>
 <li class="method public "><a href="#scan" title="scan :: Get items via the scan call"><span class="description">Get items via the scan call</span><pre>scan()</pre></a></li>
 <li class="method public "><a href="#update" title="update :: Update an item via the update_item call"><span class="description">Update an item via the update_item call</span><pre>update()</pre></a></li>
+<li class="method public "><a href="#updateTable" title="updateTable :: Update table via the update_table call"><span class="description">Update table via the update_table call</span><pre>updateTable()</pre></a></li>
+<li class="method public "><a href="#waitForTableToBeInState" title="waitForTableToBeInState :: "><span class="description">waitForTableToBeInState()
+        </span><pre>waitForTableToBeInState()</pre></a></li>
 <li class="nav-header protected">» Protected</li>
+<li class="method protected "><a href="#addConsumedReadUnits" title="addConsumedReadUnits :: Update the Read Units counter"><span class="description">Update the Read Units counter</span><pre>addConsumedReadUnits()</pre></a></li>
+<li class="method protected "><a href="#addConsumedWriteUnits" title="addConsumedWriteUnits :: Update the Write Units counter"><span class="description">Update the Write Units counter</span><pre>addConsumedWriteUnits()</pre></a></li>
 <li class="method protected "><a href="#parseResponse" title="parseResponse :: Parse the SDK response to detect error"><span class="description">Parse the SDK response to detect error</span><pre>parseResponse()</pre></a></li>
-<li class="method protected "><a href="#populateAttributes" title="populateAttributes :: Extract the attributes array from response XML"><span class="description">Extract the attributes array from response XML</span><pre>populateAttributes()</pre></a></li>
+<li class="method protected "><a href="#populateAttributes" title="populateAttributes :: Extract the attributes array from response data"><span class="description">Extract the attributes array from response data</span><pre>populateAttributes()</pre></a></li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties</li>
 <li class="property public "><a href="#%24writeUnit" title="$writeUnit :: "><span class="description">$writeUnit</span><pre>$writeUnit</pre></a></li>
 <li class="nav-header protected">» Protected</li>
 <li class="property protected "><a href="#%24connector" title="$connector :: "><span class="description">$connector</span><pre>$connector</pre></a></li>
-<li class="property protected "><a href="#%24readUnit" title="$readUnit :: "><span class="description">$readUnit</span><pre>$readUnit</pre></a></li>
+<li class="property protected "><a href="#%24readUnit" title="$readUnit :: Read and Write unit counter"><span class="description">Read and Write unit counter</span><pre>$readUnit</pre></a></li>
 </ul>
 </div>
 <div class="span8">
@@ -128,9 +139,72 @@
 </tr></table>
 </div></div>
 </div>
+<a name="batchGet" id="batchGet"></a><div class="element clickable method public batchGet" data-toggle="collapse" data-target=".batchGet .collapse">
+<h2>Get a batch of items</h2>
+<pre>batchGet(Context\BatchGet $context) : <a href="../classes/Riverline.DynamoDB.Batch.BatchCollection.html">\Riverline\DynamoDB\Batch\BatchCollection</a></pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$context</h4>
+<code>\Context\BatchGet</code>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code><a href="../classes/Riverline.DynamoDB.Exception.AttributesException.html">\Riverline\DynamoDB\Exception\AttributesException</a></code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Batch.BatchCollection.html">\Riverline\DynamoDB\Batch\BatchCollection</a></code></div>
+</div></div>
+</div>
+<a name="batchWrite" id="batchWrite"></a><div class="element clickable method public batchWrite" data-toggle="collapse" data-target=".batchWrite .collapse">
+<h2>Put Items and delete Keys by batch</h2>
+<pre>batchWrite(Context\BatchWrite $context) : null | \Context\BatchWrite</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$context</h4>
+<code>\Context\BatchWrite</code>
+</div>
+<h3>Exceptions</h3>
+<table class="table table-bordered"><tr>
+<th><code>\Exception\AttributesException</code></th>
+<td></td>
+</tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>null</code><code>\Context\BatchWrite</code>Return a new BatchWrite context if some request were not processed</div>
+</div></div>
+</div>
+<a name="createTable" id="createTable"></a><div class="element clickable method public createTable" data-toggle="collapse" data-target=".createTable .collapse">
+<h2>Create table via the create_table call</h2>
+<pre>createTable(string $table, Table\KeySchema $keySchama, Table\ProvisionedThroughput $provisionedThroughput) : \Table\TableDescription</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The name of the table</p></div>
+<div class="subelement argument">
+<h4>$keySchama</h4>
+<code>\Table\KeySchema</code>
+</div>
+<div class="subelement argument">
+<h4>$provisionedThroughput</h4>
+<code>\Table\ProvisionedThroughput</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Table\TableDescription</code></div>
+</div></div>
+</div>
 <a name="delete" id="delete"></a><div class="element clickable method public delete" data-toggle="collapse" data-target=".delete .collapse">
 <h2>Delete an item via the delete_item call</h2>
-<pre>delete(string $table, mixed $hash, mixed | null $range, Context\Delete $context) </pre>
+<pre>delete(string $table, mixed $hash, mixed | null $range, Context\Delete $context) : array | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -147,6 +221,38 @@
 <div class="subelement argument">
 <h4>$context</h4>
 <code>\Context\Deletenull</code><p>The call context</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>null</code>
+</div>
+</div></div>
+</div>
+<a name="deleteTable" id="deleteTable"></a><div class="element clickable method public deleteTable" data-toggle="collapse" data-target=".deleteTable .collapse">
+<h2>Delete table via the delete_table call</h2>
+<pre>deleteTable(string $table) : \Table\TableDescription</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The name of the table</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Table\TableDescription</code></div>
+</div></div>
+</div>
+<a name="describeTable" id="describeTable"></a><div class="element clickable method public describeTable" data-toggle="collapse" data-target=".describeTable .collapse">
+<h2>Describe table via the describe_table call</h2>
+<pre>describeTable(string $table) : \Table\TableDescription</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The name of the table</p></div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Table\TableDescription</code></div>
 </div></div>
 </div>
 <a name="get" id="get"></a><div class="element clickable method public get" data-toggle="collapse" data-target=".get .collapse">
@@ -186,27 +292,54 @@
 </div>
 <a name="getConsumedReadUnits" id="getConsumedReadUnits"></a><div class="element clickable method public getConsumedReadUnits" data-toggle="collapse" data-target=".getConsumedReadUnits .collapse">
 <h2>Return the number of read units consumed</h2>
-<pre>getConsumedReadUnits() : int</pre>
+<pre>getConsumedReadUnits(string | null $table) : float</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>stringnull</code><p>If null, return consumed units for all tables</p></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>int</code></div>
+<div class="subelement response"><code>float</code></div>
 </div></div>
 </div>
 <a name="getConsumedWriteUnits" id="getConsumedWriteUnits"></a><div class="element clickable method public getConsumedWriteUnits" data-toggle="collapse" data-target=".getConsumedWriteUnits .collapse">
 <h2>Return the number of write units consumed</h2>
-<pre>getConsumedWriteUnits() : int</pre>
+<pre>getConsumedWriteUnits(string | null $table) : float</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>stringnull</code><p>If null, return consumed units for all tables</p></div>
 <h3>Returns</h3>
-<div class="subelement response"><code>int</code></div>
+<div class="subelement response"><code>float</code></div>
+</div></div>
+</div>
+<a name="listTables" id="listTables"></a><div class="element clickable method public listTables" data-toggle="collapse" data-target=".listTables .collapse">
+<h2>List tables via the list_tables call</h2>
+<pre>listTables(integer $limit, string $exclusiveStartTableName) : \Table\TableCollection</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$limit</h4>
+<code>integer</code>
+</div>
+<div class="subelement argument">
+<h4>$exclusiveStartTableName</h4>
+<code>string</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Table\TableCollection</code></div>
 </div></div>
 </div>
 <a name="put" id="put"></a><div class="element clickable method public put" data-toggle="collapse" data-target=".put .collapse">
 <h2>Add an item to DynamoDB via the put_item call</h2>
-<pre>put(Item $item, Context\Put $context) </pre>
+<pre>put(Item $item, Context\Put $context) : array | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -223,6 +356,10 @@
 <th><code>\Exception\AttributesException</code></th>
 <td></td>
 </tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>null</code>
+</div>
 </div></div>
 </div>
 <a name="query" id="query"></a><div class="element clickable method public query" data-toggle="collapse" data-target=".query .collapse">
@@ -247,9 +384,15 @@
 </div>
 <a name="resetConsumedUnits" id="resetConsumedUnits"></a><div class="element clickable method public resetConsumedUnits" data-toggle="collapse" data-target=".resetConsumedUnits .collapse">
 <h2>Reset the read and write unit counter</h2>
-<pre>resetConsumedUnits() </pre>
+<pre>resetConsumedUnits(string | null $table) </pre>
 <div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>stringnull</code><p>If null, reset all consumed units</p></div>
+</div></div>
 </div>
 <a name="scan" id="scan"></a><div class="element clickable method public scan" data-toggle="collapse" data-target=".scan .collapse">
 <h2>Get items via the scan call</h2>
@@ -270,7 +413,7 @@
 </div>
 <a name="update" id="update"></a><div class="element clickable method public update" data-toggle="collapse" data-target=".update .collapse">
 <h2>Update an item via the update_item call</h2>
-<pre>update(string $table, mixed $hash, mixed | null $range, AttributeUpdate $update, Context\Update $context) </pre>
+<pre>update(string $table, mixed $hash, mixed | null $range, AttributeUpdate $update, Context\Update $context) : array | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -296,11 +439,93 @@
 <th><code>\Exception\AttributesException</code></th>
 <td></td>
 </tr></table>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>null</code>
+</div>
+</div></div>
+</div>
+<a name="updateTable" id="updateTable"></a><div class="element clickable method public updateTable" data-toggle="collapse" data-target=".updateTable .collapse">
+<h2>Update table via the update_table call</h2>
+<pre>updateTable(string $table, Table\ProvisionedThroughput $provisionedThroughput) : \Table\TableDescription</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code><p>The name of the table</p></div>
+<div class="subelement argument">
+<h4>$provisionedThroughput</h4>
+<code>\Table\ProvisionedThroughput</code>
+</div>
+<h3>Returns</h3>
+<div class="subelement response"><code>\Table\TableDescription</code></div>
+</div></div>
+</div>
+<a name="waitForTableToBeInState" id="waitForTableToBeInState"></a><div class="element clickable method public waitForTableToBeInState" data-toggle="collapse" data-target=".waitForTableToBeInState .collapse">
+<h2>waitForTableToBeInState()
+        </h2>
+<pre>waitForTableToBeInState($table, $status, $sleep, $max) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$status</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$sleep</h4>
+<code></code>
+</div>
+<div class="subelement argument">
+<h4>$max</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="addConsumedReadUnits" id="addConsumedReadUnits"></a><div class="element clickable method protected addConsumedReadUnits" data-toggle="collapse" data-target=".addConsumedReadUnits .collapse">
+<h2>Update the Read Units counter</h2>
+<pre>addConsumedReadUnits(string $table, float $units) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$units</h4>
+<code>float</code>
+</div>
+</div></div>
+</div>
+<a name="addConsumedWriteUnits" id="addConsumedWriteUnits"></a><div class="element clickable method protected addConsumedWriteUnits" data-toggle="collapse" data-target=".addConsumedWriteUnits .collapse">
+<h2>Update the Write Units counter</h2>
+<pre>addConsumedWriteUnits(string $table, float $units) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$table</h4>
+<code>string</code>
+</div>
+<div class="subelement argument">
+<h4>$units</h4>
+<code>float</code>
+</div>
 </div></div>
 </div>
 <a name="parseResponse" id="parseResponse"></a><div class="element clickable method protected parseResponse" data-toggle="collapse" data-target=".parseResponse .collapse">
 <h2>Parse the SDK response to detect error</h2>
-<pre>parseResponse(\CFResponse $response) : \CFSimpleXML</pre>
+<pre>parseResponse(\CFResponse $response) : <a href="http://php.net/manual/en/class.stdclass.php">\stdClass</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -315,19 +540,23 @@
 </tr></table>
 <h3>Returns</h3>
 <div class="subelement response">
-<code>\CFSimpleXML</code>The response body</div>
+<code><a href="http://php.net/manual/en/class.stdclass.php">\stdClass</a></code>The response body</div>
 </div></div>
 </div>
 <a name="populateAttributes" id="populateAttributes"></a><div class="element clickable method protected populateAttributes" data-toggle="collapse" data-target=".populateAttributes .collapse">
-<h2>Extract the attributes array from response XML</h2>
-<pre>populateAttributes(\CFSimpleXML $responseXml) </pre>
+<h2>Extract the attributes array from response data</h2>
+<pre>populateAttributes(\stdClass $data) : array | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$responseXml</h4>
-<code>\CFSimpleXML</code><p>The response body XML</p></div>
+<h4>$data</h4>
+<code><a href="http://php.net/manual/en/class.stdclass.php">\stdClass</a></code><p>The response body data</p></div>
+<h3>Returns</h3>
+<div class="subelement response">
+<code>array</code><code>null</code>
+</div>
 </div></div>
 </div>
 <h3>
@@ -345,7 +574,7 @@
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
 </div>
 <a name="%24readUnit" id="$readUnit"> </a><div class="element clickable property protected $readUnit" data-toggle="collapse" data-target=".$readUnit .collapse">
-<h2>$readUnit</h2>
+<h2>Read and Write unit counter</h2>
 <pre>$readUnit : int</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
@@ -357,7 +586,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a3</a> and<br>
-            generated on 2012-06-19T11:53:54+02:00.<br></footer></div>
+            generated on 2012-08-10T18:46:40+02:00.<br></footer></div>
 </div>
 </body>
 </html>

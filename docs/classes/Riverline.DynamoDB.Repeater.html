@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
 <meta charset="utf-8">
-<title>phpDocumentor » \Riverline\DynamoDB\Context\Put</title>
+<title>phpDocumentor » \Riverline\DynamoDB\Repeater</title>
 <meta name="author" content="Mike van Riel">
 <meta name="description" content="">
 <link href="../css/template.css" rel="stylesheet" media="all">
@@ -57,31 +57,30 @@
 <ul class="side-nav nav nav-list">
 <li class="nav-header">
 <i class="icon-custom icon-method"></i> Methods</li>
-<li class="method public "><a href="#getForDynamoDB" title="getForDynamoDB :: Return the context formated for DynamoDB"><span class="description">Return the context formated for DynamoDB</span><pre>getForDynamoDB()</pre></a></li>
-<li class="method public "><a href="#setExpected" title="setExpected :: "><span class="description">setExpected()
-        </span><pre>setExpected()</pre></a></li>
-<li class="method public "><a href="#setReturnValues" title="setReturnValues :: "><span class="description">setReturnValues()
-        </span><pre>setReturnValues()</pre></a></li>
+<li class="method public "><a href="#BatchGet" title="BatchGet :: "><span class="description">BatchGet()
+        </span><pre>BatchGet()</pre></a></li>
+<li class="method public "><a href="#BatchWrite" title="BatchWrite :: "><span class="description">BatchWrite()
+        </span><pre>BatchWrite()</pre></a></li>
+<li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
+        </span><pre>__construct()</pre></a></li>
 <li class="nav-header">
 <i class="icon-custom icon-property"></i> Properties</li>
 <li class="nav-header protected">» Protected</li>
-<li class="property protected "><a href="#%24expected" title="$expected :: Expected values."><span class="description">Expected values.</span><pre>$expected</pre></a></li>
-<li class="property protected "><a href="#%24returnValues" title="$returnValues :: A return constant."><span class="description">A return constant.</span><pre>$returnValues</pre></a></li>
+<li class="property protected "><a href="#%24connection" title="$connection :: "><span class="description">$connection</span><pre>$connection</pre></a></li>
 </ul>
 </div>
 <div class="span8">
-<a name="%5CRiverline%5CDynamoDB%5CContext%5CPut" id="\Riverline\DynamoDB\Context\Put"></a><ul class="breadcrumb">
+<a name="%5CRiverline%5CDynamoDB%5CRepeater" id="\Riverline\DynamoDB\Repeater"></a><ul class="breadcrumb">
 <li>
 <a href="../index.html"><i class="icon-custom icon-class"></i></a><span class="divider">\</span>
 </li>
 <li><a href="../namespaces/Riverline.html">Riverline</a></li>
 <span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.html">DynamoDB</a></li>
-<span class="divider">\</span><li><a href="../namespaces/Riverline.DynamoDB.Context.html">Context</a></li>
 <li class="active">
-<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Context.Put.html">Put</a>
+<span class="divider">\</span><a href="../classes/Riverline.DynamoDB.Repeater.html">Repeater</a>
 </li>
 </ul>
-<div href="../classes/Riverline.DynamoDB.Context.Put.html" class="element class">
+<div href="../classes/Riverline.DynamoDB.Repeater.html" class="element class">
 <p class="short_description"></p>
 <div class="details">
 <p class="long_description"></p>
@@ -91,59 +90,57 @@
 </tr></table>
 <h3>
 <i class="icon-custom icon-method"></i> Methods</h3>
-<a name="getForDynamoDB" id="getForDynamoDB"></a><div class="element clickable method public getForDynamoDB" data-toggle="collapse" data-target=".getForDynamoDB .collapse">
-<h2>Return the context formated for DynamoDB</h2>
-<pre>getForDynamoDB() : array</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description">
-<p class="long_description"></p>
-<h3>Returns</h3>
-<div class="subelement response"><code>array</code></div>
-</div></div>
-</div>
-<a name="setExpected" id="setExpected"></a><div class="element clickable method public setExpected" data-toggle="collapse" data-target=".setExpected .collapse">
-<h2>setExpected()
+<a name="BatchGet" id="BatchGet"></a><div class="element clickable method public BatchGet" data-toggle="collapse" data-target=".BatchGet .collapse">
+<h2>BatchGet()
         </h2>
-<pre>setExpected(Expected $expected) </pre>
+<pre>BatchGet(Context\BatchGet $context) : <a href="../classes/Riverline.DynamoDB.Collection.html">\Riverline\DynamoDB\Collection</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$expected</h4>
-<code><a href="../classes/Riverline.DynamoDB.Expected.html">\Riverline\DynamoDB\Expected</a></code>
+<h4>$context</h4>
+<code>\Context\BatchGet</code>
 </div>
+<h3>Returns</h3>
+<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Collection.html">\Riverline\DynamoDB\Collection</a></code></div>
 </div></div>
 </div>
-<a name="setReturnValues" id="setReturnValues"></a><div class="element clickable method public setReturnValues" data-toggle="collapse" data-target=".setReturnValues .collapse">
-<h2>setReturnValues()
+<a name="BatchWrite" id="BatchWrite"></a><div class="element clickable method public BatchWrite" data-toggle="collapse" data-target=".BatchWrite .collapse">
+<h2>BatchWrite()
         </h2>
-<pre>setReturnValues(string $returnValues) : <a href="../classes/Riverline.DynamoDB.Context.Put.html">\Riverline\DynamoDB\Context\Put</a></pre>
+<pre>BatchWrite(Context\BatchWrite $context) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$returnValues</h4>
-<code>string</code><p>AmazonDynamoDB return constant</p></div>
-<h3>Returns</h3>
-<div class="subelement response"><code><a href="../classes/Riverline.DynamoDB.Context.Put.html">\Riverline\DynamoDB\Context\Put</a></code></div>
+<h4>$context</h4>
+<code></code>
+</div>
+</div></div>
+</div>
+<a name="__construct" id="__construct"></a><div class="element clickable method public __construct" data-toggle="collapse" data-target=".__construct .collapse">
+<h2>__construct()
+        </h2>
+<pre>__construct(Connection $connection) </pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Parameters</h3>
+<div class="subelement argument">
+<h4>$connection</h4>
+<code><a href="../classes/Riverline.DynamoDB.Connection.html">\Riverline\DynamoDB\Connection</a></code>
+</div>
 </div></div>
 </div>
 <h3>
 <i class="icon-custom icon-property"></i> Properties</h3>
-<a name="%24expected" id="$expected"> </a><div class="element clickable property protected $expected" data-toggle="collapse" data-target=".$expected .collapse">
-<h2>Expected values.</h2>
-<pre>$expected : array</pre>
+<a name="%24connection" id="$connection"> </a><div class="element clickable property protected $connection" data-toggle="collapse" data-target=".$connection .collapse">
+<h2>$connection</h2>
+<pre>$connection : <a href="../classes/Riverline.DynamoDB.Connection.html">\Riverline\DynamoDB\Connection</a></pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description"><p class="long_description"></p></div></div>
-</div>
-<a name="%24returnValues" id="$returnValues"> </a><div class="element clickable property protected $returnValues" data-toggle="collapse" data-target=".$returnValues .collapse">
-<h2>A return constant.</h2>
-<pre>$returnValues : string</pre>
-<div class="labels"></div>
-<div class="row collapse"><div class="detail-description"><p class="long_description">\AmazonDynamoDB::RETURN_NONE or \AmazonDynamoDB::RETURN_ALL_OLD for put and delete operations.
-\AmazonDynamoDB::RETURN_NONE, \AmazonDynamoDB::RETURN_ALL_OLD, \AmazonDynamoDB::RETURN_ALL_NEW, \AmazonDynamoDB::RETURN_UPDATED_OLD, \AmazonDynamoDB::RETURN_UPDATED_NEW for update operation.</p></div></div>
 </div>
 </div>
 </div>

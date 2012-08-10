@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">88</span></a></li>
+                <span class="label label-info">137</span></a></li>
 <li><a href="markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -57,15 +57,24 @@
 </div></li>
 <li class="nav-header">Navigation</li>
 <li><a href="#Riverline/DynamoDB/Expected.php"><i class="icon-file"></i>Riverline/DynamoDB/Expected.php</a></li>
+<li><a href="#Riverline/DynamoDB/Repeater.php"><i class="icon-file"></i>Riverline/DynamoDB/Repeater.php</a></li>
 <li><a href="#Riverline/DynamoDB/UpdateAction.php"><i class="icon-file"></i>Riverline/DynamoDB/UpdateAction.php</a></li>
 <li><a href="#Riverline/DynamoDB/Collection.php"><i class="icon-file"></i>Riverline/DynamoDB/Collection.php</a></li>
 <li><a href="#Riverline/DynamoDB/Exception/ConfigurationException.php"><i class="icon-file"></i>Riverline/DynamoDB/Exception/ConfigurationException.php</a></li>
 <li><a href="#Riverline/DynamoDB/Exception/ServerException.php"><i class="icon-file"></i>Riverline/DynamoDB/Exception/ServerException.php</a></li>
 <li><a href="#Riverline/DynamoDB/Exception/AttributesException.php"><i class="icon-file"></i>Riverline/DynamoDB/Exception/AttributesException.php</a></li>
+<li><a href="#Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php"><i class="icon-file"></i>Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php</a></li>
+<li><a href="#Riverline/DynamoDB/Batch/BatchCollection.php"><i class="icon-file"></i>Riverline/DynamoDB/Batch/BatchCollection.php</a></li>
 <li><a href="#Riverline/DynamoDB/Attribute.php"><i class="icon-file"></i>Riverline/DynamoDB/Attribute.php</a></li>
 <li><a href="#Riverline/DynamoDB/AttributeCondition.php"><i class="icon-file"></i>Riverline/DynamoDB/AttributeCondition.php</a></li>
+<li><a href="#Riverline/DynamoDB/Table/ProvisionedThroughput.php"><i class="icon-file"></i>Riverline/DynamoDB/Table/ProvisionedThroughput.php</a></li>
+<li><a href="#Riverline/DynamoDB/Table/KeySchema.php"><i class="icon-file"></i>Riverline/DynamoDB/Table/KeySchema.php</a></li>
+<li><a href="#Riverline/DynamoDB/Table/KeySchemaElement.php"><i class="icon-file"></i>Riverline/DynamoDB/Table/KeySchemaElement.php</a></li>
+<li><a href="#Riverline/DynamoDB/Table/TableCollection.php"><i class="icon-file"></i>Riverline/DynamoDB/Table/TableCollection.php</a></li>
+<li><a href="#Riverline/DynamoDB/Table/TableDescription.php"><i class="icon-file"></i>Riverline/DynamoDB/Table/TableDescription.php</a></li>
 <li><a href="#Riverline/DynamoDB/ExpectedAttribute.php"><i class="icon-file"></i>Riverline/DynamoDB/ExpectedAttribute.php</a></li>
 <li><a href="#Riverline/DynamoDB/Item.php"><i class="icon-file"></i>Riverline/DynamoDB/Item.php</a></li>
+<li><a href="#Riverline/DynamoDB/Context/BatchWrite.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/BatchWrite.php</a></li>
 <li><a href="#Riverline/DynamoDB/Context/Delete.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Delete.php</a></li>
 <li><a href="#Riverline/DynamoDB/Context/Put.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Put.php</a></li>
 <li><a href="#Riverline/DynamoDB/Context/Query.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Query.php</a></li>
@@ -73,6 +82,7 @@
 <li><a href="#Riverline/DynamoDB/Context/Scan.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Scan.php</a></li>
 <li><a href="#Riverline/DynamoDB/Context/Collection.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Collection.php</a></li>
 <li><a href="#Riverline/DynamoDB/Context/Update.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/Update.php</a></li>
+<li><a href="#Riverline/DynamoDB/Context/BatchGet.php"><i class="icon-file"></i>Riverline/DynamoDB/Context/BatchGet.php</a></li>
 <li><a href="#Riverline/DynamoDB/Connection.php"><i class="icon-file"></i>Riverline/DynamoDB/Connection.php</a></li>
 <li><a href="#Riverline/DynamoDB/AttributeUpdate.php"><i class="icon-file"></i>Riverline/DynamoDB/AttributeUpdate.php</a></li>
 </ul></div>
@@ -133,6 +143,50 @@
 <td>error</td>
 <td>74</td>
 <td>No short description for method getIterator()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Repeater.php" id="Riverline/DynamoDB/Repeater.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Repeater.php<small style="float: right;padding-right: 10px;">6</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Repeater.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>5</td>
+<td>No short description for class Repeater</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>10</td>
+<td>No short description for property $connection</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>15</td>
+<td>No short description for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>23</td>
+<td>No short description for method BatchGet()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>44</td>
+<td>No DocBlock was found for method BatchWrite()</td>
 </tr>
 </tbody>
 </table></div>
@@ -278,6 +332,104 @@
 </table></div>
 </div>
 <div class="package-contents">
+<a name="Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php" id="Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php<small style="float: right;padding-right: 10px;">2</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Exception/ProvisionedThroughputExceededException.php</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>5</td>
+<td>No DocBlock was found for ProvisionedThroughputExceededException</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Batch/BatchCollection.php" id="Riverline/DynamoDB/Batch/BatchCollection.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Batch/BatchCollection.php<small style="float: right;padding-right: 10px;">12</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Batch/BatchCollection.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>8</td>
+<td>No short description for class BatchCollection</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>No short description for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>25</td>
+<td>Name of argument $unprocessedKeysContext does not match with the DocBlock's name $unprocessedKeys in __construct()</td>
+</tr>
+<tr class="notice">
+<td>notice</td>
+<td>25</td>
+<td>Parameter $unprocessedKeys could not be found in __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>33</td>
+<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $collection in setItems()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>61</td>
+<td>No short description for method offsetExists()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>71</td>
+<td>No short description for method offsetGet()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>81</td>
+<td>No short description for method offsetSet()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>96</td>
+<td>No short description for method offsetUnset()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>105</td>
+<td>No short description for method getIterator()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>114</td>
+<td>No DocBlock was found for method count()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
 <a name="Riverline/DynamoDB/Attribute.php" id="Riverline/DynamoDB/Attribute.php"></a><h3>
 <i class="icon-file"></i>Riverline/DynamoDB/Attribute.php<small style="float: right;padding-right: 10px;">5</small>
 </h3>
@@ -341,6 +493,166 @@
 <td>error</td>
 <td>24</td>
 <td>No short description for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Table/ProvisionedThroughput.php" id="Riverline/DynamoDB/Table/ProvisionedThroughput.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Table/ProvisionedThroughput.php<small style="float: right;padding-right: 10px;">3</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Table/ProvisionedThroughput.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>5</td>
+<td>No short description for class ProvisionedThroughput</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>34</td>
+<td>No short description for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Table/KeySchema.php" id="Riverline/DynamoDB/Table/KeySchema.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Table/KeySchema.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Table/KeySchema.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>5</td>
+<td>No short description for class KeySchema</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>No short description for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $hash in __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $range in __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Table/KeySchemaElement.php" id="Riverline/DynamoDB/Table/KeySchemaElement.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Table/KeySchemaElement.php<small style="float: right;padding-right: 10px;">3</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Table/KeySchemaElement.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>5</td>
+<td>No short description for class KeySchemaElement</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>No short description for method __construct()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Table/TableCollection.php" id="Riverline/DynamoDB/Table/TableCollection.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Table/TableCollection.php<small style="float: right;padding-right: 10px;">5</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Table/TableCollection.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>5</td>
+<td>No short description for class TableCollection</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>No short description for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>66</td>
+<td>No short description for method getIterator()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>75</td>
+<td>No short description for method count()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
+<a name="Riverline/DynamoDB/Table/TableDescription.php" id="Riverline/DynamoDB/Table/TableDescription.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Table/TableDescription.php<small style="float: right;padding-right: 10px;">2</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Table/TableDescription.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>7</td>
+<td>No short description for class TableDescription</td>
 </tr>
 </tbody>
 </table></div>
@@ -434,6 +746,55 @@
 </table></div>
 </div>
 <div class="package-contents">
+<a name="Riverline/DynamoDB/Context/BatchWrite.php" id="Riverline/DynamoDB/Context/BatchWrite.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Context/BatchWrite.php<small style="float: right;padding-right: 10px;">7</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Context/BatchWrite.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>7</td>
+<td>No short description for class BatchWrite</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>12</td>
+<td>No short description for property $itemsToPut</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>17</td>
+<td>No short description for property $keysToDelete</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>22</td>
+<td>No short description for method addItemToPut()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>37</td>
+<td>No short description for method addKeyToDelete()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>54</td>
+<td>No short description for method count()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
 <a name="Riverline/DynamoDB/Context/Delete.php" id="Riverline/DynamoDB/Context/Delete.php"></a><h3>
 <i class="icon-file"></i>Riverline/DynamoDB/Context/Delete.php<small style="float: right;padding-right: 10px;">2</small>
 </h3>
@@ -459,7 +820,7 @@
 </div>
 <div class="package-contents">
 <a name="Riverline/DynamoDB/Context/Put.php" id="Riverline/DynamoDB/Context/Put.php"></a><h3>
-<i class="icon-file"></i>Riverline/DynamoDB/Context/Put.php<small style="float: right;padding-right: 10px;">4</small>
+<i class="icon-file"></i>Riverline/DynamoDB/Context/Put.php<small style="float: right;padding-right: 10px;">5</small>
 </h3>
 <div><table class="table markers table-bordered">
 <thead><tr>
@@ -482,6 +843,11 @@
 <td>error</td>
 <td>26</td>
 <td>No short description for method setExpected()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>26</td>
+<td>The type hint of the argument is incorrect for the type definition of the @param tag with argument $expected in setExpected()</td>
 </tr>
 <tr class="error">
 <td>error</td>
@@ -692,6 +1058,35 @@
 </table></div>
 </div>
 <div class="package-contents">
+<a name="Riverline/DynamoDB/Context/BatchGet.php" id="Riverline/DynamoDB/Context/BatchGet.php"></a><h3>
+<i class="icon-file"></i>Riverline/DynamoDB/Context/BatchGet.php<small style="float: right;padding-right: 10px;">3</small>
+</h3>
+<div><table class="table markers table-bordered">
+<thead><tr>
+<th>Type</th>
+<th>Line</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="error">
+<td>error</td>
+<td>1</td>
+<td>No page-level DocBlock was found in file Riverline/DynamoDB/Context/BatchGet.php</td>
+</tr>
+<tr class="critical">
+<td>critical</td>
+<td>7</td>
+<td>No short description for class BatchGet</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>60</td>
+<td>No short description for method count()</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<div class="package-contents">
 <a name="Riverline/DynamoDB/Connection.php" id="Riverline/DynamoDB/Connection.php"></a><h3>
 <i class="icon-file"></i>Riverline/DynamoDB/Connection.php<small style="float: right;padding-right: 10px;">6</small>
 </h3>
@@ -717,20 +1112,20 @@
 <td>10</td>
 <td>No short description for property $connector</td>
 </tr>
-<tr class="critical">
-<td>critical</td>
-<td>15</td>
-<td>No short description for property $readUnit</td>
-</tr>
 <tr class="error">
 <td>error</td>
-<td>18</td>
+<td>19</td>
 <td>No DocBlock was found for property $writeUnit</td>
 </tr>
 <tr class="error">
 <td>error</td>
-<td>20</td>
+<td>21</td>
 <td>No short description for method __construct()</td>
+</tr>
+<tr class="error">
+<td>error</td>
+<td>547</td>
+<td>No DocBlock was found for method waitForTableToBeInState()</td>
 </tr>
 </tbody>
 </table></div>
@@ -794,7 +1189,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a3</a> and<br>
-            generated on 2012-06-19T11:53:54+02:00.<br></footer></div>
+            generated on 2012-08-10T18:46:40+02:00.<br></footer></div>
 </div>
 </body>
 </html>

@@ -31,7 +31,7 @@
 <a href="#reports" class="dropdown-toggle" data-toggle="dropdown">
                                     Reports <b class="caret"></b></a><ul class="dropdown-menu">
 <li><a href="../errors.html"><i class="icon-remove-sign"></i> Errors 
-                <span class="label label-info">88</span></a></li>
+                <span class="label label-info">137</span></a></li>
 <li><a href="../markers.html"><i class="icon-map-marker"></i> Markers 
                 <ul><li>todo 
                 <span class="label label-info">1</span>
@@ -59,6 +59,7 @@
 <i class="icon-custom icon-method"></i> Methods</li>
 <li class="method public "><a href="#__construct" title="__construct :: "><span class="description">__construct()
         </span><pre>__construct()</pre></a></li>
+<li class="method public "><a href="#getArrayCopy" title="getArrayCopy :: Return an Array representation of the item attributes"><span class="description">Return an Array representation of the item attributes</span><pre>getArrayCopy()</pre></a></li>
 <li class="method public "><a href="#getIterator" title="getIterator :: "><span class="description">getIterator()
         </span><pre>getIterator()</pre></a></li>
 <li class="method public "><a href="#getTable" title="getTable :: Return the Item table name"><span class="description">Return the Item table name</span><pre>getTable()</pre></a></li>
@@ -114,6 +115,16 @@
 <code>\Riverline\DynamoDB\$table</code><p>string The item table name</p></div>
 </div></div>
 </div>
+<a name="getArrayCopy" id="getArrayCopy"></a><div class="element clickable method public getArrayCopy" data-toggle="collapse" data-target=".getArrayCopy .collapse">
+<h2>Return an Array representation of the item attributes</h2>
+<pre>getArrayCopy() : array</pre>
+<div class="labels"></div>
+<div class="row collapse"><div class="detail-description">
+<p class="long_description"></p>
+<h3>Returns</h3>
+<div class="subelement response"><code>array</code></div>
+</div></div>
+</div>
 <a name="getIterator" id="getIterator"></a><div class="element clickable method public getIterator" data-toggle="collapse" data-target=".getIterator .collapse">
 <h2>getIterator()
         </h2>
@@ -162,7 +173,7 @@
 <a name="offsetGet" id="offsetGet"></a><div class="element clickable method public offsetGet" data-toggle="collapse" data-target=".offsetGet .collapse">
 <h2>offsetGet()
         </h2>
-<pre>offsetGet($offset) : null</pre>
+<pre>offsetGet($offset) : mixed | null</pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
@@ -176,7 +187,9 @@
 <code></code>
 </div>
 <h3>Returns</h3>
-<div class="subelement response"><code>null</code></div>
+<div class="subelement response">
+<code>mixed</code><code>null</code>
+</div>
 </div></div>
 </div>
 <a name="offsetSet" id="offsetSet"></a><div class="element clickable method public offsetSet" data-toggle="collapse" data-target=".offsetSet .collapse">
@@ -226,14 +239,14 @@
 </div>
 <a name="populateFromDynamoDB" id="populateFromDynamoDB"></a><div class="element clickable method public populateFromDynamoDB" data-toggle="collapse" data-target=".populateFromDynamoDB .collapse">
 <h2>Populate attributes from the raw DynamoDB response</h2>
-<pre>populateFromDynamoDB(\CFSimpleXML $xml) </pre>
+<pre>populateFromDynamoDB(\stdClass $data) </pre>
 <div class="labels"></div>
 <div class="row collapse"><div class="detail-description">
 <p class="long_description"></p>
 <h3>Parameters</h3>
 <div class="subelement argument">
-<h4>$xml</h4>
-<code>\CFSimpleXML</code>
+<h4>$data</h4>
+<code><a href="http://php.net/manual/en/class.stdclass.php">\stdClass</a></code>
 </div>
 </div></div>
 </div>
@@ -280,7 +293,7 @@
 <div class="row"><footer class="span12">
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by <a href="http://glyphicons.com/">Glyphicons</a>.<br>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor 2.0.0a3</a> and<br>
-            generated on 2012-06-19T11:53:54+02:00.<br></footer></div>
+            generated on 2012-08-10T18:46:40+02:00.<br></footer></div>
 </div>
 </body>
 </html>
