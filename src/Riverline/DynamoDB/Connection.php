@@ -13,9 +13,10 @@ class Connection
     protected $connector;
 
     /**
+     * Read and Write unit counter
      * @var int
      */
-    protected $readUnit = 0, $writeUnit = 0;
+    protected $readUnit = array(), $writeUnit = array();
 
     /**
      * @param string $key The AWS access Key
@@ -55,29 +56,75 @@ class Connection
 
     /**
      * Return the number of read units consumed
-     * @return int
+     * @param string|null $table If null, return consumed units for all tables
+     * @return float
      */
-    public function getConsumedReadUnits()
+    public function getConsumedReadUnits($table = null)
     {
-        return $this->readUnit;
+        if (is_null($table)) {
+            return array_sum($this->readUnit);
+        } else {
+            return (isset($this->readUnit[$table])?$this->readUnit[$table]:0);
+        }
+    }
+
+    /**
+     * Update the Read Units counter
+     * @param string $table
+     * @param float $units
+     */
+    protected function addConsumedReadUnits($table, $units)
+    {
+        if (isset($this->readUnit[$table])) {
+            $this->readUnit[$table] += $units;
+        } else {
+            $this->readUnit[$table] = $units;
+        }
     }
 
     /**
      * Return the number of write units consumed
-     * @return int
+     * @param string|null $table If null, return consumed units for all tables
+     * @return float
      */
-    public function getConsumedWriteUnits()
+    public function getConsumedWriteUnits($table = null)
     {
-        return $this->writeUnit;
+        if (is_null($table)) {
+            return array_sum($this->writeUnit);
+        } else {
+            return (isset($this->writeUnit[$table])?$this->writeUnit[$table]:0);
+        }
+    }
+
+    /**
+     * Update the Write Units counter
+     * @param string $table
+     * @param float $units
+     */
+    protected function addConsumedWriteUnits($table, $units)
+    {
+        if (isset($this->writeUnit[$table])) {
+            $this->writeUnit[$table] += $units;
+        } else {
+            $this->writeUnit[$table] = $units;
+        }
     }
 
     /**
      * Reset the read and write unit counter
+     * @param string|null $table If null, reset all consumed units
      */
-    public function resetConsumedUnits()
+    public function resetConsumedUnits($table = null)
     {
-        $this->readUnit  = 0;
-        $this->writeUnit = 0;
+        if (is_null($table)) {
+            $this->readUnit  = array();
+            $this->writeUnit = array();
+        } else {
+            unset(
+                $this->readUnit[$table],
+                $this->writeUnit[$table]
+            );
+        }
     }
 
     /**
@@ -115,7 +162,7 @@ class Connection
         $response = $this->parseResponse($this->connector->put_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
 
         return $this->populateAttributes($response);
     }
@@ -154,7 +201,7 @@ class Connection
         $response = $this->parseResponse($this->connector->delete_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
 
         return $this->populateAttributes($response);
     }
@@ -190,7 +237,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->get_item($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
         if (isset($response->Item)) {
             $item = new Item($table);
@@ -227,6 +274,7 @@ class Connection
 
         $attributes = array();
         foreach ($update as $name => $attribute) {
+            /** @var $attribute Attribute */
             $attributes[$name] = $attribute->getForDynamoDB();
         }
         
@@ -243,7 +291,7 @@ class Connection
         $response = $this->parseResponse($this->connector->update_item($parameters));
 
         // Update write counter
-        $this->writeUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
 
         return $this->populateAttributes($response);
     }
@@ -269,7 +317,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->query($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
         $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
@@ -300,7 +348,7 @@ class Connection
 
         $response = $this->parseResponse($this->connector->scan($parameters));
 
-        $this->readUnit += floatval($response->ConsumedCapacityUnits);
+        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
         $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
         if (!empty($response->Items)) {
@@ -316,16 +364,21 @@ class Connection
     /**
      * Get a batch of items
      * @param Context\BatchGet $context
-     * @return \Riverline\DynamoDB\BatchCollection
+     * @throws \Riverline\DynamoDB\Exception\AttributesException
+     * @return \Riverline\DynamoDB\Batch\BatchCollection
      */
     public function batchGet(Context\BatchGet $context)
     {
-        $paramaters = $context->getForDynamoDB();
+        if (0 === count($context)) {
+            throw new Exception\AttributesException("Context doesn't contain any key to get");
+        }
 
-        $response = $this->parseResponse($this->connector->batch_get_item($paramaters));
+        $parameters = $context->getForDynamoDB();
+
+        $response = $this->parseResponse($this->connector->batch_get_item($parameters));
 
         // UnprocessedKeys
-        if (!empty($response->UnprocessedKeys)) {
+        if (count((array)$response->UnprocessedKeys)) {
             $unprocessKeyContext = new Context\BatchGet();
             foreach ($response->UnprocessedKeys as $table => $tableParameters) {
                 foreach ($tableParameters->Keys as $key) {
@@ -339,10 +392,10 @@ class Connection
             $unprocessKeyContext = null;
         }
 
-        $collection = new BatchCollection($unprocessKeyContext);
+        $collection = new Batch\BatchCollection($unprocessKeyContext);
 
         foreach ($response->Responses as $table => $responseItems) {
-            $this->readUnit += floatval($responseItems->ConsumedCapacityUnits);
+            $this->addConsumedReadUnits($table, floatval($responseItems->ConsumedCapacityUnits));
 
             $items = new Collection();
             foreach ($responseItems->Items as $responseItem) {
@@ -355,6 +408,53 @@ class Connection
         }
 
         return $collection;
+    }
+
+    /**
+     * Put Items and delete Keys by batch
+     * @param Context\BatchWrite $context
+     * @return null|Context\BatchWrite Return a new BatchWrite context if some request were not processed
+     * @throws Exception\AttributesException
+     */
+    public function batchWrite(Context\BatchWrite $context)
+    {
+        if (0 === count($context)) {
+            throw new Exception\AttributesException("Context doesn't contain anything to write");
+        }
+
+        $parameters = $context->getForDynamoDB();
+
+        $response = $this->parseResponse($this->connector->batch_write_item($parameters));
+
+        // UnprocessedKeys
+        if (count((array)$response->UnprocessedItems)) {
+            $newContext = new Context\BatchWrite();
+            foreach ($response->UnprocessedItems as $table => $tableParameters) {
+                foreach ($tableParameters as $request) {
+                    if (isset($request->DeleteRequest)) {
+                        $keys = $request->DeleteRequest->Key;
+                        $newContext->addKeyToDelete(
+                            $table,
+                            current($keys->HashKeyElement),
+                            (isset($keys->RangeKeyElement)?current($keys->RangeKeyElement):null)
+                        );
+                    } elseif (isset($request->PutRequest)) {
+                        $item = new Item($table);
+                        $item->populateFromDynamoDB($request->PutRequest->Item);
+                        $newContext->addItemToPut($item);
+                    }
+                }
+            }
+        } else {
+            $newContext = null;
+        }
+
+        // Write Unit
+        foreach ($response->Responses as $table => $responseItems) {
+            $this->addConsumedWriteUnits($table, floatval($responseItems->ConsumedCapacityUnits));
+        }
+
+        return $newContext;
     }
 
     /**
@@ -462,7 +562,7 @@ class Connection
     /**
      * Parse the SDK response to detect error
      * @param \CFResponse $response The raw SDK response
-     * @return \CFSimpleXML The response body
+     * @return \stdClass The response body
      * @throws Exception\ServerException
      */
     protected function parseResponse(\CFResponse $response)
@@ -477,7 +577,19 @@ class Connection
             } elseif (isset($body->Message)) {
                 $message = $body->Message;
             }
-            throw new Exception\ServerException($message);
+
+            if (isset($body->__type)) {
+                list ($api, $type) = explode('#', $body->__type);
+            } else {
+                $type = '';
+            }
+
+            switch ($type) {
+                case 'ProvisionedThroughputExceededException':
+                    throw new Exception\ProvisionedThroughputExceededException($message);
+                default:
+                    throw new Exception\ServerException($message);
+            }
         }
     }
 

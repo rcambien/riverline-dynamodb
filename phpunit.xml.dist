@@ -16,10 +16,4 @@
             <directory>tests/Riverline/DynamoDB/</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory suffix=".php">src/Riverline/DynamoDB/</directory>
-        </whitelist>
-    </filter>
 </phpunit>

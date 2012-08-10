@@ -1,6 +1,9 @@
 <?php
 
-namespace Riverline\DynamoDB;
+namespace Riverline\DynamoDB\Batch;
+
+use Riverline\DynamoDB\Collection;
+use Riverline\DynamoDB\Exception\AttributesException;
 
 /**
  * @class
@@ -15,14 +18,14 @@ class BatchCollection implements \ArrayAccess, \IteratorAggregate, \Countable
 
     /**
      * The previous request unprocessed keys
-     * @var Context\BatchGet|null
+     * @var \Riverline\DynamoDB\Context\BatchGet|null
      */
     protected $unprocessedKeysContext = null;
 
     /**
-     * @param Context\BatchGet|null $unprocessedKeys
+     * @param \Riverline\DynamoDB\Context\BatchGet|null $unprocessedKeys
      */
-    function __construct(Context\BatchGet $unprocessedKeysContext = null)
+    function __construct(\Riverline\DynamoDB\Context\BatchGet $unprocessedKeysContext = null)
     {
         $this->unprocessedKeysContext = $unprocessedKeysContext;
     }
@@ -79,12 +82,12 @@ class BatchCollection implements \ArrayAccess, \IteratorAggregate, \Countable
      * @see \ArrayAccess
      * @param $offset
      * @param $value
-     * @throws Exception\AttributesException
+     * @throws \Riverline\DynamoDB\Exception\AttributesException
      */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
-            throw new Exception\AttributesException('Square bracket syntax isn\'t allowed');
+            throw new AttributesException('Square bracket syntax isn\'t allowed');
         }
 
         $this->setItems($offset, $value);

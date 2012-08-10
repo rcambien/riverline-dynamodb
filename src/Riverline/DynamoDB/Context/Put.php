@@ -2,7 +2,7 @@
 
 namespace Riverline\DynamoDB\Context;
 
-use \Riverline\DynamoDB\ExpectedCondition;
+use \Riverline\DynamoDB\Expected;
 
 /**
  * @class
@@ -26,7 +26,7 @@ class Put
     /**
      * @param \Riverline\DynamoDB\Expected $expected
      */
-    public function setExpected(\Riverline\DynamoDB\Expected $expected)
+    public function setExpected(Expected $expected)
     {
         $this->expected = $expected;
 
@@ -56,6 +56,7 @@ class Put
         if (null !== $expected) {
             $expectedParameters = array();
             foreach ($expected as $name => $attribute) {
+                /** @var $attribute \Riverline\DynamoDB\Attribute */
                 $expectedParameters[$name] = $attribute->getForDynamoDB();
             }
             $parameters['Expected'] = $expectedParameters;

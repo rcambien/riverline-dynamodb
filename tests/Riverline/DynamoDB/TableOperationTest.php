@@ -2,18 +2,10 @@
 
 namespace Riverline\DynamoDB;
 
-class TableOperationTest extends \PHPUnit_Framework_TestCase
+require_once 'ConnectionTest.php';
+
+class TableOperationTest extends ConnectionTest
 {
-    /**
-     * @var Connection
-     */
-    protected $conn;
-
-    protected function setUp()
-    {
-        $this->conn = new Connection(AWS_KEY, AWS_SECRET, '/tmp/', AWS_REGION);
-    }
-
     public function testDescribeTable()
     {
         $tableDescription = $this->conn->describeTable(DY_TABLE);

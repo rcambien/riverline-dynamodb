@@ -7,7 +7,7 @@ use \Riverline\DynamoDB\Attribute;
 /**
  * @class
  */
-class BatchGet
+class BatchGet implements \Countable
 {
     /**
      * List of keys to get grouped by table
@@ -31,7 +31,7 @@ class BatchGet
      */
     public function addKey($table, $hash, $range = null)
     {
-        if (count($this->keysByTable, COUNT_RECURSIVE) >= 100) {
+        if ($this->count() >= 100) {
             throw new \Riverline\DynamoDB\Exception\AttributesException("Can't request more than 100 items");
         }
 
@@ -55,6 +55,15 @@ class BatchGet
         $this->attributesToGetByTable[$table] = $attributesToGet;
 
         return $this;
+    }
+
+    /**
+     * @see \Countable
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->keysByTable, COUNT_RECURSIVE);
     }
 
     /**
