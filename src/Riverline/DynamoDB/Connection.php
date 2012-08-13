@@ -369,7 +369,7 @@ class Connection
      */
     public function batchGet(Context\BatchGet $context)
     {
-        if (0 === count($context)) {
+        if (0 === $context->count()) {
             throw new Exception\AttributesException("Context doesn't contain any key to get");
         }
 
@@ -418,7 +418,7 @@ class Connection
      */
     public function batchWrite(Context\BatchWrite $context)
     {
-        if (0 === count($context)) {
+        if (0 === $context->count()) {
             throw new Exception\AttributesException("Context doesn't contain anything to write");
         }
 
