@@ -18,9 +18,9 @@ abstract class Collection extends Get
     protected $limit;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $lastKey;
+    protected $exclusiveStartKey;
 
     /**
      * @param boolean $count
@@ -45,12 +45,12 @@ abstract class Collection extends Get
     }
 
     /**
-     * @param string $lastKey
+     * @param array $exclusiveStartKey
      * @return \Riverline\DynamoDB\Context\Collection
      */
-    public function setLastKey($lastKey)
+    public function setExclusiveStartKey($exclusiveStartKey)
     {
-        $this->lastKey = $lastKey;
+        $this->exclusiveStartKey = $exclusiveStartKey;
 
         return $this;
     }
@@ -65,7 +65,7 @@ abstract class Collection extends Get
 
         $count = $this->count;
         if (null !== $count) {
-            $parameters['Count'] = $this->count;
+            $parameters['Count'] = $count;
         }
 
         $limit = $this->limit;
@@ -73,9 +73,9 @@ abstract class Collection extends Get
             $parameters['Limit'] = $limit;
         }
 
-        $lastKey = $this->lastKey;
-        if (null !== $lastKey) {
-            $parameters['ExclusiveStartKey'] = $lastKey;
+        $exclusiveStartKey = $this->exclusiveStartKey;
+        if (null !== $exclusiveStartKey) {
+            $parameters['ExclusiveStartKey'] = $exclusiveStartKey;
         }
 
         return $parameters;

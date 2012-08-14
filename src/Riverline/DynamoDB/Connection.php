@@ -2,6 +2,8 @@
 
 namespace Riverline\DynamoDB;
 
+use Riverline\DynamoDB\Logger\Logger;
+
 /**
  * @class
  */
@@ -11,6 +13,11 @@ class Connection
      * @var \AmazonDynamoDB
      */
     protected $connector;
+
+    /**
+     * @var \Riverline\DynamoDB\Logger\Logger
+     */
+    protected $logger;
 
     /**
      * Read and Write unit counter
@@ -46,6 +53,29 @@ class Connection
     }
 
     /**
+     * Set a logger for this connection
+     * @param Logger $logger
+     */
+    public function setLogger(Logger $logger)
+    {
+        $this->logger = $logger;
+
+        $this->log('Logger activated');
+    }
+
+    /**
+     * Log a message via the logger
+     * @param string $message
+     * @param int $level
+     */
+    protected function log($message, $level = Logger::INFO)
+    {
+        if (null !== $this->logger) {
+            $this->logger->log($message, $level);
+        }
+    }
+
+    /**
      * Return the DynamoDB object
      * @return \AmazonDynamoDB
      */
@@ -75,6 +105,7 @@ class Connection
      */
     protected function addConsumedReadUnits($table, $units)
     {
+        $this->log($units.' consumed read units on table '.$table);
         if (isset($this->readUnit[$table])) {
             $this->readUnit[$table] += $units;
         } else {
@@ -103,6 +134,7 @@ class Connection
      */
     protected function addConsumedWriteUnits($table, $units)
     {
+        $this->log($units.' consumed write units on table '.$table);
         if (isset($this->writeUnit[$table])) {
             $this->writeUnit[$table] += $units;
         } else {
@@ -117,9 +149,11 @@ class Connection
     public function resetConsumedUnits($table = null)
     {
         if (is_null($table)) {
+            $this->log('Reset all consumed units counters');
             $this->readUnit  = array();
             $this->writeUnit = array();
         } else {
+            $this->log('Reset consumed units counters for table '.$table);
             unset(
                 $this->readUnit[$table],
                 $this->writeUnit[$table]
@@ -137,6 +171,8 @@ class Connection
     public function put(Item $item, Context\Put $context = null)
     {
         $table = $item->getTable();
+
+        $this->log('Put on table '.$table);
 
         if (empty($table)) {
             throw new \Riverline\DynamoDB\Exception\AttributesException('Item do not have table defined');
@@ -159,7 +195,11 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
+        $this->log('Put request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->put_item($parameters));
+
+        $this->log('Put request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
@@ -177,6 +217,8 @@ class Connection
      */
     public function delete($table, $hash, $range = null, Context\Delete $context = null)
     {
+        $this->log('Delete on table '.$table);
+
         // Primary key
         $hash = new Attribute($hash);
         $key = array(
@@ -198,7 +240,11 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
+        $this->log('Delete request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->delete_item($parameters));
+
+        $this->log('Delete request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
@@ -216,18 +262,17 @@ class Connection
      */
     public function get($table, $hash, $range = null, Context\Get $context = null)
     {
-        if (null === $context) {
-            $context = new Context\Get();
-        }
+        $this->log('Get on table '.$table);
 
         // Primary key
         $hash = new Attribute($hash);
+
         $parameters = array(
             'TableName' => $table,
             'Key'       => array(
                 'HashKeyElement' => $hash->getForDynamoDB()
             )
-        ) + $context->getForDynamoDB();
+        );
 
         // Range key
         if (null !== $range) {
@@ -235,7 +280,15 @@ class Connection
             $parameters['Key']['RangeKeyElement'] = $range->getForDynamoDB();
         }
 
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $this->log('Get request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->get_item($parameters));
+
+        $this->log('Get request response : '.print_r($response, true), Logger::DEBUG);
 
         $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
@@ -244,6 +297,7 @@ class Connection
             $item->populateFromDynamoDB($response->Item);
             return $item;
         } else {
+            $this->log('Didn\'t find item');
             return null;
         }
     }
@@ -260,6 +314,8 @@ class Connection
      */
     public function update($table, $hash, $range = null, AttributeUpdate $update, Context\Update $context = null)
     {
+        $this->log('Update on table'.$table);
+
         // Primary key
         $hash = new Attribute($hash);
         $key = array(
@@ -288,7 +344,11 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
+        $this->log('Update request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->update_item($parameters));
+
+        $this->log('Update request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
@@ -305,21 +365,43 @@ class Connection
      */
     public function query($table, $hash, Context\Query $context = null)
     {
-        if (null === $context) {
-            $context = new Context\Query();
-        }
+        $this->log('Query on table '.$table);
 
         $hash = new Attribute($hash);
         $parameters = array(
             'TableName'    => $table,
             'HashKeyValue' => $hash->getForDynamoDB(),
-        ) + $context->getForDynamoDB();
+        );
+
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $this->log('Query request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
         $response = $this->parseResponse($this->connector->query($parameters));
 
+        $this->log('Query request response : '.print_r($response, true), Logger::DEBUG);
+
         $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
-        $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
+        if (isset($response->LastEvaluatedKey)) {
+            if (null === $context) {
+                $nextContext = new Context\Query();
+            } else {
+                $nextContext = clone $context;
+            }
+            $nextContext->setExclusiveStartKey($response->LastEvaluatedKey);
+
+            $this->log('More Items to retrieve');
+        } else {
+            $nextContext = null;
+        }
+
+        $items = new Collection(
+            $nextContext,
+            $response->Count
+        );
         if (!empty($response->Items)) {
             foreach ($response->Items as $responseItem) {
                 $item = new Item($table);
@@ -327,6 +409,9 @@ class Connection
                 $items->add($item);
             }
         }
+
+        $this->log('Find '.count($items).' Items');
+
         return $items;
     }
 
@@ -338,19 +423,42 @@ class Connection
      */
     public function scan($table, Context\Scan $context = null)
     {
-        if (null === $context) {
-            $context = new Context\Scan();
-        }
+        $this->log('Scan on table '.$table);
 
         $parameters = array(
             'TableName' => $table
-        ) + $context->getForDynamoDB();
+        );
+
+        if (null !== $context) {
+            $parameters += $context->getForDynamoDB();
+        }
+
+        $this->log('Scan request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
         $response = $this->parseResponse($this->connector->scan($parameters));
 
+        $this->log('Scan request response : '.print_r($response, true), Logger::DEBUG);
+        $this->log($response->ScannedCount.' scanned items');
+
         $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
 
-        $items = new Collection((isset($response->LastEvaluatedKey)?$response->LastEvaluatedKey:null));
+        if (isset($response->LastEvaluatedKey)) {
+            if (null === $context) {
+                $nextContext = new Context\Query();
+            } else {
+                $nextContext = clone $context;
+            }
+            $nextContext->setExclusiveStartKey($response->LastEvaluatedKey);
+
+            $this->log('More Items to retrieve');
+        } else {
+            $nextContext = null;
+        }
+
+        $items = new Collection(
+            $nextContext,
+            $response->Count
+        );
         if (!empty($response->Items)) {
             foreach ($response->Items as $responseItem) {
                 $item = new Item($table);
@@ -358,6 +466,9 @@ class Connection
                 $items->add($item);
             }
         }
+
+        $this->log('Find '.count($items).' Items');
+
         return $items;
     }
 
@@ -369,13 +480,21 @@ class Connection
      */
     public function batchGet(Context\BatchGet $context)
     {
+        $this->log('BatchGet');
+
         if (0 === count($context)) {
-            throw new Exception\AttributesException("Context doesn't contain any key to get");
+            $message = "BatchGet context doesn't contain any key to get";
+            $this->log($message, Logger::ERROR);
+            throw new Exception\AttributesException($message);
         }
 
         $parameters = $context->getForDynamoDB();
 
+        $this->log('BatchGet request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->batch_get_item($parameters));
+
+        $this->log('BatchGet request response : '.print_r($response, true), Logger::DEBUG);
 
         // UnprocessedKeys
         if (count((array)$response->UnprocessedKeys)) {
@@ -404,6 +523,8 @@ class Connection
                 $items->add($item);
             }
 
+            $this->log('Find '.count($items).' Items on table '.$table);
+
             $collection->setItems($table, $items);
         }
 
@@ -418,13 +539,21 @@ class Connection
      */
     public function batchWrite(Context\BatchWrite $context)
     {
+        $this->log('BatchWrite');
+
         if (0 === count($context)) {
-            throw new Exception\AttributesException("Context doesn't contain anything to write");
+            $message = "BatchWrite context doesn't contain anything to write";
+            $this->log($message, Logger::ERROR);
+            throw new Exception\AttributesException($message);
         }
 
         $parameters = $context->getForDynamoDB();
 
+        $this->log('BatchWrite request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->batch_write_item($parameters));
+
+        $this->log('BatchWrite request response : '.print_r($response, true), Logger::DEBUG);
 
         // UnprocessedKeys
         if (count((array)$response->UnprocessedItems)) {
@@ -445,6 +574,8 @@ class Connection
                     }
                 }
             }
+
+            $this->log('More unprocessed Items');
         } else {
             $newContext = null;
         }
@@ -466,12 +597,19 @@ class Connection
      */
     public function createTable($table, Table\KeySchema $keySchama, Table\ProvisionedThroughput $provisionedThroughput)
     {
+        $this->log('Create table '.$table);
+
         $parameters = array(
             'TableName' => $table,
             'KeySchema' => $keySchama->getForDynamoDB(),
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
-        $this->parseResponse($this->connector->create_table($parameters));
+
+        $this->log('TableCreate request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
+        $response = $this->parseResponse($this->connector->create_table($parameters));
+
+        $this->log('TableCreate request response : '.print_r($response, true), Logger::DEBUG);
     }
 
     /**
@@ -482,11 +620,18 @@ class Connection
      */
     public function updateTable($table, Table\ProvisionedThroughput $provisionedThroughput)
     {
+        $this->log('Update table '.$table);
+
         $parameters = array(
             'TableName' => $table,
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
-        $this->parseResponse($this->connector->update_table($parameters));
+
+        $this->log('UpdateTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
+        $response = $this->parseResponse($this->connector->update_table($parameters));
+
+        $this->log('UpdateTable request response : '.print_r($response, true), Logger::DEBUG);
     }
 
     /**
@@ -496,10 +641,17 @@ class Connection
      */
     public function deleteTable($table)
     {
+        $this->log('Delete table '.$table);
+
         $parameters = array(
             'TableName' => $table,
         );
-        $this->parseResponse($this->connector->delete_table($parameters));
+
+        $this->log('DeleteTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
+        $response = $this->parseResponse($this->connector->delete_table($parameters));
+
+        $this->log('DeleteTable request response : '.print_r($response, true), Logger::DEBUG);
     }
 
     /**
@@ -509,12 +661,21 @@ class Connection
      */
     public function describeTable($table)
     {
+        $this->log('Describe table '.$table);
+
         $parameters = array(
             'TableName' => $table,
         );
+
+        $this->log('DescribeTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->describe_table($parameters));
+
+        $this->log('DescribeTable request response : '.print_r($response, true), Logger::DEBUG);
+
         $tableDescription = new Table\TableDescription();
         $tableDescription->populateFromDynamoDB($response->Table);
+
         return $tableDescription;
     }
 
@@ -526,6 +687,8 @@ class Connection
      */
     public function listTables($limit = null, $exclusiveStartTableName = null)
     {
+        $this->log('List tables');
+
         $parameters = array();
         if (null !== $limit) {
             $parameters['Limit'] = $limit;
@@ -533,7 +696,12 @@ class Connection
         if (null !== $exclusiveStartTableName) {
             $parameters['ExclusiveStartTableName'] = $exclusiveStartTableName;
         }
+
+        $this->log('ListTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+
         $response = $this->parseResponse($this->connector->list_tables($parameters));
+
+        $this->log('ListTable request response : '.print_r($response, true), Logger::DEBUG);
 
         $tables = new Table\TableCollection((isset($response->LastEvaluatedTableName)?$response->LastEvaluatedTableName:null));
         if (!empty($response->TableNames)) {
@@ -552,18 +720,21 @@ class Connection
             if ($status == $tableDescription->getTableStatus()) {
                 return $tableDescription;
             } else {
+                $this->log('Table status is '.$tableDescription->getTableStatus().', waiting');
                 sleep($sleep);
             }
         } while(++$current < $max);
 
+        $this->log('Timeout while waiting for table to be in state', Logger::ERROR);
         throw new \Exception('waitForTableToBeInState timeout');
     }
 
     /**
      * Parse the SDK response to detect error
      * @param \CFResponse $response The raw SDK response
-     * @return \stdClass The response body
      * @throws Exception\ServerException
+     * @throws Exception\ProvisionedThroughputExceededException
+     * @return \stdClass The response body
      */
     protected function parseResponse(\CFResponse $response)
     {
@@ -577,6 +748,8 @@ class Connection
             } elseif (isset($body->Message)) {
                 $message = $body->Message;
             }
+
+            $this->log($message, Logger::ERROR);
 
             if (isset($body->__type)) {
                 list ($api, $type) = explode('#', $body->__type);

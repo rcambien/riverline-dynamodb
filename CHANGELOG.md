@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+* 1.4.0
+    * Add Logger
+    * Add Scan and Query method to the Repeater
+    * Fix BatchGet method in the Repeater
+    * Replace GetLastKey method by GetNextContext in Collection
+    * Replace SetLastKey method by setExclusiveStartKey in Context\Collection
+
 * 1.3.0
     * Add BatchGet method
     * Add BatchWrite method

@@ -17,23 +17,31 @@ class Collection implements \IteratorAggregate, \Countable
      * The previous request last key
      * @var string|null
      */
-    protected $lastKey;
+    protected $nextContext;
 
     /**
-     * @param string|null $lastKey The previous request last key
+     * The previous request count
+     * @var int|null
      */
-    function __construct($lastKey = null)
+    protected $requestCount = 0;
+
+    /**
+     * @param Context\Collection|null $nextContext
+     * @param int $requestCount The previous request count
+     */
+    function __construct(Context\Collection $nextContext = null, $requestCount = 0)
     {
-        $this->lastKey = $lastKey;
+        $this->nextContext  = $nextContext;
+        $this->requestCount = $requestCount;
     }
 
     /**
      * Return the previous request last key
      * @return null|string
      */
-    public function getLastKey()
+    public function getNextContext()
     {
-        return $this->lastKey;
+        return $this->nextContext;
     }
 
     /**
@@ -42,7 +50,7 @@ class Collection implements \IteratorAggregate, \Countable
      */
     public function more()
     {
-        return !empty($this->lastKey);
+        return !empty($this->nextContext);
     }
 
     /**
@@ -64,6 +72,18 @@ class Collection implements \IteratorAggregate, \Countable
     }
 
     /**
+     * Merge a collection with the current collection
+     * @param Collection $collection The collection to merge
+     */
+    public function merge(Collection $collection)
+    {
+        $this->requestCount += count($collection);
+        foreach($collection as $item) {
+            $this->add($item);
+        }
+    }
+
+    /**
      * @see \IteratorAggregate
      * @return \ArrayIterator
      */
@@ -78,6 +98,12 @@ class Collection implements \IteratorAggregate, \Countable
      */
     public function count()
     {
-        return count($this->items);
+        if (empty($this->items)) {
+            // Collection from a count request
+            return $this->requestCount;
+        } else {
+            // Real items count
+            return count($this->items);
+        }
     }
 }

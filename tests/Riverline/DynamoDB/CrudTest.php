@@ -140,9 +140,9 @@ class CrudTest extends ConnectionTest
         $item = $items->shift();
         $this->assertSame(567, $item['range']);
 
-        $this->assertNotEmpty($items->getLastKey());
+        $this->assertNotEmpty($items->getNextContext());
 
-        $query->setLastKey($items->getLastKey());
+        $query = $items->getNextContext();
         $query->setLimit(3);
 
         $items = $this->conn->query(DY_TABLE_RANGE, ITEM_ID, $query);
@@ -155,7 +155,7 @@ class CrudTest extends ConnectionTest
         $item = $items->shift();
         $this->assertSame(789, $item['range']);
 
-        $this->assertEmpty($items->getLastKey());
+        $this->assertEmpty($items->getNextContext());
     }
 
     public function testScan()

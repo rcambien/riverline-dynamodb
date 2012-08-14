@@ -14,7 +14,7 @@ It speed up the manipulation of items and attributes
 
 ## Installation
 
-``Riverline\DynamoDB`` is compatible composer and any prs-0 autoloader
+``Riverline\DynamoDB`` is compatible with composer and any prs-0 autoloader
 
 ## Getting started
 
@@ -29,6 +29,8 @@ $connection = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', 'apc'
 // With file cache handler to European zone
 $connectionEU = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', '/tmp/', \AmazonDynamoDB::REGION_EU_W1);
 
+// Attach a simple logger (or write your own logger class)
+$connection->setLogger(new \Riverline\DynamoDB\Logger\EchoLogger());
 ?>
 ```
 
@@ -154,9 +156,8 @@ do {
         echo $product['title'].PHP_EOL;
     }
 
-    // pass the last key to the context for the next request
-    $context->setLastKey($products->getLastKey());
-
+    // Get the next context to continue
+    $context = $products->getNextContext();
 } while ($products->more() /* more products to retrieve */);
 
 ?>
