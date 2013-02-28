@@ -98,12 +98,14 @@ class Repeater
                     $context = $itemsByTable->getUnprocessedKeysContext();
                 } else {
                     // End
-                    return $batchCollection;
+                    break;
                 }
             } catch (\Riverline\DynamoDB\Exception\ProvisionedThroughputExceededException $e) {
                 // Continue
             }
         } while(true);
+
+        return $batchCollection;
     }
 
     public function batchWrite(Context\BatchWrite $context)

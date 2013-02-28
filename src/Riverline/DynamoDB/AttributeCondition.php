@@ -4,6 +4,8 @@ namespace Riverline\DynamoDB;
 
 use \Riverline\DynamoDB\Exception\AttributesException;
 
+use Aws\DynamoDb\Enum\ComparisonOperator;
+
 /**
  * @class
  */
@@ -24,10 +26,11 @@ class AttributeCondition
     /**
      * @param string $operator The condition operator
      * @param Attribute|array $attributes The condition attributes
+     * @throws Exception\AttributesException
      */
     public function __construct($operator, $attributes)
     {
-        if (\AmazonDynamoDB::CONDITION_BETWEEN === $operator) {
+        if (ComparisonOperator::BETWEEN === $operator) {
             if  (!is_array($attributes) || 2 !== count($attributes)) {
                 throw new AttributesException('Between operator must have two range attributes.');
             } else {
@@ -73,7 +76,7 @@ class AttributeCondition
             'ComparisonOperator' => $operator
         );
 
-        if (\AmazonDynamoDB::CONDITION_BETWEEN === $operator) {
+        if (ComparisonOperator::BETWEEN === $operator) {
             $rangeFrom = array_shift($attributes);
             $rangeTo   = array_shift($attributes);
             $condition['AttributeValueList'] = array(

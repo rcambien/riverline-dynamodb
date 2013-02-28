@@ -2,8 +2,11 @@
 
 namespace Riverline\DynamoDB;
 
+use Aws\DynamoDb\Enum\Type;
+
 /**
  * @class
+ * @todo Add Binary Type
  */
 class Attribute implements \IteratorAggregate
 {
@@ -32,17 +35,17 @@ class Attribute implements \IteratorAggregate
 
         // Normalize
         switch ($type) {
-            case \AmazonDynamoDB::TYPE_STRING:
+            case Type::STRING:
                 $value = strval($value);
                 break;
-            case \AmazonDynamoDB::TYPE_NUMBER:
+            case Type::NUMBER:
                 $value = $value+0;
                 break;
-            case \AmazonDynamoDB::TYPE_ARRAY_OF_STRINGS:
+            case Type::STRING_SET:
                 $value = array_map(function ($value) { return strval($value);}, (array)$value);
                 sort($value);
                 break;
-            case \AmazonDynamoDB::TYPE_ARRAY_OF_NUMBERS:
+            case Type::NUMBER_SET:
                 $value = array_map(function ($value) { return $value+0;}, (array)$value);
                 sort($value);
                 break;
@@ -79,8 +82,8 @@ class Attribute implements \IteratorAggregate
      */
     public function isArray()
     {
-        return (\AmazonDynamoDB::TYPE_ARRAY_OF_NUMBERS === $this->type
-            || \AmazonDynamoDB::TYPE_ARRAY_OF_STRINGS === $this->type
+        return (Type::STRING_SET === $this->type
+            || Type::NUMBER_SET === $this->type
         );
     }
 
@@ -136,14 +139,14 @@ class Attribute implements \IteratorAggregate
         if (is_array($value)) {
             foreach ($value as $val) {
                 if (!is_numeric($val)) {
-                    return \AmazonDynamoDB::TYPE_ARRAY_OF_STRINGS;
+                    return Type::STRING_SET;
                 }
             }
-            return \AmazonDynamoDB::TYPE_ARRAY_OF_NUMBERS;
+            return Type::NUMBER_SET;
         } elseif (is_numeric($value)) {
-            return \AmazonDynamoDB::TYPE_NUMBER;
+            return Type::NUMBER;
         } else {
-            return \AmazonDynamoDB::TYPE_STRING;
+            return Type::STRING;
         }
     }
 }

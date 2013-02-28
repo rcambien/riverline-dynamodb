@@ -4,13 +4,15 @@ namespace Riverline\DynamoDB;
 
 use Riverline\DynamoDB\Logger\Logger;
 
+use Aws\DynamoDb\DynamoDbClient;
+
 /**
  * @class
  */
 class Connection
 {
     /**
-     * @var \AmazonDynamoDB
+     * @var \Aws\DynamoDb\DynamoDbClient
      */
     protected $connector;
 
@@ -28,28 +30,20 @@ class Connection
     /**
      * @param string $key The AWS access Key
      * @param string $secret The AWS secret Key
-     * @param string $cacheConfig The DynamoDB SDK cache configuration
-     * @param string|null $region The DynamoDB region endpoint
-     * @throws \Exception
+     * @param string $region The DynamoDB region endpoint
+     * @throws \RuntimeException
      */
-    public function __construct($key, $secret, $cacheConfig, $region = null)
+    public function __construct($key, $secret, $region)
     {
-        if (!class_exists('\AmazonDynamoDB')) {
-            throw new \Exception('Missing AWS PHP SDK');
+        if (!class_exists('Aws\DynamoDb\DynamoDbClient')) {
+            throw new \RuntimeException('Missing AWS PHP SDK');
         }
 
-        $this->connector = new \AmazonDynamoDB(array(
+        $this->connector = DynamoDbClient::factory(array(
             'key'    => $key,
             'secret' => $secret,
-            'default_cache_config' => $cacheConfig,
+            'region' => $region
         ));
-
-        if (null !== $region) {
-            $this->connector->set_region($region);
-        }
-
-        // Raw JSON response
-        $this->connector->parse_the_response = false;
     }
 
     /**
@@ -77,7 +71,7 @@ class Connection
 
     /**
      * Return the DynamoDB object
-     * @return \AmazonDynamoDB
+     * @return \Aws\DynamoDb\DynamoDbClient
      */
     public function getConnector()
     {
@@ -197,12 +191,12 @@ class Connection
 
         $this->log('Put request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->put_item($parameters));
+        $response = $this->connector->putItem($parameters);
 
         $this->log('Put request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
-        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
 
         return $this->populateAttributes($response);
     }
@@ -242,12 +236,12 @@ class Connection
 
         $this->log('Delete request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->delete_item($parameters));
+        $response = $this->connector->deleteItem($parameters);
 
         $this->log('Delete request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
-        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
 
         return $this->populateAttributes($response);
     }
@@ -286,15 +280,15 @@ class Connection
 
         $this->log('Get request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->get_item($parameters));
+        $response = $this->connector->getItem($parameters);
 
         $this->log('Get request response : '.print_r($response, true), Logger::DEBUG);
 
-        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
-        if (isset($response->Item)) {
+        if (isset($response['Item'])) {
             $item = new Item($table);
-            $item->populateFromDynamoDB($response->Item);
+            $item->populateFromDynamoDB($response['Item']);
             return $item;
         } else {
             $this->log('Didn\'t find item');
@@ -346,12 +340,12 @@ class Connection
 
         $this->log('Update request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->update_item($parameters));
+        $response = $this->connector->updateItem($parameters);
 
         $this->log('Update request response : '.print_r($response, true), Logger::DEBUG);
 
         // Update write counter
-        $this->addConsumedWriteUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
 
         return $this->populateAttributes($response);
     }
@@ -379,19 +373,19 @@ class Connection
 
         $this->log('Query request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->query($parameters));
+        $response = $this->connector->query($parameters);
 
         $this->log('Query request response : '.print_r($response, true), Logger::DEBUG);
 
-        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
-        if (isset($response->LastEvaluatedKey)) {
+        if (isset($response['LastEvaluatedKey'])) {
             if (null === $context) {
                 $nextContext = new Context\Query();
             } else {
                 $nextContext = clone $context;
             }
-            $nextContext->setExclusiveStartKey($response->LastEvaluatedKey);
+            $nextContext->setExclusiveStartKey($response['LastEvaluatedKey']);
 
             $this->log('More Items to retrieve');
         } else {
@@ -400,10 +394,10 @@ class Connection
 
         $items = new Collection(
             $nextContext,
-            $response->Count
+            $response['Count']
         );
-        if (!empty($response->Items)) {
-            foreach ($response->Items as $responseItem) {
+        if (!empty($response['Items'])) {
+            foreach ($response['Items'] as $responseItem) {
                 $item = new Item($table);
                 $item->populateFromDynamoDB($responseItem);
                 $items->add($item);
@@ -435,20 +429,20 @@ class Connection
 
         $this->log('Scan request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->scan($parameters));
+        $response = $this->connector->scan($parameters);
 
         $this->log('Scan request response : '.print_r($response, true), Logger::DEBUG);
-        $this->log($response->ScannedCount.' scanned items');
+        $this->log($response['ScannedCount'].' scanned items');
 
-        $this->addConsumedReadUnits($table, floatval($response->ConsumedCapacityUnits));
+        $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
-        if (isset($response->LastEvaluatedKey)) {
+        if (isset($response['LastEvaluatedKey'])) {
             if (null === $context) {
                 $nextContext = new Context\Query();
             } else {
                 $nextContext = clone $context;
             }
-            $nextContext->setExclusiveStartKey($response->LastEvaluatedKey);
+            $nextContext->setExclusiveStartKey($response['LastEvaluatedKey']);
 
             $this->log('More Items to retrieve');
         } else {
@@ -457,10 +451,10 @@ class Connection
 
         $items = new Collection(
             $nextContext,
-            $response->Count
+            $response['Count']
         );
-        if (!empty($response->Items)) {
-            foreach ($response->Items as $responseItem) {
+        if (!empty($response['Items'])) {
+            foreach ($response['Items'] as $responseItem) {
                 $item = new Item($table);
                 $item->populateFromDynamoDB($responseItem);
                 $items->add($item);
@@ -492,14 +486,14 @@ class Connection
 
         $this->log('BatchGet request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->batch_get_item($parameters));
+        $response = $this->connector->batchGetItem($parameters);
 
         $this->log('BatchGet request response : '.print_r($response, true), Logger::DEBUG);
 
         // UnprocessedKeys
-        if (count((array)$response->UnprocessedKeys)) {
+        if (count((array)$response['UnprocessedKeys'])) {
             $unprocessKeyContext = new Context\BatchGet();
-            foreach ($response->UnprocessedKeys as $table => $tableParameters) {
+            foreach ($response['UnprocessedKeys'] as $table => $tableParameters) {
                 foreach ($tableParameters->Keys as $key) {
                     $unprocessKeyContext->addKey($table, current($key->HashKeyElement), current($key->RangeKeyElement));
                 }
@@ -513,11 +507,11 @@ class Connection
 
         $collection = new Batch\BatchCollection($unprocessKeyContext);
 
-        foreach ($response->Responses as $table => $responseItems) {
-            $this->addConsumedReadUnits($table, floatval($responseItems->ConsumedCapacityUnits));
+        foreach ($response['Responses'] as $table => $responseItems) {
+            $this->addConsumedReadUnits($table, floatval($responseItems['ConsumedCapacityUnits']));
 
             $items = new Collection();
-            foreach ($responseItems->Items as $responseItem) {
+            foreach ($responseItems['Items'] as $responseItem) {
                 $item = new Item($table);
                 $item->populateFromDynamoDB($responseItem);
                 $items->add($item);
@@ -551,25 +545,25 @@ class Connection
 
         $this->log('BatchWrite request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->batch_write_item($parameters));
+        $response = $this->connector->batchWriteItem($parameters);
 
         $this->log('BatchWrite request response : '.print_r($response, true), Logger::DEBUG);
 
         // UnprocessedKeys
-        if (count((array)$response->UnprocessedItems)) {
+        if (count((array)$response['UnprocessedItems'])) {
             $newContext = new Context\BatchWrite();
-            foreach ($response->UnprocessedItems as $table => $tableParameters) {
+            foreach ($response['UnprocessedItems'] as $table => $tableParameters) {
                 foreach ($tableParameters as $request) {
-                    if (isset($request->DeleteRequest)) {
-                        $keys = $request->DeleteRequest->Key;
+                    if (isset($request['DeleteRequest'])) {
+                        $keys = $request['DeleteRequest']['Key'];
                         $newContext->addKeyToDelete(
                             $table,
-                            current($keys->HashKeyElement),
-                            (isset($keys->RangeKeyElement)?current($keys->RangeKeyElement):null)
+                            current($keys['HashKeyElement']),
+                            (isset($keys['RangeKeyElement'])?current($keys['RangeKeyElement']):null)
                         );
-                    } elseif (isset($request->PutRequest)) {
+                    } elseif (isset($request['PutRequest'])) {
                         $item = new Item($table);
-                        $item->populateFromDynamoDB($request->PutRequest->Item);
+                        $item->populateFromDynamoDB($request['PutRequest']['Item']);
                         $newContext->addItemToPut($item);
                     }
                 }
@@ -581,8 +575,8 @@ class Connection
         }
 
         // Write Unit
-        foreach ($response->Responses as $table => $responseItems) {
-            $this->addConsumedWriteUnits($table, floatval($responseItems->ConsumedCapacityUnits));
+        foreach ($response['Responses'] as $table => $responseItems) {
+            $this->addConsumedWriteUnits($table, floatval($responseItems['ConsumedCapacityUnits']));
         }
 
         return $newContext;
@@ -607,7 +601,7 @@ class Connection
 
         $this->log('TableCreate request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->create_table($parameters));
+        $response = $this->connector->createTable($parameters);
 
         $this->log('TableCreate request response : '.print_r($response, true), Logger::DEBUG);
     }
@@ -629,7 +623,7 @@ class Connection
 
         $this->log('UpdateTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->update_table($parameters));
+        $response = $this->connector->updateTable($parameters);
 
         $this->log('UpdateTable request response : '.print_r($response, true), Logger::DEBUG);
     }
@@ -649,7 +643,7 @@ class Connection
 
         $this->log('DeleteTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->delete_table($parameters));
+        $response = $this->connector->deleteTable($parameters);
 
         $this->log('DeleteTable request response : '.print_r($response, true), Logger::DEBUG);
     }
@@ -669,12 +663,12 @@ class Connection
 
         $this->log('DescribeTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->describe_table($parameters));
+        $response = $this->connector->describeTable($parameters);
 
         $this->log('DescribeTable request response : '.print_r($response, true), Logger::DEBUG);
 
         $tableDescription = new Table\TableDescription();
-        $tableDescription->populateFromDynamoDB($response->Table);
+        $tableDescription->populateFromDynamoDB($response['Table']);
 
         return $tableDescription;
     }
@@ -699,13 +693,13 @@ class Connection
 
         $this->log('ListTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
 
-        $response = $this->parseResponse($this->connector->list_tables($parameters));
+        $response = $this->connector->listTables($parameters);
 
         $this->log('ListTable request response : '.print_r($response, true), Logger::DEBUG);
 
-        $tables = new Table\TableCollection((isset($response->LastEvaluatedTableName)?$response->LastEvaluatedTableName:null));
-        if (!empty($response->TableNames)) {
-            foreach ($response->TableNames as $table) {
+        $tables = new Table\TableCollection((isset($response['LastEvaluatedTableName'])?$response['LastEvaluatedTableName']:null));
+        if (!empty($response['TableNames'])) {
+            foreach ($response['TableNames'] as $table) {
                 $tables->add($table);
             }
         }
@@ -730,52 +724,15 @@ class Connection
     }
 
     /**
-     * Parse the SDK response to detect error
-     * @param \CFResponse $response The raw SDK response
-     * @throws Exception\ServerException
-     * @throws Exception\ProvisionedThroughputExceededException
-     * @return \stdClass The response body
-     */
-    protected function parseResponse(\CFResponse $response)
-    {
-        $body = json_decode($response->body);
-        if ($response->isOk()) {
-            return $body;
-        } else {
-            $message = '';
-            if (isset($body->message)) {
-                $message = $body->message;
-            } elseif (isset($body->Message)) {
-                $message = $body->Message;
-            }
-
-            $this->log($message, Logger::ERROR);
-
-            if (isset($body->__type)) {
-                list ($api, $type) = explode('#', $body->__type);
-            } else {
-                $type = '';
-            }
-
-            switch ($type) {
-                case 'ProvisionedThroughputExceededException':
-                    throw new Exception\ProvisionedThroughputExceededException($message);
-                default:
-                    throw new Exception\ServerException($message);
-            }
-        }
-    }
-
-    /**
      * Extract the attributes array from response data
-     * @param \stdClass $data The response body data
+     * @param \Guzzle\Service\Resource\Model $data The response body data
      * @return array|null
      */
-    protected function populateAttributes(\stdClass $data)
+    protected function populateAttributes(\Guzzle\Service\Resource\Model $data)
     {
-        if (isset($data->Attributes)) {
+        if (isset($data['Attributes'])) {
             $attributes = array();
-            foreach ($data->Attributes as $name => $value) {
+            foreach ($data['Attributes'] as $name => $value) {
                 list ($type, $value) = each($value);
                 $attributes[$name] = new Attribute($value, $type);
             }

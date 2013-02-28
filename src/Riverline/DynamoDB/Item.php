@@ -105,9 +105,9 @@ class Item implements \ArrayAccess, \IteratorAggregate
 
     /**
      * Populate attributes from the raw DynamoDB response
-     * @param \stdClass $data
+     * @param array $data
      */
-    public function populateFromDynamoDB(\stdClass $data)
+    public function populateFromDynamoDB(array $data)
     {
         foreach ($data as $name => $value) {
             list ($type, $value) = each($value);

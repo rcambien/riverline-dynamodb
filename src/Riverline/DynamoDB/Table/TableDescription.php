@@ -116,26 +116,26 @@ class TableDescription
 
     /**
      * Populate table description from the raw DynamoDB response
-     * @param \stdClass $data
+     * @param array $data
      */
-    public function populateFromDynamoDB(\stdClass $data)
+    public function populateFromDynamoDB(array $data)
     {
-        $this->tableName        = $data->TableName;
-        $this->tableStatus      = $data->TableStatus;
-        $this->creationDateTime = $data->CreationDateTime;
+        $this->tableName        = $data['TableName'];
+        $this->tableStatus      = $data['TableStatus'];
+        $this->creationDateTime = $data['CreationDateTime'];
 
-        $this->itemCount        = (isset($data->ItemCount)?$data->ItemCount:0);
-        $this->tableSizeBytes   = (isset($data->TableSizeBytes)?$data->TableSizeBytes:0);
+        $this->itemCount        = (isset($data['ItemCount'])?$data['ItemCount']:0);
+        $this->tableSizeBytes   = (isset($data['TableSizeBytes'])?$data['TableSizeBytes']:0);
 
-        $keySchema = $data->KeySchema;
+        $keySchema = $data['KeySchema'];
         $hash = new KeySchemaElement(
-            $keySchema->HashKeyElement->AttributeName,
-            $keySchema->HashKeyElement->AttributeType
+            $keySchema['HashKeyElement']['AttributeName'],
+            $keySchema['HashKeyElement']['AttributeType']
         );
-        if (isset($keySchema->RangeKeyElement)) {
+        if (isset($keySchema['RangeKeyElement'])) {
             $range = new KeySchemaElement(
-                $keySchema->RangeKeyElement->AttributeName,
-                $keySchema->RangeKeyElement->AttributeType
+                $keySchema['RangeKeyElement']['AttributeName'],
+                $keySchema['RangeKeyElement']['AttributeType']
             );
         } else {
             $range = null;
@@ -143,12 +143,12 @@ class TableDescription
 
         $this->keySchema = new KeySchema($hash, $range);
 
-        $provisionedThroughput = $data->ProvisionedThroughput;
+        $provisionedThroughput = $data['ProvisionedThroughput'];
         $this->provisionedThroughput = new ProvisionedThroughput(
-            $provisionedThroughput->ReadCapacityUnits,
-            $provisionedThroughput->WriteCapacityUnits,
-            (isset($provisionedThroughput->LastIncreaseDateTime)?$provisionedThroughput->LastIncreaseDateTime:null),
-            (isset($provisionedThroughput->LastDecreaseDateTime)?$provisionedThroughput->LastDecreaseDateTime:null)
+            $provisionedThroughput['ReadCapacityUnits'],
+            $provisionedThroughput['WriteCapacityUnits'],
+            (isset($provisionedThroughput['LastIncreaseDateTime'])?$provisionedThroughput['LastIncreaseDateTime']:null),
+            (isset($provisionedThroughput['LastDecreaseDateTime'])?$provisionedThroughput['LastDecreaseDateTime']:null)
         );
     }
 }
