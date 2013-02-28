@@ -2,8 +2,6 @@
 
 namespace Riverline\DynamoDB;
 
-require_once 'ConnectionTest.php';
-
 class BatchTest extends ConnectionTest
 {
     public function testBatchWrite()
@@ -43,18 +41,18 @@ class BatchTest extends ConnectionTest
     {
         $batch = new Context\BatchGet();
         $batch
-            ->addKey(DY_TABLE_RANGE, ITEM_ID, 999)
-            ->addKey(DY_TABLE_RANGE, ITEM_ID, 998)
-            ->addKey(DY_TABLE_RANGE, ITEM_ID, 997)
-            ->setAttributesToGet(DY_TABLE_RANGE, array('id'));
+            ->addKey(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 999)
+            ->addKey(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 998)
+            ->addKey(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 997)
+            ->setAttributesToGet(getenv('DY_TABLE_RANGE'), array('id'));
 
         $result = $this->conn->batchGet($batch);
 
         $this->assertCount(3, $result);
-        $this->assertCount(3, $result[DY_TABLE_RANGE]);
+        $this->assertCount(3, $result[getenv('DY_TABLE_RANGE')]);
 
-        $item = $result[DY_TABLE_RANGE]->shift();
-        $this->assertEquals(ITEM_ID, $item['id']);
+        $item = $result[getenv('DY_TABLE_RANGE')]->shift();
+        $this->assertEquals(getenv('ITEM_ID'), $item['id']);
         $this->assertNull($item['name']);
     }
 
@@ -68,8 +66,8 @@ class BatchTest extends ConnectionTest
         $item = $this->createRangeItem(994);
         $batch->addItemToPut($item);
 
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 999);
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 998);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 999);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 998);
 
         $repeater = new Repeater($this->conn);
         $repeater->BatchWrite($batch);
@@ -80,10 +78,10 @@ class BatchTest extends ConnectionTest
     {
         $batch = new Context\BatchWrite();
 
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 997);
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 996);
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 995);
-        $batch->addKeyToDelete(DY_TABLE_RANGE, ITEM_ID, 994);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 997);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 996);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 995);
+        $batch->addKeyToDelete(getenv('DY_TABLE_RANGE'), getenv('ITEM_ID'), 994);
 
         $repeater = new Repeater($this->conn);
         $repeater->BatchWrite($batch);

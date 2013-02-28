@@ -6,9 +6,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 {
     public function testNew()
     {
-        $item = new Item(DY_TABLE);
+        $item = new Item(getenv('DY_TABLE'));
 
-        $this->assertEquals(DY_TABLE, $item->getTable());
+        $this->assertEquals(getenv('DY_TABLE'), $item->getTable());
 
         return $item;
     }

@@ -438,7 +438,7 @@ class Connection
 
         if (isset($response['LastEvaluatedKey'])) {
             if (null === $context) {
-                $nextContext = new Context\Query();
+                $nextContext = new Context\Scan();
             } else {
                 $nextContext = clone $context;
             }

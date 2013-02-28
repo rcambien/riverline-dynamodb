@@ -2,21 +2,21 @@
 
 namespace Riverline\DynamoDB;
 
-require_once 'ConnectionTest.php';
+use Aws\DynamoDb\Enum\Type;
 
 class TableOperationTest extends ConnectionTest
 {
     public function testDescribeTable()
     {
-        $tableDescription = $this->conn->describeTable(DY_TABLE);
+        $tableDescription = $this->conn->describeTable(getenv('DY_TABLE'));
         $this->assertInstanceOf('Riverline\DynamoDB\Table\TableDescription', $tableDescription);
     }
 
     public function testDescribeUnknowTable()
     {
-        $this->setExpectedException('\Riverline\DynamoDB\Exception\ServerException');
+        $this->setExpectedException('Aws\DynamoDb\Exception\ResourceNotFoundException');
 
-        $this->conn->describeTable(DY_TABLE_TMP_VER);
+        $this->conn->describeTable(getenv('DY_TABLE_TMP_VER'));
     }
 
     /**
@@ -24,9 +24,9 @@ class TableOperationTest extends ConnectionTest
      */
     public function testListTables()
     {
-        $tables = $tableCollection = $this->conn->listTables(1, DY_TABLE);
+        $tables = $tableCollection = $this->conn->listTables(1, getenv('DY_TABLE'));
         $this->assertCount(1, $tables);
-        $this->assertEquals(DY_TABLE_RANGE, $tables->shift());
+        $this->assertEquals(getenv('DY_TABLE_RANGE'), $tables->shift());
     }
 
     /**
@@ -34,14 +34,14 @@ class TableOperationTest extends ConnectionTest
      */
     public function testTableCreate()
     {
-        $hash                  = new Table\KeySchemaElement('id', \AmazonDynamoDB::TYPE_NUMBER);
-        $range                 = new Table\KeySchemaElement('range', \AmazonDynamoDB::TYPE_STRING);
+        $hash                  = new Table\KeySchemaElement('id', Type::NUMBER);
+        $range                 = new Table\KeySchemaElement('range', Type::STRING);
         $keySchema             = new \Riverline\DynamoDB\Table\KeySchema($hash, $range);
         $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(3, 5);
 
-        $this->conn->createTable(DY_TABLE_TMP_VER, $keySchema, $provisionedThroughput);
+        $this->conn->createTable(getenv('DY_TABLE_TMP_VER'), $keySchema, $provisionedThroughput);
 
-        $tableDescription = $this->conn->waitForTableToBeInState(DY_TABLE_TMP_VER, 'ACTIVE');
+        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE');
 
         $this->assertInstanceOf('Riverline\DynamoDB\Table\TableDescription', $tableDescription);
 
@@ -49,10 +49,10 @@ class TableOperationTest extends ConnectionTest
         $this->assertInstanceOf('Riverline\DynamoDB\Table\KeySchema', $keySchema);
         $this->assertInstanceOf('Riverline\DynamoDB\Table\KeySchemaElement', $keySchema->getHash());
         $this->assertEquals('id', $keySchema->getHash()->getName());
-        $this->assertEquals(\AmazonDynamoDB::TYPE_NUMBER, $keySchema->getHash()->getType());
+        $this->assertEquals(Type::NUMBER, $keySchema->getHash()->getType());
         $this->assertInstanceOf('Riverline\DynamoDB\Table\KeySchemaElement', $keySchema->getRange());
         $this->assertEquals('range', $keySchema->getRange()->getName());
-        $this->assertEquals(\AmazonDynamoDB::TYPE_STRING, $keySchema->getRange()->getType());
+        $this->assertEquals(Type::STRING, $keySchema->getRange()->getType());
 
         $provisionedThroughput = $tableDescription->getProvisionedThroughput();
         $this->assertInstanceOf('Riverline\DynamoDB\Table\ProvisionedThroughput', $provisionedThroughput);
@@ -67,9 +67,9 @@ class TableOperationTest extends ConnectionTest
     {
         $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(5, 5);
 
-        $this->conn->updateTable(DY_TABLE_TMP_VER, $provisionedThroughput);
+        $this->conn->updateTable(getenv('DY_TABLE_TMP_VER'), $provisionedThroughput);
 
-        $tableDescription = $this->conn->waitForTableToBeInState(DY_TABLE_TMP_VER, 'ACTIVE');
+        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE');
 
         $this->assertInstanceOf('Riverline\DynamoDB\Table\TableDescription', $tableDescription);
 
@@ -81,6 +81,6 @@ class TableOperationTest extends ConnectionTest
 
     public function testTableDelete()
     {
-        $this->conn->deleteTable(DY_TABLE_TMP_VER);
+        $this->conn->deleteTable(getenv('DY_TABLE_TMP_VER'));
     }
 }

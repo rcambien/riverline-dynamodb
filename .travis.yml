@@ -1,6 +1,9 @@
 language: php
 php:
+  - 5.3
   - 5.4
-before_script:
-  - wget http://getcomposer.org/composer.phar
-  - php composer.phar install
+env:
+  global:
+    - secure: "AiKDxoc03lX3vIkuydRCdNDKj9VS7O1Q3wkhRT2awUJ1ZDcj0qU93XVtUJAQ\nn3OXFQcDJJcqmz14pFR2w1LVQVKucYW9GPL5y0dYgeXtdboBr1v7Troxbnvi\nZmW75MTVvBov1zbw1c/B703HGPtde8wQwOKDYPRldiq6sfWb9IQ="
+    - secure: "eFU0bBkRQ6QutKY6ma9qz2RRtGBfGAppgFiYa0wTFBZ+z4iod6UtRJRKXVSi\nyDgT3lAqQSIuUYtVe0tbfbwNB8AtuiC2i3bZCDlx0I+Vf9O7PvaTDBd+mxa7\nWObmhKFewmTErO936RQuEGDTo7I0PxRuBAA3a9I6dzmU+Ue7OH8="
+before_script: composer install

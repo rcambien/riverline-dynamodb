@@ -37,7 +37,7 @@ class Collection implements \IteratorAggregate, \Countable
 
     /**
      * Return the previous request last key
-     * @return null|string
+     * @return null|\Riverline\DynamoDB\Context\Query|\Riverline\DynamoDB\Context\Scan
      */
     public function getNextContext()
     {
