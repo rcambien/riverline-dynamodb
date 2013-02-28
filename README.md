@@ -10,11 +10,19 @@ It speed up the manipulation of items and attributes
 ## Requirements
 
 * PHP 5.3.5
-* AWS PHP SDK 1.5.3
+* AWS PHP SDK 2.1.2
 
 ## Installation
 
 ``Riverline\DynamoDB`` is compatible with composer and any prs-0 autoloader
+
+## Migration from 1.* to 2.*
+
+Since version 2.0.0, the lib use the new AWS PHP SDK 2.*
+To migrate to the new version, you need to fix any call to the old AmazonDynamoDB class by using the new Enum classes.
+For example, \AmazonDynamoDB::TYPE_NUMBER become \Aws\DynamoDb\Enum\Type::NUMBER.
+
+The Connection constructor also change.
 
 ## Getting started
 
@@ -23,11 +31,8 @@ It speed up the manipulation of items and attributes
 ```php
 <?php
 
-// Create a DynamoDB connection with APC cache handler
-$connection = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', 'apc');
-
-// With file cache handler to European zone
-$connectionEU = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', '/tmp/', \AmazonDynamoDB::REGION_EU_W1);
+// Create a DynamoDB connection
+$connectionEU = new \Riverline\DynamoDB\Connection('AccessKey', 'SecretKey', \Aws\Common\Enum\Region::EU_WEST_1);
 
 // Attach a simple logger (or write your own logger class)
 $connection->setLogger(new \Riverline\DynamoDB\Logger\EchoLogger());
@@ -47,8 +52,8 @@ foreach ($tables as $table) {
 }
 
 // Create a new table
-$hash                  = new \Riverline\DynamoDB\Table\KeySchemaElement('id', \AmazonDynamoDB::TYPE_NUMBER);
-$range                 = new \Riverline\DynamoDB\Table\KeySchemaElement('subid', \AmazonDynamoDB::TYPE_NUMBER);
+$hash                  = new \Riverline\DynamoDB\Table\KeySchemaElement('id', \Aws\DynamoDb\Enum\Type::NUMBER);
+$range                 = new \Riverline\DynamoDB\Table\KeySchemaElement('subid', \Aws\DynamoDb\Enum\Type::NUMBER);
 $keySchema             = new \Riverline\DynamoDB\Table\KeySchema($hash, $range);
 $provisionedThroughput = new \Riverline\DynamoDB\Table\ProvisionedThroughput(3 /* Read */, 5 /* Write */);
 
@@ -95,7 +100,7 @@ echo $product['title'].PHP_EOL;
 
 // Query it on with range condition
 $context = new \Riverline\DynamoDB\Context\Query();
-$context->setRangeCondition(\AmazonDynamoDB::CONDITION_BETWEEN, array(200, 205));
+$context->setRangeCondition(\Aws\DynamoDb\Enum\ComparisonOperator::BETWEEN, array(200, 205));
 $products = $connection->query('Product', 102, $context);
 
 foreach($products as $product) {
@@ -104,8 +109,8 @@ foreach($products as $product) {
 
 // Scan it by title and authors fields
 $context = new \Riverline\DynamoDB\Context\Scan();
-$context->addFilter('title', \AmazonDynamoDB::CONDITION_CONTAINS, 'Product');
-$context->addFilter('authors', \AmazonDynamoDB::CONDITION_CONTAINS, 'Author1');
+$context->addFilter('title', \Aws\DynamoDb\Enum\ComparisonOperator::CONTAINS, 'Product');
+$context->addFilter('authors', \Aws\DynamoDb\Enum\ComparisonOperator::CONTAINS, 'Author1');
 $products = $connection->scan('Product', $context);
 
 foreach($products as $product) {
@@ -125,14 +130,14 @@ $connection->delete('Product', 102, 202);
 
 // Query with range condition, limit and consistent read
 $context = new \Riverline\DynamoDB\Context\Query();
-$context->setRangeCondition(\AmazonDynamoDB::CONDITION_BETWEEN, array(200, 205));
+$context->setRangeCondition(\Aws\DynamoDb\Enum\ComparisonOperator::BETWEEN, array(200, 205));
 $context->setLimit(2);
 $context->setConsistentRead(true);
 $products = $connection->query('Product', 102, $context);
 
 // Return only some attributes with backward index
 $context = new \Riverline\DynamoDB\Context\Query();
-$context->setRangeCondition(\AmazonDynamoDB::CONDITION_BETWEEN, array(200, 205));
+$context->setRangeCondition(\Aws\DynamoDb\Enum\ComparisonOperator::BETWEEN, array(200, 205));
 $context->setAttributesToGet(array('id', 'title'));
 $context->ScanIndexForward(false);
 $products = $connection->query('Product', 102, $context);
@@ -147,7 +152,7 @@ $products = $connection->query('Product', 102, $context);
 
 // Scan with limit
 $context = new \Riverline\DynamoDB\Context\Scan();
-$context->addFilter('title', \AmazonDynamoDB::CONDITION_CONTAINS, 'Product');
+$context->addFilter('title', \Aws\DynamoDb\Enum\ComparisonOperator::CONTAINS, 'Product');
 
 do {
     $products = $connection->scan('Product', $context);
