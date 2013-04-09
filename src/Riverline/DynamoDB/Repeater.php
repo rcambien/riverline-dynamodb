@@ -57,7 +57,7 @@ class Repeater
         $collection = new Collection();
         do {
             try {
-                $items = $this->connection->query($table, $context);
+                $items = $this->connection->query($table, $hash, $context);
                 $collection->merge($items);
                 if ($items->more()) {
                     $context = $items->getNextContext();
