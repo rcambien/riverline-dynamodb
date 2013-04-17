@@ -15,9 +15,10 @@
         }
     ],
     "homepage": "https://github.com/rcambien/riverline-dynamodb",
+    "minimum-stability": "stable",
     "require":{
         "php":">=5.3.5",
-        "aws/aws-sdk-php": ">=2.1.2,<2.2"
+        "aws/aws-sdk-php": ">=2.1.2,<2.3"
     },
     "autoload":{
         "psr-0":{
