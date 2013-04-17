@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+* 2.0.1
+    * Fix composer requirement
+
+* 2.0.0
+    * Migration to AWS PHP SDK 2.*
+
 * 1.4.0
     * Add Logger
     * Add Scan and Query method to the Repeater
