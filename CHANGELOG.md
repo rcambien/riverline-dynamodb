@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+* 2.0.2
+    * Fix Reapter query method
+
 * 2.0.1
     * Fix composer requirement
 
