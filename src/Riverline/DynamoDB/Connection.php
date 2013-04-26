@@ -40,9 +40,10 @@ class Connection
         }
 
         $this->connector = DynamoDbClient::factory(array(
-            'key'    => $key,
-            'secret' => $secret,
-            'region' => $region
+            'key'     => $key,
+            'secret'  => $secret,
+            'region'  => $region,
+            'version' => '2011-12-05'
         ));
     }
 
