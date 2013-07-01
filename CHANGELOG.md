@@ -1,5 +1,7 @@
 CHANGELOG
 =========
+* 2.0.3
+    * Performance optimizations
 
 * 2.0.2
     * Fix Reapter query method

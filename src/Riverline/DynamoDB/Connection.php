@@ -64,9 +64,7 @@ class Connection
      */
     protected function log($message, $level = Logger::INFO)
     {
-        if (null !== $this->logger) {
-            $this->logger->log($message, $level);
-        }
+        $this->logger->log($message, $level);
     }
 
     /**
@@ -99,7 +97,10 @@ class Connection
      */
     protected function addConsumedReadUnits($table, $units)
     {
-        $this->log($units.' consumed read units on table '.$table);
+        if (null !== $this->logger) {
+            $this->log($units.' consumed read units on table '.$table);
+        }
+
         if (isset($this->readUnit[$table])) {
             $this->readUnit[$table] += $units;
         } else {
@@ -128,7 +129,10 @@ class Connection
      */
     protected function addConsumedWriteUnits($table, $units)
     {
-        $this->log($units.' consumed write units on table '.$table);
+        if (null !== $this->logger) {
+            $this->log($units.' consumed write units on table '.$table);
+        }
+
         if (isset($this->writeUnit[$table])) {
             $this->writeUnit[$table] += $units;
         } else {
@@ -143,11 +147,15 @@ class Connection
     public function resetConsumedUnits($table = null)
     {
         if (is_null($table)) {
-            $this->log('Reset all consumed units counters');
+            if (null !== $this->logger) {
+                $this->log('Reset all consumed units counters');
+            }
             $this->readUnit  = array();
             $this->writeUnit = array();
         } else {
-            $this->log('Reset consumed units counters for table '.$table);
+            if (null !== $this->logger) {
+                $this->log('Reset consumed units counters for table '.$table);
+            }
             unset(
                 $this->readUnit[$table],
                 $this->writeUnit[$table]
@@ -166,7 +174,9 @@ class Connection
     {
         $table = $item->getTable();
 
-        $this->log('Put on table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Put on table '.$table);
+        }
 
         if (empty($table)) {
             throw new \Riverline\DynamoDB\Exception\AttributesException('Item do not have table defined');
@@ -189,11 +199,15 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Put request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Put request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->putItem($parameters);
 
-        $this->log('Put request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Put request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
@@ -211,7 +225,9 @@ class Connection
      */
     public function delete($table, $hash, $range = null, Context\Delete $context = null)
     {
-        $this->log('Delete on table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Delete on table '.$table);
+        }
 
         // Primary key
         $hash = new Attribute($hash);
@@ -234,11 +250,15 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Delete request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Delete request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->deleteItem($parameters);
 
-        $this->log('Delete request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Delete request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
@@ -256,7 +276,9 @@ class Connection
      */
     public function get($table, $hash, $range = null, Context\Get $context = null)
     {
-        $this->log('Get on table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Get on table '.$table);
+        }
 
         // Primary key
         $hash = new Attribute($hash);
@@ -278,11 +300,15 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Get request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Get request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->getItem($parameters);
 
-        $this->log('Get request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Get request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
@@ -291,7 +317,9 @@ class Connection
             $item->populateFromDynamoDB($response['Item']);
             return $item;
         } else {
-            $this->log('Didn\'t find item');
+            if (null !== $this->logger) {
+                $this->log('Didn\'t find item');
+            }
             return null;
         }
     }
@@ -308,7 +336,9 @@ class Connection
      */
     public function update($table, $hash, $range = null, AttributeUpdate $update, Context\Update $context = null)
     {
-        $this->log('Update on table'.$table);
+        if (null !== $this->logger) {
+            $this->log('Update on table'.$table);
+        }
 
         // Primary key
         $hash = new Attribute($hash);
@@ -338,11 +368,15 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Update request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Update request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->updateItem($parameters);
 
-        $this->log('Update request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Update request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         // Update write counter
         $this->addConsumedWriteUnits($table, floatval($response['ConsumedCapacityUnits']));
@@ -359,7 +393,9 @@ class Connection
      */
     public function query($table, $hash, Context\Query $context = null)
     {
-        $this->log('Query on table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Query on table '.$table);
+        }
 
         $hash = new Attribute($hash);
         $parameters = array(
@@ -371,11 +407,15 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Query request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Query request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->query($parameters);
 
-        $this->log('Query request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Query request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
@@ -387,7 +427,9 @@ class Connection
             }
             $nextContext->setExclusiveStartKey($response['LastEvaluatedKey']);
 
-            $this->log('More Items to retrieve');
+            if (null !== $this->logger) {
+                $this->log('More Items to retrieve');
+            }
         } else {
             $nextContext = null;
         }
@@ -404,7 +446,9 @@ class Connection
             }
         }
 
-        $this->log('Find '.count($items).' Items');
+        if (null !== $this->logger) {
+            $this->log('Find '.count($items).' Items');
+        }
 
         return $items;
     }
@@ -417,7 +461,9 @@ class Connection
      */
     public function scan($table, Context\Scan $context = null)
     {
-        $this->log('Scan on table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Scan on table '.$table);
+        }
 
         $parameters = array(
             'TableName' => $table
@@ -427,12 +473,16 @@ class Connection
             $parameters += $context->getForDynamoDB();
         }
 
-        $this->log('Scan request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('Scan request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->scan($parameters);
 
-        $this->log('Scan request response : '.print_r($response, true), Logger::DEBUG);
-        $this->log($response['ScannedCount'].' scanned items');
+        if (null !== $this->logger) {
+            $this->log('Scan request response : '.print_r($response, true), Logger::DEBUG);
+            $this->log($response['ScannedCount'].' scanned items');
+        }
 
         $this->addConsumedReadUnits($table, floatval($response['ConsumedCapacityUnits']));
 
@@ -444,7 +494,9 @@ class Connection
             }
             $nextContext->setExclusiveStartKey($response['LastEvaluatedKey']);
 
-            $this->log('More Items to retrieve');
+            if (null !== $this->logger) {
+                $this->log('More Items to retrieve');
+            }
         } else {
             $nextContext = null;
         }
@@ -461,7 +513,9 @@ class Connection
             }
         }
 
-        $this->log('Find '.count($items).' Items');
+        if (null !== $this->logger) {
+            $this->log('Find '.count($items).' Items');
+        }
 
         return $items;
     }
@@ -474,21 +528,29 @@ class Connection
      */
     public function batchGet(Context\BatchGet $context)
     {
-        $this->log('BatchGet');
+        if (null !== $this->logger) {
+            $this->log('BatchGet');
+        }
 
         if (0 === count($context)) {
             $message = "BatchGet context doesn't contain any key to get";
-            $this->log($message, Logger::ERROR);
+            if (null !== $this->logger) {
+                $this->log($message, Logger::ERROR);
+            }
             throw new Exception\AttributesException($message);
         }
 
         $parameters = $context->getForDynamoDB();
 
-        $this->log('BatchGet request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('BatchGet request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->batchGetItem($parameters);
 
-        $this->log('BatchGet request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('BatchGet request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         // UnprocessedKeys
         if (count((array)$response['UnprocessedKeys'])) {
@@ -517,7 +579,9 @@ class Connection
                 $items->add($item);
             }
 
-            $this->log('Find '.count($items).' Items on table '.$table);
+            if (null !== $this->logger) {
+                $this->log('Find '.count($items).' Items on table '.$table);
+            }
 
             $collection->setItems($table, $items);
         }
@@ -533,21 +597,29 @@ class Connection
      */
     public function batchWrite(Context\BatchWrite $context)
     {
-        $this->log('BatchWrite');
+        if (null !== $this->logger) {
+            $this->log('BatchWrite');
+        }
 
         if (0 === count($context)) {
             $message = "BatchWrite context doesn't contain anything to write";
-            $this->log($message, Logger::ERROR);
+            if (null !== $this->logger) {
+                $this->log($message, Logger::ERROR);
+            }
             throw new Exception\AttributesException($message);
         }
 
         $parameters = $context->getForDynamoDB();
 
-        $this->log('BatchWrite request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('BatchWrite request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->batchWriteItem($parameters);
 
-        $this->log('BatchWrite request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('BatchWrite request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         // UnprocessedKeys
         if (count((array)$response['UnprocessedItems'])) {
@@ -569,7 +641,9 @@ class Connection
                 }
             }
 
-            $this->log('More unprocessed Items');
+            if (null !== $this->logger) {
+                $this->log('More unprocessed Items');
+            }
         } else {
             $newContext = null;
         }
@@ -591,7 +665,9 @@ class Connection
      */
     public function createTable($table, Table\KeySchema $keySchama, Table\ProvisionedThroughput $provisionedThroughput)
     {
-        $this->log('Create table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Create table '.$table);
+        }
 
         $parameters = array(
             'TableName' => $table,
@@ -599,11 +675,15 @@ class Connection
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
 
-        $this->log('TableCreate request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('TableCreate request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->createTable($parameters);
 
-        $this->log('TableCreate request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('TableCreate request response : '.print_r($response, true), Logger::DEBUG);
+        }
     }
 
     /**
@@ -614,18 +694,24 @@ class Connection
      */
     public function updateTable($table, Table\ProvisionedThroughput $provisionedThroughput)
     {
-        $this->log('Update table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Update table '.$table);
+        }
 
         $parameters = array(
             'TableName' => $table,
             'ProvisionedThroughput' => $provisionedThroughput->getForDynamoDB()
         );
 
-        $this->log('UpdateTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('UpdateTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->updateTable($parameters);
 
-        $this->log('UpdateTable request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('UpdateTable request response : '.print_r($response, true), Logger::DEBUG);
+        }
     }
 
     /**
@@ -635,17 +721,23 @@ class Connection
      */
     public function deleteTable($table)
     {
-        $this->log('Delete table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Delete table '.$table);
+        }
 
         $parameters = array(
             'TableName' => $table,
         );
 
-        $this->log('DeleteTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('DeleteTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->deleteTable($parameters);
 
-        $this->log('DeleteTable request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('DeleteTable request response : '.print_r($response, true), Logger::DEBUG);
+        }
     }
 
     /**
@@ -655,17 +747,23 @@ class Connection
      */
     public function describeTable($table)
     {
-        $this->log('Describe table '.$table);
+        if (null !== $this->logger) {
+            $this->log('Describe table '.$table);
+        }
 
         $parameters = array(
             'TableName' => $table,
         );
 
-        $this->log('DescribeTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('DescribeTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->describeTable($parameters);
 
-        $this->log('DescribeTable request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('DescribeTable request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         $tableDescription = new Table\TableDescription();
         $tableDescription->populateFromDynamoDB($response['Table']);
@@ -681,7 +779,9 @@ class Connection
      */
     public function listTables($limit = null, $exclusiveStartTableName = null)
     {
-        $this->log('List tables');
+        if (null !== $this->logger) {
+            $this->log('List tables');
+        }
 
         $parameters = array();
         if (null !== $limit) {
@@ -691,11 +791,15 @@ class Connection
             $parameters['ExclusiveStartTableName'] = $exclusiveStartTableName;
         }
 
-        $this->log('ListTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('ListTable request paramaters : '.print_r($parameters, true), Logger::DEBUG);
+        }
 
         $response = $this->connector->listTables($parameters);
 
-        $this->log('ListTable request response : '.print_r($response, true), Logger::DEBUG);
+        if (null !== $this->logger) {
+            $this->log('ListTable request response : '.print_r($response, true), Logger::DEBUG);
+        }
 
         $tables = new Table\TableCollection((isset($response['LastEvaluatedTableName'])?$response['LastEvaluatedTableName']:null));
         if (!empty($response['TableNames'])) {
@@ -714,12 +818,17 @@ class Connection
             if ($status == $tableDescription->getTableStatus()) {
                 return $tableDescription;
             } else {
-                $this->log('Table status is '.$tableDescription->getTableStatus().', waiting');
+                if (null !== $this->logger) {
+                    $this->log('Table status is '.$tableDescription->getTableStatus().', waiting');
+                }
                 sleep($sleep);
             }
         } while(++$current < $max);
 
-        $this->log('Timeout while waiting for table to be in state', Logger::ERROR);
+        if (null !== $this->logger) {
+            $this->log('Timeout while waiting for table to be in state', Logger::ERROR);
+        }
+
         throw new \Exception('waitForTableToBeInState timeout');
     }
 
