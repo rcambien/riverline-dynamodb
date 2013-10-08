@@ -24,6 +24,17 @@ For example, \AmazonDynamoDB::TYPE_NUMBER become \Aws\DynamoDb\Enum\Type::NUMBER
 
 The Connection constructor also change.
 
+## Test
+
+Create DynamoDB tables :
+* Test(id)
+* TestRange(id, [range])
+
+Define phpunit env vars in ``phpunit.xml.dist`
+
+    $ php composer.phar install
+    $ phpunit
+
 ## Getting started
 
 ### Create a new connection
