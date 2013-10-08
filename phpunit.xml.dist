@@ -3,6 +3,9 @@
 <phpunit bootstrap="tests/bootstrap.php" colors="true">
     <php>
         <env name="AWS_REGION"     value="us-east-1" />
+        <env name="AWS_ACCESS_KEY" value="YOUR AWS ACCESS KEY" />
+        <env name="AWS_SECRET_KEY" value="YOUR AWS SECRET KEY" />
+
         <env name="DY_TABLE"       value="Test" />
         <env name="DY_TABLE_RANGE" value="TestRange" />
         <env name="DY_TABLE_TMP"   value="TestTmp" />
