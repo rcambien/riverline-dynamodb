@@ -41,7 +41,7 @@ class TableOperationTest extends ConnectionTest
 
         $this->conn->createTable(getenv('DY_TABLE_TMP_VER'), $keySchema, $provisionedThroughput);
 
-        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE');
+        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE', 10);
 
         $this->assertInstanceOf('Riverline\DynamoDB\Table\TableDescription', $tableDescription);
 
@@ -69,7 +69,7 @@ class TableOperationTest extends ConnectionTest
 
         $this->conn->updateTable(getenv('DY_TABLE_TMP_VER'), $provisionedThroughput);
 
-        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE');
+        $tableDescription = $this->conn->waitForTableToBeInState(getenv('DY_TABLE_TMP_VER'), 'ACTIVE', 10);
 
         $this->assertInstanceOf('Riverline\DynamoDB\Table\TableDescription', $tableDescription);
 
